@@ -10,4 +10,12 @@ We are attempting to build a system to help people deal with the shock in the fi
   * Provide power to cell phones in the first 12 hours
   * Help locate family and friends
 
+## Notes
+
+To access test mode for your phone, go into the dialer and type:
+
+    *#*#4636#*#*
+
+You can switch to GSM or CDMA and check what freq band you are
+
 [Mozilla / NSF wireless challenge]: https://wirelesschallenge.mozilla.org/
