@@ -1,0 +1,62 @@
+/* GENERAL
+--------------------------------------------- */
+
+body {
+	background: #90B3BF;
+	position: relative;
+	margin: 0;
+	font-family: 'Crimson Text', serif;
+}
+
+p {
+	color: #0B3051;
+	font-size: 17px;
+}
+
+h1 {
+	color: #D13415;
+	font-size: 30px;
+	padding-bottom: 20px;
+	border-bottom: 1px #9FB5BC solid;
+	font-family: 'Rubik script=all rev=3', sans-serif;
+	font-weight: 700;
+	text-align:center;
+	margin-bottom: 27px;
+}
+
+h2 {
+	color: #D13415;
+}
+
+a {
+	color: #1587AF;
+	text-decoration: none;
+    transition: background 0.3s ease 0s, color 0.3s ease 0s; 
+}
+
+a:hover {
+	color: #7D8689;
+    transition: background 0.3s ease 0s, color 0.3s ease 0s; 
+}
+
+i.fa {
+	margin-right: 7px;
+}
+
+/* INDEX
+--------------------------------------------- */
+
+.text-container {
+	background: #EDECE4;
+	padding: 20px 40px;
+	width: 60%;
+	margin: 5% auto;
+	border-radius: 10px;
+	max-width: 800px;
+}
+
+.buoy-img {
+	width: 30%;
+	float: right;
+	padding: 0 0 10px 25px;
+}

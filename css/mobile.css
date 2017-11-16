@@ -1,0 +1,11 @@
+@media only screen and (max-width: 499px) {
+	.text-container {
+		width: 90%;
+		height: 90%;
+		border-radius: 0;
+		padding: 5%;
+	}
+	body {
+		background: #EDECE4;
+	}
+}
