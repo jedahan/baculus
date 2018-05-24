@@ -4,12 +4,11 @@
 * Raspberry pi comms
   * DONE - Ping with two pi's over wifi(liteBeam)
 * Concept art
-* Stats on death outdoors
-  * The National Park Service spends nearly $5 million annually on search and rescue (SAR) missions and that doesn't include the cost of hundreds of thousands of man hours that go into these searches. [ref](http://content.time.com/time/nation/article/0,8599,1892621,00.html)
-* Presentation
+  * DONE
 * Test outside
+  * DONE - Hyperlapse video made
 
-## To buy:
+## Purchase links:
 
 * [Router](https://www.amazon.com/MikroTik-Routerboard-RB960PGS-Gigabit-Ethernet/dp/B01MDUCLVW/ref=sr_1_15?s=electronics&ie=UTF8&qid=1508354776&sr=1-15&keywords=mikroTik)
 * [7.5" eInk display](https://www.amazon.com/HAT-Resolution-Electronic-Controller-Compatible/dp/B0769XXSXR/ref=pd_sbs_147_4?_encoding=UTF8&pd_rd_i=B0769XXSXR&pd_rd_r=JS3SW50WZBW2603P3H3Y&pd_rd_w=3Ngy4&pd_rd_wg=EvAOf&psc=1&refRID=JS3SW50WZBW2603P3H3Y)
