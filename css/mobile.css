@@ -8,4 +8,7 @@
 	body {
 		background: #EDECE4;
 	}
+	.thumbnail {
+		display: none;
+	}
 }
