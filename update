@@ -1,0 +1,12 @@
+# baculus update script
+HOME=/home/pi
+LOG=/home/pi/baculus_update.log
+echo "--- START" >> $LOG
+date >> $LOG
+cd $HOME
+test -f mvd || git clone https://github.com/evbogue/mvd
+cd mvd
+git pull
+npm install
+date >> $LOG
+echo "--- END" >> $LOG
