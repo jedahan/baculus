@@ -1,12 +1,29 @@
 # baculus update script
 HOME=/home/pi
-LOG=/home/pi/baculus_update.log
+LOG=$HOME/baculus_update.log
+
+update_rclocal() {
+grep IPV6 /etc/rc.local && return
+  sudo bash -c 'cat << EOF > /etc/rc.local
+# Print ipv6 address
+_IPV6=$(ip -6 address show dev eth0 scope link | awk '/inet6/{print $2}')
+if [ "$_IPV6" ]; then
+  printf "Local ipv6 address is %s\n" "$_IPV6"
+fi
+  EOF'
+}
+
+update_mvd() {
+  cd $HOME
+  test -f mvd || git clone https://github.com/evbogue/mvd
+  cd mvd
+  git pull
+  npm install
+}
+
 echo "--- START" >> $LOG
 date >> $LOG
-cd $HOME
-test -f mvd || git clone https://github.com/evbogue/mvd
-cd mvd
-git pull
-npm install
+echo "updating rc.local" && update_rclocal
+echo "updating mvd" && update_mvd
 date >> $LOG
 echo "--- END" >> $LOG
