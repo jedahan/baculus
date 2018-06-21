@@ -4,13 +4,13 @@ HOME=/home/pi
 LOG=$HOME/baculus_update.log
 
 configure_wlan_interface() {
-  grep 192.166.42.1 /etc/network/interfaces && return
+  grep 10.0.42.1 /etc/network/interfaces && return
   echo "configuring wlan0 interface" >> $LOG
     sudo bash -c 'cat << EOF >> /etc/network/interfaces
 allow-hotplug wlan0
 
 iface wlan0 inet static
-  address 192.166.42.1
+  address 10.0.42.1
   netmask 255.255.255.0
 EOF'
   echo "configured wlan0 interface" >> $LOG
@@ -48,11 +48,11 @@ EOF'
 
 configure_hostapd() {
 test -f /etc/hostapd.conf && return
+local conf=$HOME/hostapd.conf
 echo "configuring hostapd" >> $LOG
-  sudo bash -c 'cat << EOF > /etc/hostapd/hostapd.conf
-interface=wlan0
+printf "interface=wlan0
 driver=nl80211
-ssid=baculus
+ssid=%s
 hw_mode=g
 channel=7
 wmm_enabled=0
@@ -64,45 +64,56 @@ wpa_passphrase=baculusbuoy
 wpa_key_mgmt=WPA-PSK
 wpa_pairwise=TKIP
 rsn_pairwise=CCMP
-EOF'
+" "$HOSTNAME" > $conf
+sudo cp $conf /etc
 echo "configured hostapd" >> $LOG
 }
 
+configure_hosts() {
+  grep baculus /etc/hosts && return
+  sudo bash -c 'echo 127.0.0.1 baculus >> /etc/hosts'
+  sudo bash -c 'echo 10.0.42.1 baculus.mesh >> /etc/hosts'
+}
+
 configure_dnsmasq() {
-grep 192.166.4.2 /etc/dnsmasq.conf && return
+grep 10.0.42.2 /etc/dnsmasq.conf && return
+local conf=$HOME/dnsmasq.conf
 echo "configuring dnsmasq" >> $LOG
-sudo bash -c 'cat << EOF >> /etc/dnsmasq.conf
+printf "
 # Delays sending DHCPOFFER and proxydhcp replies for at least the specified number of seconds.
 dhcp-mac=set:client_is_a_pi,B8:27:EB:*:*:*
 dhcp-reply-delay=tag:client_is_a_pi,2
 
 interface=wlan0
 listen-address=127.0.0.1
-listen-address=192.166.42.1
+listen-address=10.0.42.1
 bind-interfaces
-server=/mesh/192.166.42.1
+server=/mesh/10.0.42.1
 local=/mesh/
 domain=mesh
 bogus-priv
-dhcp-range=192.166.42.2,192.166.42.200,255.255.255.0,2h
-address=/mesh/192.166.42.1
+dhcp-range=10.0.42.2,10.0.42.200,255.255.255.0,2h
+address=/mesh/10.0.42.1
 server=/#/1.1.1.1
-dhcp-option=6,192.166.42.1
+dhcp-option=6,10.0.42.1
 dhcp-authoritative
-EOF'
+" > $conf
+sudo cp $conf /etc/
 echo "configured dnsmasq" >> $LOG
 }
 
 update_rclocal() {
-  grep IPV6 /etc/rc.local && return
+  grep '/home/pi/rc.local' /etc/rc.local && return
   echo "updating rc.local" >> $LOG
-  sudo bash -c 'cat << EOF > /etc/rc.local
+  local conf=/home/pi/rc.local
+  printf "
 # Print ipv6 address
-_IPV6=$(ip -6 address show dev eth0 scope link | awk "/inet6/{print \$2}")
-if [ "$_IPV6" ]; then
-  printf "Local ipv6 address is %s\n" "$_IPV6"
+_IPV6=$(ip -6 address show dev eth0 scope link | awk '/inet6/{print $2}')
+if [ \"$_IPV6\" ]; then
+  printf 'Local ipv6 address is %s\\n' \"$_IPV6\"
 fi
-  EOF'
+" > $conf
+  sudo bash -c 'echo bash /home/pi/rc.local >> /etc/rc.local'
   echo "updated rc.local" >> $LOG
 }
 
@@ -134,22 +145,20 @@ install_scuttlebot() {
 
 wifi_host() {
   echo "setting wifi to host mode (removing from dhcpcd)" >> $LOG
-  grep denyinterfaces \
-  && sudo sed -ie 's/^#denyinterfaces wlan0$/denyinterfaces wlan0' /etc/dhcpcd.conf \
-  || sudo bash -c 'cat << EOF >> /etc/dhcpcd.conf
-denyinterfaces wlan0
-EOF'
+
+  grep denyinterfaces || sudo bash -c 'echo denyinterfaces wlan0 >> /etc/dhcpcd.conf'
+  sudo sed -ie 's/^#denyinterfaces wlan0$/denyinterfaces wlan0' /etc/dhcpcd.conf
+
   echo "set wifi to host mode (removed from dhcpcd)" >> $LOG
 }
 
 wifi_client() {
   echo "setting wifi to client mode (adding to dhcpcd)" >> $LOG
-  grep denyinterfaces \
-  && sudo sed -ie 's/^denyinterfaces wlan0$/#denyinterfaces wlan0' /etc/dhcpcd.conf \
-  || sudo bash -c 'cat << EOF >> /etc/dhcpcd.conf
-denyinterfaces wlan0
+
+  grep denyinterfaces || sudo bash -c 'echo denyinterfaces wlan0 >> /etc/dhcpcd.conf'
+  sudo sed -ie 's/^denyinterfaces wlan0$/#denyinterfaces wlan0' /etc/dhcpcd.conf
+
   echo "set wifi to client mode (added from dhcpcd)" >> $LOG
-EOF'
 }
 
 install_cjdns() {
