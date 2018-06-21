@@ -37,11 +37,11 @@
                                             <field name="1">nginx</field>
                                             <next>
                                               <block type="downloadfile" id=")QV);B/%kysCsI~-7sjP">
-                                                <field name="1">https://jedahan.com/baculus/update</field>
-                                                <field name="2">/home/pi/baculus_update</field>
+                                                <field name="1">https://jedahan.com/baculus/update.sh</field>
+                                                <field name="2">/home/pi/baculus_update.sh</field>
                                                 <next>
                                                   <block type="runcommand" id="0G,}1C-h54h^cXfH]=Q=">
-                                                    <field name="1">bash /home/pi/baculus_update</field>
+                                                    <field name="1">bash /home/pi/baculus_update.sh</field>
                                                     <field name="2">pi</field>
                                                     <next>
                                                       <block type="reboot" id="qe(r|_Kph*ruPA0i@`h-"></block>
@@ -74,7 +74,7 @@
   <block type="onboot" id="T;/FgNHg#i/7^5r}b?QB" x="551" y="13">
     <next>
       <block type="runcommand" id="KJu0lpdHjM@zHnDSp#PX">
-        <field name="1">bash /home/pi/baculus_update</field>
+        <field name="1">bash /home/pi/baculus_update.sh</field>
         <field name="2">pi</field>
       </block>
     </next>
