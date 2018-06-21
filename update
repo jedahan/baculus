@@ -2,45 +2,42 @@
 HOME=/home/pi
 LOG=$HOME/baculus_update.log
 
-setup_hostapd() {
-  interface=wlan0
-  driver=nl80211
-  ssid=baculus
-  hw_mode=g
-  channel=7
-  wmm_enabled=0
-  macaddr_acl=0
-  auth_algs=1
-  ignore_broadcast_ssid=0
-  wpa=2
-  wpa_passphrase=baculus
-  wpa_key_mgmt=WPA-PSK
-  wpa_pairwise=TKIP
-  rsn_pairwise=CCMP
+configure_hostapd() {
+test -f /etc/hostapd.conf && return
+echo "configuring hostapd" >> $LOG
+  sudo bash -c 'cat << EOF > /etc/hostapd/hostapd.conf
+interface=wlan0
+driver=nl80211
+ssid=baculus
+hw_mode=g
+channel=7
+wmm_enabled=0
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid=0
+wpa=2
+wpa_passphrase=baculus
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP
+rsn_pairwise=CCMP
+EOF'
+echo "configured hostapd" >> $LOG
 }
 
-setup_dnsmasq() {
-# append to /etc/dnsmasq.conf
-  interface=wlan0
-    dhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h
-}
-
-add_missing_denyinterfaces() {
-  grep denyinterfaces /etc/dhcpcd.conf || sudo bash -c 'echo "denyinterfaces wlan0" >> /etc/dhcpcd.conf'
-}
-
-switch_wifi_to_client() {
-  add_missing_denyinterfaces
-  sudo sed -ie 's/^denyinterfaces wlan0$/#denyinterfaces wlan0/' /etc/dhcpcd.conf
-}
-
-switch_wifi_to_host() {
-  add_missing_denyinterfaces
-  sudo sed -ie 's/^#denyinterfaces wlan0$/denyinterfaces wlan0/' /etc/dhcpcd.conf
+configure_dnsmasq() {
+grep 192.168.4.2 /etc/dnsmasq.conf && return
+echo "configuring dnsmasq" >> $LOG
+sudo bash -c 'cat << EOF >> /etc/dnsmasq.conf
+# added by baculus-buoy
+interface=wlan0
+  dhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h
+EOF'
+echo "configured dnsmasq" >> $LOG
 }
 
 update_rclocal() {
-grep IPV6 /etc/rc.local && return
+  grep IPV6 /etc/rc.local && return
+  echo "updating rc.local" >> $LOG
   sudo bash -c 'cat << EOF > /etc/rc.local
 # Print ipv6 address
 _IPV6=$(ip -6 address show dev eth0 scope link | awk '/inet6/{print $2}')
@@ -48,28 +45,43 @@ if [ "$_IPV6" ]; then
   printf "Local ipv6 address is %s\n" "$_IPV6"
 fi
   EOF'
+  echo "updated rc.local" >> $LOG
 }
 
-update_mvd() {
+install_mvd() {
   cd $HOME
-  test -f mvd || git clone https://github.com/evbogue/mvd
+  test -d mvd && { test -f mvd/installed && return }
+  echo "installing mvd" >> $LOG
+  git clone https://github.com/evbogue/mvd
   cd mvd
   git pull
+  git checkout e98922f687ca57e6561d20a7b20423e50317ced2
   npm install
+  touch installed
+  echo "installed mvd" >> $LOG
 }
 
-echo "--- START" >> $LOG
-date >> $LOG
-echo "updating rc.local" && update_rclocal
-echo "updating mvd" && update_mvd
-date >> $LOG
-echo "--- END" >> $LOG
-
-echo "install cjdns" && install_cjdns
+install_scuttlebot() {
+  cd $HOME
+  test -d scuttlebot && { test -d scuttlebot/installed && return }
+  echo "installing scuttlebot" >> $LOG
+  git clone https://github.com/ssbc/scuttlebot.git
+  cd scuttlebot
+  git pull
+  git checkout f11eacb2457ed757f2b267720f56e33fd206c42f
+  npm install
+  touch installed
+  echo "installed scuttlebot" >> $LOG
+}
 
 install_cjdns() {
+  cd $HOME
+  test -d cjdns && { test -f cjdns/installed && return }
+  echo "installing cjdns" >> $LOG
   git clone https://github.com/cjdelisle/cjdns.git
   cd cjdns
+  git pull
+  git checkout e98922f687ca57e6561d20a7b20423e50317ced2
   NO_TEST=1 Seccomp_NO=1 ./do
   ./cjdroute --genconf > cjdroute.conf
   sudo cp cjdroute /usr/bin/cjdroute
@@ -79,16 +91,18 @@ install_cjdns() {
   sudo systemctl daemon-reload
   sudo systemctl enable cjdns
   sudo systemctl start cjdns
+  touch installed
+  echo "installed cjdns" >> $LOG
 }
 
-install_scuttlebot() {
-  git clone https://github.com/ssbc/scuttlebot.git
-  cd scuttlebot
-  npm install
-}
-
-install_mvd() {
-  git clone https://github.com/ssbc/mvd.git
-  cd mvd
-  npm install
-}
+echo "--- START" >> $LOG
+date >> $LOG
+cd $HOME
+install_mvd
+install_scuttlebot
+install_cjdns
+update_rclocal
+configure_hostapd
+configure_dnsmasq
+date >> $LOG
+echo "--- END" >> $LOG
