@@ -132,6 +132,26 @@ install_scuttlebot() {
   echo "installed scuttlebot" >> $LOG
 }
 
+wifi_host() {
+  echo "setting wifi to host mode (removing from dhcpcd)" >> $LOG
+  grep denyinterfaces \
+  && sudo sed -ie 's/^#denyinterfaces wlan0$/denyinterfaces wlan0' /etc/dhcpcd.conf \
+  || sudo bash -c 'cat << EOF >> /etc/dhcpcd.conf
+denyinterfaces wlan0
+EOF'
+  echo "set wifi to host mode (removed from dhcpcd)" >> $LOG
+}
+
+wifi_client() {
+  echo "setting wifi to client mode (adding to dhcpcd)" >> $LOG
+  grep denyinterfaces \
+  && sudo sed -ie 's/^denyinterfaces wlan0$/#denyinterfaces wlan0' /etc/dhcpcd.conf \
+  || sudo bash -c 'cat << EOF >> /etc/dhcpcd.conf
+denyinterfaces wlan0
+  echo "set wifi to client mode (added from dhcpcd)" >> $LOG
+EOF'
+}
+
 install_cjdns() {
   cd $HOME || return
   test -d cjdns && test -f cjdns/installed && return
@@ -164,5 +184,6 @@ configure_hostapd
 configure_dnsmasq
 configure_nginx
 configure_wlan_interface
+wifi_host
 date >> $LOG
 echo "--- END" >> $LOG
