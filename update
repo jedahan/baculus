@@ -24,6 +24,7 @@ setup_dnsmasq() {
   interface=wlan0
     dhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h
 }
+
 add_missing_denyinterfaces() {
   grep denyinterfaces /etc/dhcpcd.conf || sudo bash -c 'echo "denyinterfaces wlan0" >> /etc/dhcpcd.conf'
 }
@@ -78,4 +79,16 @@ install_cjdns() {
   sudo systemctl daemon-reload
   sudo systemctl enable cjdns
   sudo systemctl start cjdns
+}
+
+install_scuttlebot() {
+  git clone https://github.com/ssbc/scuttlebot.git
+  cd scuttlebot
+  npm install
+}
+
+install_mvd() {
+  git clone https://github.com/ssbc/mvd.git
+  cd mvd
+  npm install
 }
