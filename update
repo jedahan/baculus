@@ -2,6 +2,42 @@
 HOME=/home/pi
 LOG=$HOME/baculus_update.log
 
+setup_hostapd() {
+  interface=wlan0
+  driver=nl80211
+  ssid=baculus
+  hw_mode=g
+  channel=7
+  wmm_enabled=0
+  macaddr_acl=0
+  auth_algs=1
+  ignore_broadcast_ssid=0
+  wpa=2
+  wpa_passphrase=baculus
+  wpa_key_mgmt=WPA-PSK
+  wpa_pairwise=TKIP
+  rsn_pairwise=CCMP
+}
+
+setup_dnsmasq() {
+# append to /etc/dnsmasq.conf
+  interface=wlan0
+    dhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h
+}
+add_missing_denyinterfaces() {
+  grep denyinterfaces /etc/dhcpcd.conf || sudo bash -c 'echo "denyinterfaces wlan0" >> /etc/dhcpcd.conf'
+}
+
+switch_wifi_to_client() {
+  add_missing_denyinterfaces
+  sudo sed -ie 's/^denyinterfaces wlan0$/#denyinterfaces wlan0/' /etc/dhcpcd.conf
+}
+
+switch_wifi_to_host() {
+  add_missing_denyinterfaces
+  sudo sed -ie 's/^#denyinterfaces wlan0$/denyinterfaces wlan0/' /etc/dhcpcd.conf
+}
+
 update_rclocal() {
 grep IPV6 /etc/rc.local && return
   sudo bash -c 'cat << EOF > /etc/rc.local
@@ -27,3 +63,19 @@ echo "updating rc.local" && update_rclocal
 echo "updating mvd" && update_mvd
 date >> $LOG
 echo "--- END" >> $LOG
+
+echo "install cjdns" && install_cjdns
+
+install_cjdns() {
+  git clone https://github.com/cjdelisle/cjdns.git
+  cd cjdns
+  NO_TEST=1 Seccomp_NO=1 ./do
+  ./cjdroute --genconf > cjdroute.conf
+  sudo cp cjdroute /usr/bin/cjdroute
+  sudo cp cjdroute.conf /etc/cjdroute.conf
+  sudo sed -ie 's/"bind": "all"/"bind": "eth0"/' /etc/cjdroute.conf
+  sudo cp contrib/systemd/cjdns* /etc/systemd/system/
+  sudo systemctl daemon-reload
+  sudo systemctl enable cjdns
+  sudo systemctl start cjdns
+}
