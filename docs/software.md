@@ -43,5 +43,4 @@ Once it is done written, pop it into the pi. If you have a screen attached you s
 
 ![8. wifi](../../../../../Users/micro/Desktop/8. wifi.png)
 
-You can connect to this network and start chatting via scuttlebutt!
-
+You can connect to this network and start chatting!
