@@ -2,11 +2,11 @@
   <block type="onfirstboot" id="onfirstboot" x="32" y="20">
     <next>
       <block type="sethostname" id="O/gSH[HgvN^H74Y/EB=e">
-        <field name="1">baculus</field>
+        <field name="1">baculusNUMBER_HERE</field>
         <next>
           <block type="wifisetup" id="4GxCnkTEq0Zad3QWlw:Z">
-            <field name="1">NYCR24</field>
-            <field name="2">clubmate</field>
+            <field name="1">YOUR NETWORK HERE</field>
+            <field name="2">YOUR PASSWORD HERE</field>
             <field name="3">WPA/WPA2</field>
             <field name="4">US</field>
             <next>
