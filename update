@@ -2,6 +2,49 @@
 HOME=/home/pi
 LOG=$HOME/baculus_update.log
 
+configure_wlan_interface() {
+  grep 192.166.42.1 /etc/network/interfaces && return
+  echo "configuring wlan0 interface" >> $LOG
+    sudo bash -c 'cat << EOF >> /etc/network/interfaces
+allow-hotplug wlan0
+
+iface wlan0 inet static
+  address 192.166.42.1
+  netmask 255.255.255.0
+EOF'
+  echo "configured wlan0 interface" >> $LOG
+}
+
+configure_nginx() {
+  test -f /etc/nginx/sites-available/baculus && return
+  echo "configuring nginx" >> $LOG
+  sudo bash -c 'cat << EOF > /etc/nginx/sites-available
+server {
+    listen 80;
+    server_name baculus.mesh;
+
+    # For iOS
+    if ($http_user_agent ~* (CaptiveNetworkSupport) ) {
+        return 302 http://baculus.mesh/;
+    }
+
+    # Android
+    location /generate_204 {
+        return 302 http://baculus.mesh/;
+    }
+
+    location / {
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   Host      $http_host;
+        proxy_pass         http://127.0.0.1:9191;
+    }
+}
+EOF'
+  sudo ln -s /etc/nginx/sites-available/baculus /etc/nginx/sites-enabled/baculus
+  sudo systemctl enable nginx
+  echo "configured nginx" >> $LOG
+}
+
 configure_hostapd() {
 test -f /etc/hostapd.conf && return
 echo "configuring hostapd" >> $LOG
@@ -25,12 +68,26 @@ echo "configured hostapd" >> $LOG
 }
 
 configure_dnsmasq() {
-grep 192.168.4.2 /etc/dnsmasq.conf && return
+grep 192.166.4.2 /etc/dnsmasq.conf && return
 echo "configuring dnsmasq" >> $LOG
 sudo bash -c 'cat << EOF >> /etc/dnsmasq.conf
-# added by baculus-buoy
+# Delays sending DHCPOFFER and proxydhcp replies for at least the specified number of seconds.
+dhcp-mac=set:client_is_a_pi,B8:27:EB:*:*:*
+dhcp-reply-delay=tag:client_is_a_pi,2
+
 interface=wlan0
-  dhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h
+listen-address=127.0.0.1
+listen-address=192.166.42.1
+bind-interfaces
+server=/mesh/192.166.42.1
+local=/mesh/
+domain=mesh
+bogus-priv
+dhcp-range=192.166.42.2,192.166.42.200,255.255.255.0,2h
+address=/mesh/192.166.42.1
+server=/#/1.1.1.1
+dhcp-option=6,192.166.42.1
+dhcp-authoritative
 EOF'
 echo "configured dnsmasq" >> $LOG
 }
@@ -104,5 +161,7 @@ install_cjdns
 update_rclocal
 configure_hostapd
 configure_dnsmasq
+configure_nginx
+configure_wlan_interface
 date >> $LOG
 echo "--- END" >> $LOG
