@@ -1,3 +1,4 @@
+#!/bin/bash
 # baculus update script
 HOME=/home/pi
 LOG=$HOME/baculus_update.log
@@ -97,7 +98,7 @@ update_rclocal() {
   echo "updating rc.local" >> $LOG
   sudo bash -c 'cat << EOF > /etc/rc.local
 # Print ipv6 address
-_IPV6=$(ip -6 address show dev eth0 scope link | awk '/inet6/{print $2}')
+_IPV6=$(ip -6 address show dev eth0 scope link | awk "/inet6/{print \$2}")
 if [ "$_IPV6" ]; then
   printf "Local ipv6 address is %s\n" "$_IPV6"
 fi
@@ -106,11 +107,11 @@ fi
 }
 
 install_mvd() {
-  cd $HOME
-  test -d mvd && { test -f mvd/installed && return }
+  cd $HOME || return
+  test -d mvd && test -f mvd/installed && return
   echo "installing mvd" >> $LOG
   git clone https://github.com/evbogue/mvd
-  cd mvd
+  cd mvd || return
   git pull
   git checkout e98922f687ca57e6561d20a7b20423e50317ced2
   npm install
@@ -119,11 +120,11 @@ install_mvd() {
 }
 
 install_scuttlebot() {
-  cd $HOME
-  test -d scuttlebot && { test -d scuttlebot/installed && return }
+  cd $HOME || return
+  test -d scuttlebot && test -f scuttlebot/installed && return
   echo "installing scuttlebot" >> $LOG
   git clone https://github.com/ssbc/scuttlebot.git
-  cd scuttlebot
+  cd scuttlebot || return
   git pull
   git checkout f11eacb2457ed757f2b267720f56e33fd206c42f
   npm install
@@ -132,11 +133,11 @@ install_scuttlebot() {
 }
 
 install_cjdns() {
-  cd $HOME
-  test -d cjdns && { test -f cjdns/installed && return }
+  cd $HOME || return
+  test -d cjdns && test -f cjdns/installed && return
   echo "installing cjdns" >> $LOG
   git clone https://github.com/cjdelisle/cjdns.git
-  cd cjdns
+  cd cjdns || return
   git pull
   git checkout e98922f687ca57e6561d20a7b20423e50317ced2
   NO_TEST=1 Seccomp_NO=1 ./do
@@ -154,7 +155,7 @@ install_cjdns() {
 
 echo "--- START" >> $LOG
 date >> $LOG
-cd $HOME
+cd $HOME || return
 install_mvd
 install_scuttlebot
 install_cjdns
