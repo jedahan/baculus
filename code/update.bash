@@ -19,7 +19,7 @@ EOF'
 configure_nginx() {
   test -f /etc/nginx/sites-available/baculus && return
   echo "configuring nginx" >> $LOG
-  sudo bash -c 'cat << EOF > /etc/nginx/sites-available
+  sudo bash -c 'cat << EOF > /etc/nginx/sites-available/baculus
 server {
     listen 80;
     server_name baculus.mesh;
@@ -37,11 +37,12 @@ server {
     location / {
         proxy_set_header   X-Real-IP $remote_addr;
         proxy_set_header   Host      $http_host;
-        proxy_pass         http://127.0.0.1:9191;
+        proxy_pass         http://127.0.0.1:8027;
     }
 }
 EOF'
   sudo ln -s /etc/nginx/sites-available/baculus /etc/nginx/sites-enabled/baculus
+  sudo rm /etc/nginx/sites-available/default
   sudo systemctl enable nginx
   echo "configured nginx" >> $LOG
 }
