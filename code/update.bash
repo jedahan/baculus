@@ -47,10 +47,11 @@ EOF'
 }
 
 configure_hostapd() {
-test -f /etc/hostapd.conf && return
-local conf=$HOME/hostapd.conf
-echo "configuring hostapd" >> $LOG
-printf "interface=wlan0
+  local dest=/etc/hostapd
+  local conf=hostapd.conf
+  test -f $dest/$conf && return
+  echo "configuring hostapd" >> $LOG
+  printf "interface=wlan0
 driver=nl80211
 ssid=%s
 hw_mode=g
@@ -64,10 +65,10 @@ wpa_passphrase=baculusbuoy
 wpa_key_mgmt=WPA-PSK
 wpa_pairwise=TKIP
 rsn_pairwise=CCMP
-" "$HOSTNAME" > $conf
-sudo cp $conf /etc
-sudo bash -c 'echo DAEMON_CONF="etc/hostapd/hostapd.conf" >> /etc/default/hostapd'
-echo "configured hostapd" >> $LOG
+" "$HOSTNAME" > $HOME/$conf
+  sudo cp $HOME/$conf $dest/
+  sudo bash -c 'echo DAEMON_CONF="etc/hostapd/hostapd.conf" >> /etc/default/hostapd'
+  echo "configured hostapd" >> $LOG
 }
 
 configure_hosts() {
