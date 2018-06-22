@@ -135,6 +135,7 @@ install_scuttlebot() {
   cd $HOME || return
   test -d scuttlebot && test -f scuttlebot/installed && return
   echo "installing scuttlebot" >> $LOG
+  sudo bash -c 'echo ssb_appname=bac >> /etc/environment'
   git clone https://github.com/ssbc/scuttlebot.git
   cd scuttlebot || return
   git pull
