@@ -1,6 +1,6 @@
 # Baculus
 
-## Phase II Submission
+## Prototype Application
 
 ### Links to Public Documentation
 
