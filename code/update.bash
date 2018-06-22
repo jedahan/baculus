@@ -146,7 +146,7 @@ install_scuttlebot() {
 wifi_host() {
   echo "setting wifi to host mode (removing from dhcpcd)" >> $LOG
 
-  grep denyinterfaces || sudo bash -c 'echo denyinterfaces wlan0 >> /etc/dhcpcd.conf'
+  grep denyinterfaces dhcpcd.conf || sudo bash -c 'echo denyinterfaces wlan0 >> /etc/dhcpcd.conf'
   sudo sed -ie 's/^#denyinterfaces wlan0$/denyinterfaces wlan0' /etc/dhcpcd.conf
 
   echo "set wifi to host mode (removed from dhcpcd)" >> $LOG
@@ -155,7 +155,7 @@ wifi_host() {
 wifi_client() {
   echo "setting wifi to client mode (adding to dhcpcd)" >> $LOG
 
-  grep denyinterfaces || sudo bash -c 'echo denyinterfaces wlan0 >> /etc/dhcpcd.conf'
+  grep denyinterfaces /etc/dhcpcd.conf || sudo bash -c 'echo denyinterfaces wlan0 >> /etc/dhcpcd.conf'
   sudo sed -ie 's/^denyinterfaces wlan0$/#denyinterfaces wlan0' /etc/dhcpcd.conf
 
   echo "set wifi to client mode (added from dhcpcd)" >> $LOG
