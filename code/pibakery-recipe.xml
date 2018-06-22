@@ -1,0 +1,93 @@
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="onfirstboot" id="onfirstboot" x="32" y="20">
+    <next>
+      <block type="sethostname" id="O/gSH[HgvN^H74Y/EB=e">
+        <field name="1">baculusLETTER</field>
+        <next>
+          <block type="changepass" id="*BY2~YAv86?1VetRytp6">
+            <field name="1">baculusbuoy</field>
+            <next>
+              <block type="wifisetup" id="4GxCnkTEq0Zad3QWlw:Z">
+                <field name="1">NETWORK</field>
+                <field name="2">PASSWORD</field>
+                <field name="3">WPA/WPA2</field>
+                <field name="4">US</field>
+                <next>
+                  <block type="runcommand" id="j1W_AYRBFFBtD.VE7Y.T">
+                    <field name="1">ip route del default dev eth0</field>
+                    <field name="2">root</field>
+                    <next>
+                      <block type="downloadfile" id="+cAD/6~9ZZl5Omv)K^D7">
+                        <field name="1">https://deb.nodesource.com/setup_8.x</field>
+                        <field name="2">/home/pi/node-setup_8.x</field>
+                        <next>
+                          <block type="runcommand" id="(r-!_6P5pWruu,p:n3X{">
+                            <field name="1">bash /home/pi/node-setup_8.x</field>
+                            <field name="2">root</field>
+                            <next>
+                              <block type="packageinstall" id="kaU^{C]nw=pGx0XO{up(">
+                                <field name="1">build-essential</field>
+                                <next>
+                                  <block type="packageinstall" id="wLXAzHmzIVIcd+i6ZLL;">
+                                    <field name="1">git</field>
+                                    <next>
+                                      <block type="packageinstall" id="tr2sT5TM8n;Zemy(q:EO">
+                                        <field name="1">nodejs</field>
+                                        <next>
+                                          <block type="packageinstall" id="S0hs#q#BYEeA.P[F5uw{">
+                                            <field name="1">hostapd</field>
+                                            <next>
+                                              <block type="packageinstall" id="WhMl2iw5u_0qOo4Z{+W5">
+                                                <field name="1">dnsmasq</field>
+                                                <next>
+                                                  <block type="packageinstall" id="B`AQE{yNg5rJUSIEj)[W">
+                                                    <field name="1">nginx</field>
+                                                    <next>
+                                                      <block type="downloadfile" id=")QV);B/%kysCsI~-7sjP">
+                                                        <field name="1">https://jedahan.com/baculus/code/update.bash</field>
+                                                        <field name="2">/home/pi/baculus_update.bash</field>
+                                                        <next>
+                                                          <block type="runcommand" id="0G,}1C-h54h^cXfH]=Q=">
+                                                            <field name="1">bash /home/pi/baculus_update.bash</field>
+                                                            <field name="2">pi</field>
+                                                            <next>
+                                                              <block type="reboot" id="qe(r|_Kph*ruPA0i@`h-"></block>
+                                                            </next>
+                                                          </block>
+                                                        </next>
+                                                      </block>
+                                                    </next>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+  <block type="onboot" id="T;/FgNHg#i/7^5r}b?QB" x="551" y="13">
+    <next>
+      <block type="runcommand" id="KJu0lpdHjM@zHnDSp#PX">
+        <field name="1">bash /home/pi/baculus_update.bash</field>
+        <field name="2">pi</field>
+      </block>
+    </next>
+  </block>
+</xml>
