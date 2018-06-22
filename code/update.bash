@@ -66,6 +66,7 @@ wpa_pairwise=TKIP
 rsn_pairwise=CCMP
 " "$HOSTNAME" > $conf
 sudo cp $conf /etc
+sudo bash -c 'echo DAEMON_CONF="etc/hostapd/hostapd.conf" >> /etc/default/hostapd'
 echo "configured hostapd" >> $LOG
 }
 
