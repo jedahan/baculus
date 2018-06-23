@@ -48,7 +48,7 @@ All the technologies, and design have been chosen with the following values in m
 
 **Hardware**
 
-The basic hardware design is a lithium ion battery powering a raspberry pi, coordinating a limeSDR, RTL-SDR, and ubiquiti litebeam access point. This will create three networks
+The basic hardware design is a lithium ion battery powering a raspberry pi, coordinating a  and ubiquiti litebeam access point. This will create three networks
 
 1. Iridium network reciever for unconnected nodes to recieve GPS coords
 2. Wifi mesh network for screen-based devices to connect to the map and message board applications for coordinating people and places
@@ -82,10 +82,7 @@ The main differentiator is that the nodes know their physical location on earth 
 
 Nodes share GPS coordinates with each other over wifi, and if any node has an internet or Iridium uplink, precipitate that list up to the Iridium Network, to be burst across the appropriate zones. These [Iridium bursts](https://mozilla.fluxx.io/dashboard/index#link-here) are receivable **anywhere in the world**, allowing disconnected nodes to find their closest neighbor. After being brought close enough to connect via wifi, that nodes gps location gets added to the cloud and the cycle continues.
 
-An individual can find out what direction, and how long it will take (time and distance), to bring the node close enough to join others on the network via a wifi map, sms broadcast, and divining rod. A digital and physical compass, led, vibrating motor, and
- display will direct a person in the correct heading. If Iridium is 
-down, we fallback to the last known gps coordinates. Will we also 
-experiment with SDR frequency scanning over common channels like AM/FM for the prototype, time allowing.
+An individual can find out what direction, and how long it will take (time and distance), to bring the node close enough to join others on the network via a wifi map, sms broadcast, and divining rod. A digital and physical compass, led, vibrating motor, and display will direct a person in the correct heading. If Iridium is down, we fallback to the last known gps coordinates. Will we also experiment with SDR frequency scanning over common channels like AM/FM for the prototype, time allowing.
 
 ###### Affordability
 
