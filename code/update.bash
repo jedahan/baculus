@@ -1,23 +1,26 @@
 #!/bin/bash
 # baculus update script
+set -xe
+
 HOME=/home/pi
-LOG=$HOME/baculus_update.log
+LOG=$HOME/baculus.log
+export src=$HOME/config/ && mkdir -p $src
 
 configure_wlan_interface() {
-  grep 10.0.42.1 /etc/network/interfaces && return
-  echo "configuring wlan0 interface" >> $LOG
-    sudo bash -c 'cat << EOF >> /etc/network/interfaces
+  grep "configured wlan interface" $LOG && return
+  echo "configuring wlan interface" >> $LOG
+  printf '
 allow-hotplug wlan0
 
 iface wlan0 inet static
   address 10.0.42.1
   netmask 255.255.255.0
-EOF'
-  echo "configured wlan0 interface" >> $LOG
+' | sudo tee -a /etc/network/interfaces
+  echo "configured wlan interface" >> $LOG
 }
 
 configure_nginx() {
-  test -f /etc/nginx/sites-available/baculus && return
+  grep "configured nginx" $LOG && return
   echo "configuring nginx" >> $LOG
   sudo bash -c 'cat << EOF > /etc/nginx/sites-available/baculus
 server {
@@ -48,10 +51,9 @@ EOF'
 }
 
 configure_hostapd() {
-  local dest=/etc/hostapd
-  local conf=hostapd.conf
-  test -f $dest/$conf && return
+  grep "configured hostapd" $LOG && return
   echo "configuring hostapd" >> $LOG
+  local config=/etc/hostapd/hostapd.conf
   printf "interface=wlan0
 driver=nl80211
 ssid=%s
@@ -66,24 +68,27 @@ wpa_passphrase=baculusbuoy
 wpa_key_mgmt=WPA-PSK
 wpa_pairwise=TKIP
 rsn_pairwise=CCMP
-" "$HOSTNAME" > $HOME/$conf
-  sudo cp $HOME/$conf $dest/
-  sudo bash -c 'echo DAEMON_CONF="etc/hostapd/hostapd.conf" >> /etc/default/hostapd'
+" "$HOSTNAME" | sudo tee $config
+  echo "DAEMON_CONF=$config" | sudo tee -a /etc/default/hostapd
   echo "configured hostapd" >> $LOG
 }
 
 configure_hosts() {
-  grep baculus /etc/hosts && return
-  sudo bash -c 'echo 127.0.0.1 baculus >> /etc/hosts'
-  sudo bash -c 'echo 10.0.42.1 baculus.mesh >> /etc/hosts'
+  grep "configured hosts" $LOG && return
+  echo "configuring hosts" >> $LOG
+  local config=/etc/hosts
+  printf "
+127.0.0.1 baculus
+10.0.42.1 baculus.mesh
+" | sudo tee -a $config
+  echo "configured hosts" >> $LOG
 }
 
 configure_dnsmasq() {
-grep 10.0.42.2 /etc/dnsmasq.conf && return
-local conf=$HOME/dnsmasq.conf
-echo "configuring dnsmasq" >> $LOG
-printf "
-# Delays sending DHCPOFFER and proxydhcp replies for at least the specified number of seconds.
+  grep "configured dnsmasq" $LOG && return
+  echo "configuring dnsmasq" >> $LOG
+printf \
+"# Delays sending DHCPOFFER and proxydhcp replies for at least the specified number of seconds.
 dhcp-mac=set:client_is_a_pi,B8:27:EB:*:*:*
 dhcp-reply-delay=tag:client_is_a_pi,2
 
@@ -100,58 +105,80 @@ address=/mesh/10.0.42.1
 server=/#/1.1.1.1
 dhcp-option=6,10.0.42.1
 dhcp-authoritative
-" > $conf
-sudo cp $conf /etc/
-echo "configured dnsmasq" >> $LOG
+" | sudo tee /etc/dnsmasq.conf
+  echo "configured dnsmasq" >> $LOG
 }
 
 update_rclocal() {
-  grep '/home/pi/rc.local' /etc/rc.local && return
-  echo "updating rc.local" >> $LOG
-  local conf=/home/pi/rc.local
+  grep "updated rclocal" $LOG && return
+  echo "updating rclocal" >> $LOG
   printf "
 # Print ipv6 address
-_IPV6=$(ip -6 address show dev eth0 scope link | awk '/inet6/{print $2}')
-if [ \"$_IPV6\" ]; then
-  printf 'Local ipv6 address is %s\\n' \"$_IPV6\"
+_IPV6=\$(ip -6 address show dev eth0 scope link | awk '/inet6/{print \$2}')
+if [ \"\$_IPV6\" ]; then
+  printf 'Local ipv6 address is %s\\n' \"\$_IPV6\"
 fi
-" > $conf
-  sudo bash -c 'echo bash /home/pi/rc.local >> /etc/rc.local'
+" | sudo tee -a /etc/rc.local
   echo "updated rc.local" >> $LOG
 }
 
 install_mvd() {
-  cd $HOME || return
-  test -d mvd && test -f mvd/installed && return
+  grep "installed mvd" $LOG && return
   echo "installing mvd" >> $LOG
+  cd $HOME
   git clone https://github.com/evbogue/mvd
-  cd mvd || return
+  pushd mvd
   git pull
   git checkout e98922f687ca57e6561d20a7b20423e50317ced2
   npm install
-  touch installed
+  popd
   echo "installed mvd" >> $LOG
 }
 
 install_scuttlebot() {
-  cd $HOME || return
-  test -d scuttlebot && test -f scuttlebot/installed && return
+  grep "installed scuttlebot" $LOG && return
   echo "installing scuttlebot" >> $LOG
-  sudo bash -c 'echo ssb_appname=bac >> /etc/environment'
-  git clone https://github.com/ssbc/scuttlebot.git
-  cd scuttlebot || return
-  git pull
-  git checkout f11eacb2457ed757f2b267720f56e33fd206c42f
+  cd $HOME
+  # broadcast-stream
+  git clone https://github.com/jedahan/broadcast-stream.git --branch routerless
+  pushd broadcast-stream
+  git checkout 53e28ee7be3a247a62dc6f7003d2c89b9a38770e
   npm install
-  touch installed
+  popd
+  # scuttlebot
+  git clone https://github.com/jedahan/scuttlebot.git --branch routerless
+  pushd scuttlebot
+  git checkout 4d1c0a97e7b1d5f216ec425190d77743bc28e15f
+  npm install
+  npm link ../broadcast-stream
+  popd
+  # appname
+  echo ssb_appname=bac | sudo tee -a /etc/environment
   echo "installed scuttlebot" >> $LOG
+}
+
+install_cjdns() {
+  grep "installed cjdns" $LOG && return
+  echo "installing cjdns" >> $LOG
+  cd $HOME
+  git clone https://github.com/cjdelisle/cjdns.git
+  pushd cjdns
+  git pull
+  git checkout e98922f687ca57e6561d20a7b20423e50317ced2
+  NO_TEST=1 Seccomp_NO=1 ./do
+  sudo cp cjdroute /usr/bin/cjdroute
+  cjdroute --genconf | sed -e 's/"bind": "all"/"bind": "eth0"/' | sudo tee /etc/cjdroute.conf
+  sudo cp contrib/systemd/cjdns* /etc/systemd/system/
+  popd
+  echo "installed cjdns" >> $LOG
 }
 
 wifi_host() {
   echo "setting wifi to host mode (removing from dhcpcd)" >> $LOG
 
-  grep denyinterfaces dhcpcd.conf || sudo bash -c 'echo denyinterfaces wlan0 >> /etc/dhcpcd.conf'
-  sudo sed -ie 's/^#denyinterfaces wlan0$/denyinterfaces wlan0' /etc/dhcpcd.conf
+  local config=/etc/dhcpcd.conf
+  grep denyinterfaces $config || echo denyinterfaces wlan0 | sudo tee -a $config
+  sudo sed -ie 's/^#denyinterfaces wlan0$/denyinterfaces wlan0' $config
 
   echo "set wifi to host mode (removed from dhcpcd)" >> $LOG
 }
@@ -159,35 +186,14 @@ wifi_host() {
 wifi_client() {
   echo "setting wifi to client mode (adding to dhcpcd)" >> $LOG
 
-  grep denyinterfaces /etc/dhcpcd.conf || sudo bash -c 'echo denyinterfaces wlan0 >> /etc/dhcpcd.conf'
-  sudo sed -ie 's/^denyinterfaces wlan0$/#denyinterfaces wlan0' /etc/dhcpcd.conf
+  local config=/etc/dhcpcd.conf
+  grep denyinterfaces $config || echo denyinterfaces wlan0 | sudo tee -a $config
+  sudo sed -ie 's/^denyinterfaces wlan0$/#denyinterfaces wlan0' $config
 
   echo "set wifi to client mode (added from dhcpcd)" >> $LOG
 }
 
-install_cjdns() {
-  cd $HOME || return
-  test -d cjdns && test -f cjdns/installed && return
-  echo "installing cjdns" >> $LOG
-  git clone https://github.com/cjdelisle/cjdns.git
-  cd cjdns || return
-  git pull
-  git checkout e98922f687ca57e6561d20a7b20423e50317ced2
-  NO_TEST=1 Seccomp_NO=1 ./do
-  ./cjdroute --genconf > cjdroute.conf
-  sudo cp cjdroute /usr/bin/cjdroute
-  sudo cp cjdroute.conf /etc/cjdroute.conf
-  sudo sed -ie 's/"bind": "all"/"bind": "eth0"/' /etc/cjdroute.conf
-  sudo cp contrib/systemd/cjdns* /etc/systemd/system/
-  sudo systemctl daemon-reload
-  sudo systemctl enable cjdns
-  sudo systemctl start cjdns
-  touch installed
-  echo "installed cjdns" >> $LOG
-}
-
-echo "--- START" >> $LOG
-date >> $LOG
+echo "--- START" $(date) >> $LOG
 cd $HOME || return
 install_mvd
 install_scuttlebot
@@ -198,5 +204,4 @@ configure_dnsmasq
 configure_nginx
 configure_wlan_interface
 wifi_host
-date >> $LOG
-echo "--- END" >> $LOG
+echo "--- END" $(date) >> $LOG
