@@ -20,8 +20,7 @@ RUN git clone https://github.com/jedahan/scuttlebot --branch routerless \
   && npm link ../broadcast-stream
 
 COPY delipv4 .
-RUN cat delipv4 >> $HOME/.profile \
-  && rm delipv4
+RUN cat delipv4 >> $HOME/.bashrc && rm delipv4
 
 # with dev tools
 FROM scuttlebot
