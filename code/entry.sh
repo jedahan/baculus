@@ -1,3 +1,9 @@
+# This script is for developing scuttlebutt in docker, which:
+#
+# * sets up ipv6 link-local only network
+# * starts bash as the node user
+# * exports some environment variables
+
 # remove public ip address
 export public=$(ip addr show eth0 | grep -oE '[0-9.]+/16')
 ip addr del ${public} dev eth0
