@@ -1,11 +1,12 @@
-<xml xmlns="http://www.w3.org/1999/xhtml">
+<xml 
+  xmlns="http://www.w3.org/1999/xhtml">
   <block type="onfirstboot" id="onfirstboot" x="32" y="20">
     <next>
       <block type="sethostname" id="O/gSH[HgvN^H74Y/EB=e">
         <field name="1">baculusLETTER</field>
         <next>
           <block type="changepass" id="*BY2~YAv86?1VetRytp6">
-            <field name="1">baculusbuoy</field>
+            <field name="1">baculus</field>
             <next>
               <block type="wifisetup" id="4GxCnkTEq0Zad3QWlw:Z">
                 <field name="1">NETWORK</field>
@@ -82,7 +83,7 @@
       </block>
     </next>
   </block>
-  <block type="onboot" id="T;/FgNHg#i/7^5r}b?QB" x="551" y="13">
+  <block type="onboot" id="T;/FgNHg#i/7^5r}b?QB" x="556" y="18">
     <next>
       <block type="runcommand" id="KJu0lpdHjM@zHnDSp#PX">
         <field name="1">bash /home/pi/baculus_update.bash</field>
@@ -90,4 +91,7 @@
       </block>
     </next>
   </block>
+  <firstboot 
+    xmlns="">0
+  </firstboot>
 </xml>

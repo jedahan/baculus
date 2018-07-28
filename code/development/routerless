@@ -1,3 +1,6 @@
+# A quick way to start the docker container for development
+# Expects an ssb-routerless image, which we need to create a dockerfile for at some point
+
 letter=${1:-a}
 
 docker run -it \
