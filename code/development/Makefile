@@ -8,12 +8,4 @@ run:
 --sysctl net.ipv6.conf.all.disable_ipv6=0 \
 --cap-add NET_ADMIN \
 --cap-add NET_BROADCAST \
-scuttlebot:dev /bin/bash
-
-entry:
-	docker run -it \
---sysctl net.ipv6.conf.all.disable_ipv6=0 \
---cap-add NET_ADMIN \
---cap-add NET_BROADCAST \
---entrypoint /bin/bash \
-scuttlebot:dev entry.sh
+scuttlebot:dev

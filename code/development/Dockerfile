@@ -19,7 +19,9 @@ RUN git clone https://github.com/jedahan/scuttlebot --branch routerless \
   && npm install \
   && npm link ../broadcast-stream
 
-COPY entry.sh .
+COPY delipv4 .
+RUN cat delipv4 >> $HOME/.profile \
+  && rm delipv4
 
 # with dev tools
 FROM scuttlebot
@@ -37,5 +39,6 @@ RUN apt update \
 
 # allow running ip as sudo
 RUN echo 'node ALL=NOPASSWD:/sbin/ip' >> /etc/sudoers
+CMD /bin/bash
 
 USER node
