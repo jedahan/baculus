@@ -44,7 +44,11 @@ RUN usermod -a -G sudo node \
   && echo 'node ALL=NOPASSWD:/usr/bin/tshark' >> /etc/sudoers
 
 USER node
-RUN echo 'cd ~/scuttlebot' >> ~/.bashrc
+RUN printf '\n\
+cd ~/scuttlebot\n\
+export ssb_host=$(ip addr show dev eth0 | grep -oE "fe80[0-9a-f:]+")\n\
+' >> ~/.bashrc
 
-COPY delipv4 /home/node
-CMD /bin/bash /home/node/delipv4 && /usr/bin/env -p /bin/bash
+CMD export public=$(ip addr show eth0 | grep -oE '[0-9.]+/16') \
+  && sudo ip addr del $public dev eth0 \
+  && bash
