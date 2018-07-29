@@ -12,4 +12,6 @@ run: build
 --cap-add NET_ADMIN \
 --cap-add NET_BROADCAST \
 --mount 'type=bind,source=/Volumes/data/code/scuttlebot,destination=/home/node/scuttlebot' \
+--mount 'type=bind,source=/Volumes/data/code/multiserver,destination=/home/node/multiserver' \
+--mount 'type=bind,source=/Volumes/data/code/broadcast-stream,destination=/home/node/broadcast-stream' \
 scuttlebot:dev ${cmd}
