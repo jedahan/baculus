@@ -14,10 +14,15 @@ RUN git clone https://github.com/jedahan/broadcast-stream --branch routerless \
   && cd broadcast-stream \
   && npm install
 
+RUN git clone https://github.com/jedahan/multiserver --branch routerless \
+  && cd multiserver \
+  && npm install
+
 RUN git clone https://github.com/jedahan/scuttlebot --branch routerless \
   && cd scuttlebot \
   && npm install \
-  && npm link ../broadcast-stream
+  && npm link ../broadcast-stream \
+  && npm link ../multiserver
 
 COPY delipv4 .
 
