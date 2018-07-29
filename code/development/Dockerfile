@@ -24,13 +24,11 @@ RUN git clone https://github.com/jedahan/scuttlebot --branch routerless \
   && npm link ../broadcast-stream \
   && npm link ../multiserver
 
-COPY delipv4 .
-
 # with dev tools
 FROM scuttlebot
 USER root
 RUN apt update \
-  && DEBIAN_FRONTEND=noninteractive apt install -y vim net-tools screen socat sudo tshark
+  && DEBIAN_FRONTEND=noninteractive apt install -y vim net-tools screen socat sudo
 
 # setup non-root tshark
 RUN apt update \
@@ -48,4 +46,5 @@ RUN usermod -a -G sudo node \
 USER node
 RUN echo 'cd ~/scuttlebot' >> ~/.bashrc
 
-CMD /bin/bash delipv4 && /bin/bash
+COPY delipv4 /home/node
+CMD /bin/bash /home/node/delipv4 && /usr/bin/env -p /bin/bash
