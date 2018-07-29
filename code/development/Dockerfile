@@ -30,7 +30,7 @@ COPY delipv4 .
 FROM scuttlebot
 USER root
 RUN apt update \
-  && DEBIAN_FRONTEND=noninteractive apt install -y vim net-tools tshark socat sudo
+  && DEBIAN_FRONTEND=noninteractive apt install -y vim net-tools screen socat sudo tshark
 
 # setup non-root tshark
 RUN apt update \
