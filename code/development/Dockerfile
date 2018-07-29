@@ -44,6 +44,8 @@ RUN apt update \
 RUN usermod -a -G sudo node \
   && echo 'node ALL=NOPASSWD:/sbin/ip' >> /etc/sudoers \
   && echo 'node ALL=NOPASSWD:/usr/bin/tshark' >> /etc/sudoers
-CMD /bin/bash delipv4 && /bin/bash
 
 USER node
+RUN echo 'cd ~/scuttlebot' >> ~/.bashrc
+
+CMD /bin/bash delipv4 && /bin/bash
