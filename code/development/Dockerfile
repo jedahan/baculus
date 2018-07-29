@@ -43,12 +43,14 @@ RUN usermod -a -G sudo node \
   && echo 'node ALL=NOPASSWD:/sbin/ip' >> /etc/sudoers \
   && echo 'node ALL=NOPASSWD:/usr/bin/tshark' >> /etc/sudoers
 
+# setup ssb_host
 USER node
 RUN printf '\n\
-cd ~/scuttlebot\n\
 export ssb_host=$(ip addr show dev eth0 | grep -oE "fe80[0-9a-f:]+")\n\
+cd ~/scuttlebot\n\
 ' >> ~/.bashrc
 
+# by default, remove ipv4 address
 CMD export public=$(ip addr show eth0 | grep -oE '[0-9.]+/16') \
   && sudo ip addr del $public dev eth0 \
   && bash
