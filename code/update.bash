@@ -191,8 +191,15 @@ wifi_client() {
   echo "set wifi to client mode (added from dhcpcd)" >> $LOG
 }
 
+setup_npm() {
+  export NPM_CONFIG_PREFIX=$HOME/.npm/global
+  mkdir -p $NPM_CONFIG_PREFIX
+  echo NPM_CONFIG_PREFIX=$NPM_CONFIG_PREFIX | sudo tee -a /etc/environment
+}
+
 echo "--- START" $(date) >> $LOG
 cd $HOME || return
+setup_npm
 install_mvd
 install_scuttlebot
 install_cjdns
