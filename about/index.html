@@ -1,45 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>	
+
+<head>
 	<meta charset="utf-8" />
 	<title>Baculus</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
-	<link rel="stylesheet" href="../css/mobile.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
-	<link rel="stylesheet" href="../css/responsive.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+	<link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+	<link rel="stylesheet" href="../css/mobile.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+	<link rel="stylesheet" href="../css/responsive.css" type="text/css" media="screen" title="no title" charset="utf-8" />
 	<link href="https://fonts.googleapis.com/css?family=Crimson+Text:400,700|Rubik" rel="stylesheet">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<script src='../js/jquery-3.3.1.min.js'></script>
 	<script src="https://use.fontawesome.com/b80927d916.js"></script>
 
 	<script>
-	    $(document).ready(function(){
-	        $("#nav-mobile").html($("#nav-main").html());
-	        $("#nav-trigger span").click(function(){
-	            if ($("nav#nav-mobile ul").hasClass("expanded")) {
-	                $("nav#nav-mobile ul.expanded").removeClass("expanded").slideUp(250);
-	                $(this).removeClass("open");
-	            } else {
-	                $("nav#nav-mobile ul").addClass("expanded").slideDown(250);
-	                $(this).addClass("open");
-	            }
-	        });
-	    });
+		$(document).ready(function () {
+			$("#nav-mobile").html($("#nav-main").html());
+			$("#nav-trigger span").click(function () {
+				if ($("nav#nav-mobile ul").hasClass("expanded")) {
+					$("nav#nav-mobile ul.expanded").removeClass("expanded").slideUp(250);
+					$(this).removeClass("open");
+				} else {
+					$("nav#nav-mobile ul").addClass("expanded").slideDown(250);
+					$(this).addClass("open");
+				}
+			});
+		});
 	</script>
 
 </head>
+
 <body>
 	<div class="text-container">
 		<header>
 
-			<div id="nav-trigger"class="clearfix">
+			<div id="nav-trigger" class="clearfix">
 				<div class="left">
-		        	<a href="../" class="logo-link"><div class="logo">Home</div></a>
-		        </div>
-		        <div class="right">
-		        	<span><a href="#"><i class="fa fa-bars" aria-hidden="true"></i></a></span>
-		        </div>
-		    </div>
+					<a href="../" class="logo-link">
+						<div class="logo">Home</div>
+					</a>
+				</div>
+				<div class="right">
+					<span>
+						<a href="#">
+							<i class="fa fa-bars" aria-hidden="true"></i>
+						</a>
+					</span>
+				</div>
+			</div>
 			<nav id="nav-main">
 				<div class="left logo">
 					<a href="../">Home</a>
@@ -47,41 +55,26 @@
 				<div class="right">
 					<div class="menu_container">
 						<ul class="navigation">
-							<li><a href="../howto">How-to</a></li>
-							<li><a href="../research">Research & Testing</a></li>
+							<li>
+								<a href="../howto">How-to</a>
+							</li>
+							<li>
+								<a href="../research">Research & Testing</a>
+							</li>
+							<li>
+								<a href="../software">Software</a>
+							</li>
+							<li>
+								<a href="../network">Network</a>
+							</li>
+
 						</ul>
 					</div>
 				</div>
 			</nav>
-	    	<nav id="nav-mobile"></nav>
-
-
-			<!--<div class="wrapper">
-				<div class="left">
-					<a href="/">Home</a>
-				</div>
-				<div class="right">
-					<ul class="navigation">
-						<li><a href="/howto">How-to</a></li>
-						<li><a href="/research">Research & Testing</a></li>
-						<li><a href="#"target="_blank">Forum</a></li>
-					</ul>
-				</div>
-			</div>-->
+			<nav id="nav-mobile"></nav>
 		</header>
-
-	<p>This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at <a href="https://jekyllrb.com/">jekyllrb.com</a></p>
-
-<p>You can find the source code for Minima at GitHub:
-<a href="https://github.com/jekyll">jekyll</a> /
-<a href="https://github.com/jekyll/minima">minima</a></p>
-
-<p>You can find the source code for Jekyll at GitHub:
-<a href="https://github.com/jekyll">jekyll</a> /
-<a href="https://github.com/jekyll/jekyll">jekyll</a></p>
-
-
-
-</div>
+	</div>
 </body>
+
 </html>
