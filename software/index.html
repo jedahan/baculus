@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>	
+	<meta charset="utf-8" />
+	<title>Baculus</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+	<link rel="stylesheet" href="../css/mobile.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+	<link rel="stylesheet" href="../css/responsive.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+	<link href="https://fonts.googleapis.com/css?family=Crimson+Text:400,700|Rubik" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src='../js/jquery-3.3.1.min.js'></script>
+	<script src="https://use.fontawesome.com/b80927d916.js"></script>
+
+	<script>
+	    $(document).ready(function(){
+	        $("#nav-mobile").html($("#nav-main").html());
+	        $("#nav-trigger span").click(function(){
+	            if ($("nav#nav-mobile ul").hasClass("expanded")) {
+	                $("nav#nav-mobile ul.expanded").removeClass("expanded").slideUp(250);
+	                $(this).removeClass("open");
+	            } else {
+	                $("nav#nav-mobile ul").addClass("expanded").slideDown(250);
+	                $(this).addClass("open");
+	            }
+	        });
+	    });
+	</script>
+
+  <style>
+    p {
+      max-width: inherit;
+    }
+    img {
+      max-width: inherit;
+    }
+  </style>
+</head>
+<body>
+	<div class="text-container">
+		<header>
+
+			<div id="nav-trigger"class="clearfix">
+				<div class="left">
+		        	<a href="/" class="logo-link"><div class="logo">Home</div></a>
+		        </div>
+		        <div class="right">
+		        	<span><a href="#"><i class="fa fa-bars" aria-hidden="true"></i></a></span>
+		        </div>
+		    </div>
+			<nav id="nav-main">
+				<div class="left logo">
+					<a href="/">Home</a>
+				</div>
+				<div class="right">
+					<div class="menu_container">
+						<ul class="navigation">
+							<li><a href="../howto">How-to</a></li>
+							<li><a href="../research">Research & Testing</a></li>
+							<li><a href="../network">Network</a></li>
+							<li><a href="../software">Software</a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+	    	<nav id="nav-mobile"></nav>
+		</header>
+
+      <h2 id="baculus-build-log">Baculus Build Log</h2>
+
+<h3 id="software">Software</h3>
+
+<p>This is a log on how to setup a raspberry pi with everything you need to create your own baculus node.</p>
+
+<h3 id="preparation">Preparation</h3>
+
+<p>To build a node, we gathered the following materials:</p>
+
+<ul>
+  <li>computer running macOS (linux is also supported)</li>
+  <li>raspberry pi 3 model b+ (model b also supported)</li>
+  <li>microSD card + SD adapter</li>
+  <li>wireless access point connected to the internet</li>
+  <li><a href="https://github.com/baculus-buoy/pibakery/releases">PiBakery application</a></li>
+  <li>baculus buoy <a href="https://github.com/baculus-buoy/baculus/blob/master/pibakery-recipe.xml">pibakery-recipe</a></li>
+</ul>
+
+<h3 id="pibakery">PiBakery</h3>
+
+<p>We will be using our own version of PiBakery to burn the initial SD card, as it is cross-platform and allows easy customization of build images. First, download the latest version from our <a href="https://github.com/baculus-buoy/pibakery/releases">releases page</a>. We used v0.3.10, which is available as a direct download for <a href="https://github.com/baculus-buoy/pibakery/releases/download/v0.3.10/PiBakery-darwin-x64.zip">macOS</a> and <a href="https://github.com/baculus-buoy/pibakery/releases/download/v0.3.10/PiBakery-linux-x64.zip">linux (64-bit)</a> as well as other architectures.</p>
+
+<p><img src="/docs/images/1_permissions.png" alt="permissions" /></p>
+
+<p>When you first open PiBakery, it will ask for administrator permissions, this is to access your sd card to write later.<img src="/docs/images/2_blank.png" alt="2. blank" /></p>
+
+<p>Once that is out of the way, you are greeted with a blank screen. We have created a recipe that needs to be edited a bit to work on your network. Make sure to downloaded the latest <a href="https://raw.githubusercontent.com/baculus-buoy/baculus/master/pibakery-recipe.xml">pibakery-recipe.xml</a>, then click import, and choose it.</p>
+
+<p><img src="/docs/images/3_import.png" alt="import" />Once imported, you should see the blocks of what exactly will run on the pi on first boot, and on every boot.<img src="/docs/images/4_imported.png" alt="4. imported" /></p>
+
+<p>Now, edit NUMBER_HERE, YOUR NETWORK HERE, and YOUR PASSWORD HERE. This is a one-time requirement to get all the necessary software on first boot.</p>
+
+<p><img src="/docs/images/5_configured.png" alt="configured" /></p>
+
+<p>Next, click Write in the top right corner, and you will be greeted with a SD card and Operating System chooser. If this is a blank SD card, your Operating System should prompt you to format it. Make sure to give a memorable name (we use ‘<strong>boot</strong>’), and select <strong>Raspbian Lite</strong>.</p>
+
+<p><img src="/docs/images/6_sd.png" alt="sd" /></p>
+
+<p>Click Start Write, and make sure the same exact name is in the popup.</p>
+
+<p><img src="/docs/images/7_confirmation.png" alt="confirmation" /></p>
+
+<p>Once it is done written, pop it into the pi. If you have a screen attached you should be able to watch the entire process, otherwise just wait a few minutes (ours took 15 minutes) until you see a ‘baculus’ wifi network up.</p>
+
+<p><img src="/docs/images/8_wifi.png" alt="wifi" /></p>
+
+<p>You can connect to this network and start chatting!</p>
+
+  </body>
+</html>
