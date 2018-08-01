@@ -24,6 +24,12 @@ RUN git clone https://github.com/jedahan/scuttlebot --branch routerless \
   && npm link ../broadcast-stream \
   && npm link ../multiserver
 
+RUN git clone https://github.com/jedahan/mvd --branch routerless \
+  && cd mvd \
+  && npm install \
+  && npm link ../scuttlebot \
+  && npm run build
+
 # with dev tools
 FROM scuttlebot
 USER root
