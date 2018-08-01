@@ -4,11 +4,10 @@ FROM node:8 as scuttlebot
 
 USER node
 ENV HOME /home/node
-ENV NPM_CONFIG_PREFIX $HOME/.npm/global
+ENV ssb_appname bac
+ENV NPM_CONFIG_PREFIX /home/node/npm
 RUN mkdir -p $NPM_CONFIG_PREFIX
 WORKDIR $HOME
-
-ENV ssb_appname bac
 
 RUN git clone https://github.com/jedahan/broadcast-stream --branch routerless \
   && cd broadcast-stream \
@@ -26,9 +25,14 @@ RUN git clone https://github.com/jedahan/scuttlebot --branch routerless \
 
 RUN git clone https://github.com/jedahan/mvd --branch routerless \
   && cd mvd \
+  && rm -rf /home/node/scuttlebot/node_modules/.bin \
   && npm install \
   && npm link ../scuttlebot \
   && npm run build
+
+RUN cd scuttlebot \
+  && npm link ../broadcast-stream \
+  && npm link ../multiserver
 
 # with dev tools
 FROM scuttlebot
@@ -53,7 +57,7 @@ RUN usermod -a -G sudo node \
 USER node
 RUN printf '\n\
 export ssb_host=$(ip addr show dev eth0 | grep -oE "fe80[0-9a-f:]+")\n\
-cd ~/scuttlebot\n\
+cd ~/mvd\n\
 ' >> ~/.bashrc
 
 # by default, remove ipv4 address

@@ -1,4 +1,4 @@
-<xml 
+<xml
   xmlns="http://www.w3.org/1999/xhtml">
   <block type="onfirstboot" id="onfirstboot" x="32" y="20">
     <next>
@@ -49,7 +49,7 @@
                                                         <field name="1">nginx</field>
                                                         <next>
                                                           <block type="downloadfile" id=")QV);B/%kysCsI~-7sjP">
-                                                            <field name="1">https://jedahan.com/baculus/code/update.bash</field>
+                                                            <field name="1">https://bacul.us/code/update.bash</field>
                                                             <field name="2">/home/pi/baculus_update.bash</field>
                                                             <next>
                                                               <block type="runcommand" id="0G,}1C-h54h^cXfH]=Q=">
@@ -97,7 +97,7 @@
       </block>
     </next>
   </block>
-  <firstboot 
+  <firstboot
     xmlns="">0
   </firstboot>
 </xml>
