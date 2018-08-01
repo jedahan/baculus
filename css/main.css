@@ -33,12 +33,12 @@ h2 {
 a {
 	color: #1587AF;
 	text-decoration: none;
-    transition: background 0.3s ease 0s, color 0.3s ease 0s; 
+    transition: background 0.3s ease 0s, color 0.3s ease 0s;
 }
 
 a:hover {
 	color: #7D8689;
-    transition: background 0.3s ease 0s, color 0.3s ease 0s; 
+    transition: background 0.3s ease 0s, color 0.3s ease 0s;
 }
 
 i.fa {
@@ -77,12 +77,10 @@ ul.navigation {
 
 .right {
 	float: right;
-	width: 48%;
 }
 
 .left {
 	float: left;
-	width: 48%;
 }
 
 header .right {
@@ -95,11 +93,11 @@ header .left {
 }
 
 ::selection {
-    background: #ccc; 
+    background: #ccc;
 }
 
 ::-moz-selection {
-    background: #ccc; 
+    background: #ccc;
 }
 
 h1.not-found {
