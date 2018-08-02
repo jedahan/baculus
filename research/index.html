@@ -1,45 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>	
+
+<head>
 	<meta charset="utf-8" />
 	<title>Baculus</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
-	<link rel="stylesheet" href="../css/mobile.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
-	<link rel="stylesheet" href="../css/responsive.css" type="text/css" media="screen" title="no title" charset="utf-8"/>
+	<link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+	<link rel="stylesheet" href="../css/mobile.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+	<link rel="stylesheet" href="../css/responsive.css" type="text/css" media="screen" title="no title" charset="utf-8" />
 	<link href="https://fonts.googleapis.com/css?family=Crimson+Text:400,700|Rubik" rel="stylesheet">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script src='../js/jquery-3.3.1.min.js'></script>
-	<script src="https://use.fontawesome.com/b80927d916.js"></script>
+	<script src='../js/jquery-3.3.1.slim.min.js'></script>
+	<script defer src="/js/solid.min.js"></script>
+	<script defer src="/js/fontawesome.min.js"></script>
 
 	<script>
-	    $(document).ready(function(){
-	        $("#nav-mobile").html($("#nav-main").html());
-	        $("#nav-trigger span").click(function(){
-	            if ($("nav#nav-mobile ul").hasClass("expanded")) {
-	                $("nav#nav-mobile ul.expanded").removeClass("expanded").slideUp(250);
-	                $(this).removeClass("open");
-	            } else {
-	                $("nav#nav-mobile ul").addClass("expanded").slideDown(250);
-	                $(this).addClass("open");
-	            }
-	        });
-	    });
+		$(document).ready(function () {
+			$("#nav-mobile").html($("#nav-main").html());
+			$("#nav-trigger span").click(function () {
+				if ($("nav#nav-mobile ul").hasClass("expanded")) {
+					$("nav#nav-mobile ul.expanded").removeClass("expanded").slideUp(250);
+					$(this).removeClass("open");
+				} else {
+					$("nav#nav-mobile ul").addClass("expanded").slideDown(250);
+					$(this).addClass("open");
+				}
+			});
+		});
 	</script>
 
 </head>
+
 <body>
 	<div class="text-container">
 		<header>
 
-			<div id="nav-trigger"class="clearfix">
+			<div id="nav-trigger" class="clearfix">
 				<div class="left">
-		        	<a href="../" class="logo-link"><div class="logo">Home</div></a>
-		        </div>
-		        <div class="right">
-		        	<span><a href="#"><i class="fa fa-bars" aria-hidden="true"></i></a></span>
-		        </div>
-		    </div>
+					<a href="../" class="logo-link">
+						<div class="logo">Home</div>
+					</a>
+				</div>
+				<div class="right">
+					<span>
+						<a href="#">
+							<i class="fas fa-bars" aria-hidden="true"></i>
+						</a>
+					</span>
+				</div>
+			</div>
 			<nav id="nav-main">
 				<div class="left logo">
 					<a href="../">Home</a>
@@ -47,47 +55,89 @@
 				<div class="right">
 					<div class="menu_container">
 						<ul class="navigation">
-							<li><a href="../howto">How-to</a></li>
-							<li><a href="../research">Research & Testing</a></li>
-							<li><a href="../network">Network</a></li>
-							<li><a href="../software">Software</a></li>
+							<li>
+								<a href="../howto">How-to</a>
+							</li>
+							<li>
+								<a href="../research">Research & Testing</a>
+							</li>
+							<li>
+								<a href="../network">Network</a>
+							</li>
+							<li>
+								<a href="../software">Software</a>
+							</li>
 						</ul>
 					</div>
 				</div>
 			</nav>
-	    	<nav id="nav-mobile"></nav>
+			<nav id="nav-mobile"></nav>
 		</header>
 
-	<h1>Research &amp; Testing</h1>
+		<h1>Research &amp; Testing</h1>
 
-<p><img src="../img/buoy-icon-research.png" class="buoy-img" alt="" /></p>
+		<p>
+			<img src="../img/buoy-icon-research.png" class="buoy-img" alt="" />
+		</p>
 
-<p>Baculus's protoypes have been field tested to withstand a variety of situations and environments, but centered mostly around the urban environment of New York City and a disaster situation entailing intermittent electricy and an internet blackout. Unlike existing mesh network deployments currently operating in several cities, Baculus is designed to arrange its connection coverage to adapt to changing needs on the ground. In addition, the system offers readily-available applications which were tailored to match the changing needs of a wide variety of use-cases.</p>
+		<p>Baculus's protoypes have been field tested to withstand a variety of situations and environments, but centered mostly around
+			the urban environment of New York City and a disaster situation entailing intermittent electricy and an internet blackout.
+			Unlike existing mesh network deployments currently operating in several cities, Baculus is designed to arrange its connection
+			coverage to adapt to changing needs on the ground. In addition, the system offers readily-available applications which
+			were tailored to match the changing needs of a wide variety of use-cases.</p>
 
-<h2>Use Cases</h2>
+		<h2>Use Cases</h2>
 
-<p>Our original informal user interviews with community members of Red Hook highlighted the need for neighbors to be able to communicate with each other in order to let each other know of any number of situations ranging from the availability of emergency supplies to knowing where to get free crab burgers. Because of this, we opted for building a very general group messaging application, allowing people to use it for whatever situation they happen to find it useful for, rather than pigeonholing users into a limited set of use case with specialized applications.</p>
+		<p>Our original informal user interviews with community members of Red Hook highlighted the need for neighbors to be able
+			to communicate with each other in order to let each other know of any number of situations ranging from the availability
+			of emergency supplies to knowing where to get free crab burgers. Because of this, we opted for building a very general
+			group messaging application, allowing people to use it for whatever situation they happen to find it useful for, rather
+			than pigeonholing users into a limited set of use case with specialized applications.</p>
 
-<p>The first of the three prototypes is designed for The Next Sandy, emphasizing a situation where rainfall would necessitate waterproofing Baculus's electronic components, but where one could recharge a Baculus battery from a nearby neighborhood on higher ground.</p>
+		<p>The first of the three prototypes is designed for The Next Sandy, emphasizing a situation where rainfall would necessitate
+			waterproofing Baculus's electronic components, but where one could recharge a Baculus battery from a nearby neighborhood
+			on higher ground.</p>
 
-<p>The second prototype is designed for a similar situation, but with a lighter, also waterproof shell which was designed for situations where the weight of the system is a concern. This backpack is also transparent, which may be a requirement for backpacks in some situations.</p>
+		<p>The second prototype is designed for a similar situation, but with a lighter, also waterproof shell which was designed
+			for situations where the weight of the system is a concern. This backpack is also transparent, which may be a requirement
+			for backpacks in some situations.</p>
 
-<p>The third prototype was designed for a sunnier environment, but one where electricity may be extremely sparse due to electrical outages covering larger, less walkable areas than NYC. This version uses a solar panel system for charging its battery with a backpack configured to attach MOLLE-compatible components, which are more ubiquitious in rural communities with readily-available supplies for outdoor excursions.</p>
+		<p>The third prototype was designed for a sunnier environment, but one where electricity may be extremely sparse due to electrical
+			outages covering larger, less walkable areas than NYC. This version uses a solar panel system for charging its battery
+			with a backpack configured to attach MOLLE-compatible components, which are more ubiquitious in rural communities with
+			readily-available supplies for outdoor excursions.</p>
 
-<h2>Testing</h2>
+		<h2>Testing</h2>
 
-<p><img src="../img/baculus_testing.jpg" class="" alt="" /></p>
+		<p>
+			<img src="../img/baculus_testing.jpg" class="" alt="" />
+		</p>
 
-<p>Each prototype was tested for battery life, signal strength/distance, as well as transporability, emphasizing the need to be comfortable enough for an operator to carry across a high-elevation neighborhood (Park Slope, Brooklyn) into a lower elevation (Red Hook) without needing to travel too often for optimizing signal coverage or recharging.</p>
+		<p>Each prototype was tested for battery life, signal strength/distance, as well as transporability, emphasizing the need
+			to be comfortable enough for an operator to carry across a high-elevation neighborhood (Park Slope, Brooklyn) into a lower
+			elevation (Red Hook) without needing to travel too often for optimizing signal coverage or recharging.</p>
 
-<p><strong>Battery Life</strong>: Configurations between prototypes varied slightly, most notably with the addition of a  screen on the first prototype. On average, each prototype allowed a <strong>36 hour</strong> continuous battery life with low traffic and no specialized power consumption optimization.</p>
+		<p>
+			<strong>Battery Life</strong>: Configurations between prototypes varied slightly, most notably with the addition of a screen on
+			the first prototype. On average, each prototype allowed a
+			<strong>36 hour</strong> continuous battery life with low traffic and no specialized power consumption optimization.</p>
 
-<p><strong>Signal</strong>: Wi-Fi uses a crowded radio band used by everything from cordless office phones to microwave ovens. In order to test a maximum range in something close to an environment experiencing an electrical blackout, we conducted signal distance tests in the center of McCarren Park, Brooklyn, reaching <strong>500 meters</strong> from a smartphone to one node amidst some park foliage. The advertised line-of-sight range for the antennas we use is approximately <strong>30 kilometers</strong>.</p>
+		<p>
+			<strong>Signal</strong>: Wi-Fi uses a crowded radio band used by everything from cordless office phones to microwave ovens. In
+			order to test a maximum range in something close to an environment experiencing an electrical blackout, we conducted signal
+			distance tests in the center of McCarren Park, Brooklyn, reaching
+			<strong>500 meters</strong> from a smartphone to one node amidst some park foliage. The advertised line-of-sight range for the
+			antennas we use is approximately
+			<strong>30 kilometers</strong>.</p>
 
-<p><strong>Comfort</strong>: In our short-distance trials, two prototypes may be too heavy to be worn comfortably for extended periods of time, so each backpack was designed to stand vertically without needing to be worn once its position and angle is set. The third prototype, designed for a more spread-out area where large distances may need to be travelled, is the most comfortable.
-</p>
+		<p>
+			<strong>Comfort</strong>: In our short-distance trials, two prototypes may be too heavy to be worn comfortably for extended periods
+			of time, so each backpack was designed to stand vertically without needing to be worn once its position and angle is set.
+			The third prototype, designed for a more spread-out area where large distances may need to be travelled, is the most comfortable.
+		</p>
 
 
-</div>
+	</div>
 </body>
+
 </html>
