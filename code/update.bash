@@ -1,5 +1,6 @@
 #!/bin/bash
 # baculus update script
+set -ex
 HOME=/home/pi
 LOG=$HOME/baculus.log
 export src=$HOME/config/ && mkdir -p $src
