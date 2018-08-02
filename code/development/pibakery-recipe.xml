@@ -52,15 +52,25 @@
                                                           <block type="packageinstall" id="oE*DN_WE@Q8yirVvFn4;">
                                                             <field name="1">nginx</field>
                                                             <next>
-                                                              <block type="downloadfile" id=")QV);B/%kysCsI~-7sjP">
-                                                                <field name="1">https://baculus.co/de/update.bash</field>
-                                                                <field name="2">/home/pi/baculus_update.bash</field>
+                                                              <block type="packageinstall" id="KW?nUr3:+VxpiD1Zv*jt">
+                                                                <field name="1">libcairo2-dev</field>
                                                                 <next>
-                                                                  <block type="runcommand" id="0G,}1C-h54h^cXfH]=Q=">
-                                                                    <field name="1">bash /home/pi/baculus_update.bash</field>
-                                                                    <field name="2">pi</field>
+                                                                  <block type="packageinstall" id="DrWIEm4ixPZ;*z+(h6vF">
+                                                                    <field name="1">libprotobuf-dev</field>
                                                                     <next>
-                                                                      <block type="reboot" id="qe(r|_Kph*ruPA0i@`h-"></block>
+                                                                      <block type="downloadfile" id=")QV);B/%kysCsI~-7sjP">
+                                                                        <field name="1">https://baculus.co/de/update.bash</field>
+                                                                        <field name="2">/home/pi/baculus_update.bash</field>
+                                                                        <next>
+                                                                          <block type="runcommand" id="0G,}1C-h54h^cXfH]=Q=">
+                                                                            <field name="1">bash /home/pi/baculus_update.bash</field>
+                                                                            <field name="2">pi</field>
+                                                                            <next>
+                                                                              <block type="reboot" id="qe(r|_Kph*ruPA0i@`h-"></block>
+                                                                            </next>
+                                                                          </block>
+                                                                        </next>
+                                                                      </block>
                                                                     </next>
                                                                   </block>
                                                                 </next>

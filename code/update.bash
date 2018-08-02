@@ -5,6 +5,19 @@ HOME=/home/pi
 LOG=$HOME/baculus.log
 export src=$HOME/config/ && mkdir -p $src
 
+setup_npm() {
+  export NPM_CONFIG_PREFIX=$HOME/.npm/global
+  mkdir -p $NPM_CONFIG_PREFIX
+  echo NPM_CONFIG_PREFIX=$NPM_CONFIG_PREFIX | sudo tee -a /etc/environment
+  export PATH=$NPM_CONFIG_PREFIX/bin:$PATH
+}
+
+install_tileserver() {
+  npm install -g tileserver-gl-light
+  wget https://baculus.co/de/tiles/2017-07-03_california_mountain-view.mbtiles
+  wget https://baculus.co/de/tiles/2017-07-03_new-york_brooklyn.mbtiles
+}
+
 meshpoint() {
   local mesh_dev="${1:-wlan1}"
   local mesh_name="${2:-bacuhoc}"
@@ -157,12 +170,6 @@ install_cjdns() {
   echo "installed cjdns" >> $LOG
 }
 
-setup_npm() {
-  export NPM_CONFIG_PREFIX=$HOME/.npm/global
-  mkdir -p $NPM_CONFIG_PREFIX
-  echo NPM_CONFIG_PREFIX=$NPM_CONFIG_PREFIX | sudo tee -a /etc/environment
-}
-
 echo "--- START" $(date) >> $LOG
 cd $HOME || return
 setup_npm
@@ -172,5 +179,6 @@ configure_dnsmasq
 configure_nginx
 install_scuttlebot
 install_mvd
+install_tileserver
 adhoc
 echo "--- END" $(date) >> $LOG
