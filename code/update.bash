@@ -4,17 +4,25 @@ HOME=/home/pi
 LOG=$HOME/baculus.log
 export src=$HOME/config/ && mkdir -p $src
 
-configure_wlan_interface() {
-  grep "configured wlan interface" $LOG && return
-  echo "configuring wlan interface" >> $LOG
-  printf '
-allow-hotplug wlan0
+meshpoint() {
+  local mesh_dev="${1:-wlan1}"
+  local mesh_name="${2:-bacuhoc}"
+  sudo ifconfig $mesh_dev down
+  sudo iw $mesh_dev set type mp
+  sudo ifconfig $mesh_dev up
+  sudo iw dev $mesh_dev mesh join ${mesh_name} freq 2412 HT40+
+  sudo iw dev $mesh_dev set mesh_param mesh_fwding=0
+  sudo iw dev $mesh_dev set mesh_param mesh_rssi_threshold -65
+}
 
-iface wlan0 inet static
-  address 10.0.42.1
-  netmask 255.255.255.0
-' | sudo tee -a /etc/network/interfaces
-  echo "configured wlan interface" >> $LOG
+adhoc() {
+  local mesh_dev="${1:-wlan0}"
+  local mesh_name="${2:-bacumesh}"
+
+  sudo ifconfig $mesh_dev down
+  sudo iw $mesh_dev set type ibss
+  sudo ifconfig $mesh_dev up
+  sudo iw dev $mesh_dev ibss join ${mesh_name} 2412 HT40+
 }
 
 configure_nginx() {
@@ -46,29 +54,6 @@ EOF'
   sudo rm /etc/nginx/sites-available/default
   sudo systemctl enable nginx
   echo "configured nginx" >> $LOG
-}
-
-configure_hostapd() {
-  grep "configured hostapd" $LOG && return
-  echo "configuring hostapd" >> $LOG
-  local config=/etc/hostapd/hostapd.conf
-  printf "interface=wlan0
-driver=nl80211
-ssid=%s
-hw_mode=g
-channel=7
-wmm_enabled=0
-macaddr_acl=0
-auth_algs=1
-ignore_broadcast_ssid=0
-wpa=2
-wpa_passphrase=baculusbuoy
-wpa_key_mgmt=WPA-PSK
-wpa_pairwise=TKIP
-rsn_pairwise=CCMP
-" "$HOSTNAME" | sudo tee $config
-  echo "DAEMON_CONF=$config" | sudo tee -a /etc/default/hostapd
-  echo "configured hostapd" >> $LOG
 }
 
 configure_hosts() {
@@ -171,26 +156,6 @@ install_cjdns() {
   echo "installed cjdns" >> $LOG
 }
 
-wifi_host() {
-  echo "setting wifi to host mode (removing from dhcpcd)" >> $LOG
-
-  local config=/etc/dhcpcd.conf
-  grep denyinterfaces $config || echo denyinterfaces wlan0 | sudo tee -a $config
-  sudo sed -ie 's/^#denyinterfaces wlan0$/denyinterfaces wlan0' $config
-
-  echo "set wifi to host mode (removed from dhcpcd)" >> $LOG
-}
-
-wifi_client() {
-  echo "setting wifi to client mode (adding to dhcpcd)" >> $LOG
-
-  local config=/etc/dhcpcd.conf
-  grep denyinterfaces $config || echo denyinterfaces wlan0 | sudo tee -a $config
-  sudo sed -ie 's/^denyinterfaces wlan0$/#denyinterfaces wlan0' $config
-
-  echo "set wifi to client mode (added from dhcpcd)" >> $LOG
-}
-
 setup_npm() {
   export NPM_CONFIG_PREFIX=$HOME/.npm/global
   mkdir -p $NPM_CONFIG_PREFIX
@@ -204,9 +169,7 @@ install_mvd
 install_scuttlebot
 install_cjdns
 update_rclocal
-configure_hostapd
 configure_dnsmasq
 configure_nginx
-configure_wlan_interface
-wifi_host
+adhoc
 echo "--- END" $(date) >> $LOG
