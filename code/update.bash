@@ -106,19 +106,6 @@ fi
   echo "updated rc.local" >> $LOG
 }
 
-install_mvd() {
-  grep "installed mvd" $LOG && return
-  echo "installing mvd" >> $LOG
-  cd $HOME
-  git clone https://github.com/evbogue/mvd
-  pushd mvd
-  git pull
-  git checkout e98922f687ca57e6561d20a7b20423e50317ced2
-  npm install
-  popd
-  echo "installed mvd" >> $LOG
-}
-
 install_scuttlebot() {
   grep "installed scuttlebot" $LOG && return
   echo "installing scuttlebot" >> $LOG
@@ -132,13 +119,26 @@ install_scuttlebot() {
   # scuttlebot
   git clone https://github.com/jedahan/scuttlebot.git --branch routerless
   pushd scuttlebot
-  git checkout 4d1c0a97e7b1d5f216ec425190d77743bc28e15f
+  git checkout 7ed0c946a833212406ee492f27a29ba239669d6f
   npm install
   npm link ../broadcast-stream
   popd
   # appname
   echo ssb_appname=bac | sudo tee -a /etc/environment
   echo "installed scuttlebot" >> $LOG
+}
+
+install_mvd() {
+  grep "installed mvd" $LOG && return
+  echo "installing mvd" >> $LOG
+  cd $HOME
+  git clone https://github.com/jedahan/mvd --branch routerless
+  pushd mvd
+  git checkout d8a4a9ffc444a9daa612ede79049083a4ce1ca7c
+  npm install
+  npm link ../scuttlebot
+  popd
+  echo "installed mvd" >> $LOG
 }
 
 install_cjdns() {
@@ -148,7 +148,7 @@ install_cjdns() {
   git clone https://github.com/cjdelisle/cjdns.git
   pushd cjdns
   git pull
-  git checkout e98922f687ca57e6561d20a7b20423e50317ced2
+  git checkout 77259a49e5bc7ca7bc6dca5bd423e02be563bdc5
   NO_TEST=1 Seccomp_NO=1 ./do
   sudo cp cjdroute /usr/bin/cjdroute
   cjdroute --genconf | sed -e 's/"bind": "all"/"bind": "eth0"/' | sudo tee /etc/cjdroute.conf
@@ -166,11 +166,11 @@ setup_npm() {
 echo "--- START" $(date) >> $LOG
 cd $HOME || return
 setup_npm
-install_mvd
-install_scuttlebot
 install_cjdns
 update_rclocal
 configure_dnsmasq
 configure_nginx
+install_scuttlebot
+install_mvd
 adhoc
 echo "--- END" $(date) >> $LOG
