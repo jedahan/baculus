@@ -22,29 +22,55 @@
                         <field name="1">ip route del default dev eth0</field>
                         <field name="2">root</field>
                         <next>
-                          <block type="waitfornetwork" id="sqyl1mCCygxZ#g4HC31!">
-                            <field name="1">8.8.8.8</field>
+                          <block type="runcommand" id="^qXTrr}I]2X#5-LR!5r!">
+                            <field name="1">sysctl -w net.ipv6.conf.wlan0.disable_ipv6=1</field>
+                            <field name="2">root</field>
                             <next>
-                              <block type="downloadfile" id="+cAD/6~9ZZl5Omv)K^D7">
-                                <field name="1">https://deb.nodesource.com/setup_8.x</field>
-                                <field name="2">/home/pi/node-setup_8.x</field>
+                              <block type="waitfornetwork" id="sqyl1mCCygxZ#g4HC31!">
+                                <field name="1">8.8.8.8</field>
                                 <next>
-                                  <block type="runcommand" id="(r-!_6P5pWruu,p:n3X{">
-                                    <field name="1">bash /home/pi/node-setup_8.x</field>
-                                    <field name="2">root</field>
+                                  <block type="downloadfile" id="+cAD/6~9ZZl5Omv)K^D7">
+                                    <field name="1">https://deb.nodesource.com/setup_8.x</field>
+                                    <field name="2">/home/pi/node-setup_8.x</field>
                                     <next>
-                                      <block type="packageinstall" id="kaU^{C]nw=pGx0XO{up(">
-                                        <field name="1">build-essential git nodejs hostapd dnsmasq nginx</field>
+                                      <block type="runcommand" id="(r-!_6P5pWruu,p:n3X{">
+                                        <field name="1">bash /home/pi/node-setup_8.x</field>
+                                        <field name="2">root</field>
                                         <next>
-                                          <block type="downloadfile" id=")QV);B/%kysCsI~-7sjP">
-                                            <field name="1">https://baculus.co/de/update.bash</field>
-                                            <field name="2">/home/pi/baculus_update.bash</field>
+                                          <block type="packageinstall" id="kaU^{C]nw=pGx0XO{up(">
+                                            <field name="1">build-essential</field>
                                             <next>
-                                              <block type="runcommand" id="0G,}1C-h54h^cXfH]=Q=">
-                                                <field name="1">bash /home/pi/baculus_update.bash</field>
-                                                <field name="2">pi</field>
+                                              <block type="packageinstall" id="n}hWl}P-(@+ZkL#;xh+|">
+                                                <field name="1">git</field>
                                                 <next>
-                                                  <block type="reboot" id="qe(r|_Kph*ruPA0i@`h-"></block>
+                                                  <block type="packageinstall" id="b6Ifh!jLN+Q}1A+)cl3q">
+                                                    <field name="1">nodejs</field>
+                                                    <next>
+                                                      <block type="packageinstall" id="nhrLm;4g8zGzlGIlaC3.">
+                                                        <field name="1">dnsmasq</field>
+                                                        <next>
+                                                          <block type="packageinstall" id="oE*DN_WE@Q8yirVvFn4;">
+                                                            <field name="1">nginx</field>
+                                                            <next>
+                                                              <block type="downloadfile" id=")QV);B/%kysCsI~-7sjP">
+                                                                <field name="1">https://baculus.co/de/update.bash</field>
+                                                                <field name="2">/home/pi/baculus_update.bash</field>
+                                                                <next>
+                                                                  <block type="runcommand" id="0G,}1C-h54h^cXfH]=Q=">
+                                                                    <field name="1">bash /home/pi/baculus_update.bash</field>
+                                                                    <field name="2">pi</field>
+                                                                    <next>
+                                                                      <block type="reboot" id="qe(r|_Kph*ruPA0i@`h-"></block>
+                                                                    </next>
+                                                                  </block>
+                                                                </next>
+                                                              </block>
+                                                            </next>
+                                                          </block>
+                                                        </next>
+                                                      </block>
+                                                    </next>
+                                                  </block>
                                                 </next>
                                               </block>
                                             </next>
