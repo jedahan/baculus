@@ -129,6 +129,12 @@ install_scuttlebot() {
   grep "installed scuttlebot" $LOG && return
   echo "installing scuttlebot" >> $LOG
   cd $HOME
+  # multiserver
+  git clone https://github.com/jedahan/multiserver.git --branch routerless
+  pushd multiserver
+  git checkout 93e96755fc2dfe1cfa37386a92e4e9d87c3378bc
+  npm install
+  popd
   # broadcast-stream
   git clone https://github.com/jedahan/broadcast-stream.git --branch routerless
   pushd broadcast-stream
@@ -141,6 +147,7 @@ install_scuttlebot() {
   git checkout 7ed0c946a833212406ee492f27a29ba239669d6f
   npm install
   npm link ../broadcast-stream
+  npm link ../multiserver
   popd
   # appname
   echo ssb_appname=bac | sudo tee -a /etc/environment
