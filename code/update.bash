@@ -42,7 +42,7 @@ adhoc() {
 configure_nginx() {
   grep "configured nginx" $LOG && return
   echo "configuring nginx" >> $LOG
-  sudo bash -c 'cat << EOF > /etc/nginx/sites-available/baculus
+  printf '
 server {
     listen 80;
     server_name baculus.mesh;
@@ -59,13 +59,19 @@ server {
 
     location / {
         proxy_set_header   X-Real-IP $remote_addr;
-        proxy_set_header   Host      $http_host;
-        proxy_pass         http://127.0.0.1:8027;
+        proxy_set_header   Host $http_host;
+        proxy_pass         http://127.0.0.1:8008;
+    }
+
+    location /map {
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   Host $http_host;
+        proxy_pass         http://127.0.0.1:8080;
     }
 }
-EOF'
+' | sudo tee /etc/nginx/sites-available/baculus
   sudo ln -s /etc/nginx/sites-available/baculus /etc/nginx/sites-enabled/baculus
-  sudo rm /etc/nginx/sites-available/default
+  sudo rm /etc/nginx/sites-enabled/default
   sudo systemctl enable nginx
   echo "configured nginx" >> $LOG
 }
