@@ -10,33 +10,86 @@ setup_npm() {
   mkdir -p $NPM_CONFIG_PREFIX
   echo NPM_CONFIG_PREFIX=$NPM_CONFIG_PREFIX | sudo tee -a /etc/environment
   export PATH=$NPM_CONFIG_PREFIX/bin:$PATH
+  echo PATH=$PATH | sudo tee -a /etc/environment
 }
 
 install_tileserver() {
+  grep "installed tileserver" $LOG && return
+  echo "installing tileserver" >> $LOG
   npm install -g tileserver-gl-light
   wget https://baculus.co/de/tiles/2017-07-03_california_mountain-view.mbtiles
   wget https://baculus.co/de/tiles/2017-07-03_new-york_brooklyn.mbtiles
+  printf '
+{
+  "options": {
+    "paths": {
+      "root": "/home/pi/npm/lib/node_modules/tileserver-gl-light/node_modules/tileserver-gl-styles",
+      "fonts": "fonts",
+      "styles": "styles",
+      "mbtiles": "/home/pi"
+    }
+  },
+  "data": {
+    "brooklyn": {
+      "mbtiles": "2017-07-03_new-york_brooklyn.mbtiles"
+    },
+    "mountainview": {
+      "mbtiles": "2017-07-03_new-york_brooklyn.mbtiles"
+    }
+  }
+}
+' > $HOME/tileserver.json
+
+  printf '
+[Unit]
+Description=opengl tileserver
+Wants=network.target
+After=network.target
+
+[Service]
+SyslogIdentifier=tileserver
+ExecStart=/home/pi/npm/bin/tileserver-gl-light --config /home/pi/tileserver.json
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+' > tileserver.service
+  sudo cp tileserver.service /etc/systemd/system/
+  sudo systemctl daemon-reload
+  sudo systemctl enable tileserver
+  sudo systemctl start tileserver
+  echo "installed tileserver" >> $LOG
 }
 
 meshpoint() {
-  local mesh_dev="${1:-wlan1}"
-  local mesh_name="${2:-bacuhoc}"
-  sudo ifconfig $mesh_dev down
-  sudo iw $mesh_dev set type mp
-  sudo ifconfig $mesh_dev up
-  sudo iw dev $mesh_dev mesh join ${mesh_name} freq 2412 HT40+
-  sudo iw dev $mesh_dev set mesh_param mesh_fwding=0
-  sudo iw dev $mesh_dev set mesh_param mesh_rssi_threshold -65
+  test -f $HOME/meshpoint.sh || {
+  printf '# sets wlan1 to meshpoint mode
+local mesh_dev="${1:-wlan1}"
+local mesh_name="${2:-bacumesh}"
+sudo ifconfig $mesh_dev down
+sudo iw $mesh_dev set type mp
+sudo ifconfig $mesh_dev up
+sudo iw dev $mesh_dev mesh join ${mesh_name} freq 2412 HT40+
+sudo iw dev $mesh_dev set mesh_param mesh_fwding=0
+sudo iw dev $mesh_dev set mesh_param mesh_rssi_threshold -65
+  ' > $HOME/meshpoint.sh
+  }
+  bash $HOME/meshpoint.sh
 }
 
 adhoc() {
-  local mesh_dev="${1:-wlan0}"
-  local mesh_name="${2:-bacumesh}"
+  test -f $HOME/adhoc.sh || {
+  printf '# sets wlan1 to adhoc mode
+local mesh_dev="${1:-wlan1}"
+local mesh_name="${2:-bacuhoc}"
 
-  sudo ifconfig $mesh_dev down
-  sudo iw $mesh_dev set type ibss
-  sudo ifconfig $mesh_dev up
-  sudo iw dev $mesh_dev ibss join ${mesh_name} 2412 HT40+
+sudo ifconfig $mesh_dev down
+sudo iw $mesh_dev set type ibss
+sudo ifconfig $mesh_dev up
+sudo iw dev $mesh_dev ibss join ${mesh_name} 2412 HT40+
+' > $HOME/adhoc.sh
+  }
+  bash $HOME/adhoc.sh
 }
 
 configure_nginx() {
@@ -45,7 +98,7 @@ configure_nginx() {
   printf '
 server {
     listen 80;
-    server_name baculus.mesh;
+    server_name baculus.mesh *.baculus.mesh;
 
     # For iOS
     if ($http_user_agent ~* (CaptiveNetworkSupport) ) {
@@ -62,11 +115,28 @@ server {
         proxy_set_header   Host $http_host;
         proxy_pass         http://127.0.0.1:8008;
     }
+}
 
-    location /map {
-        proxy_set_header   X-Real-IP $remote_addr;
-        proxy_set_header   Host $http_host;
-        proxy_pass         http://127.0.0.1:8080;
+server {
+    listen 80;
+    listen [::]:80;
+    server_name baculus.chat  *.baculus.chat;
+
+    location / {
+        root /home/pi/mvd/build;
+        try_files $uri /index.html;
+    }
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name baculus.map *.baculus.map;
+
+    location / {
+        proxy_set_header x-real-ip $remote_addr;
+        proxy_set_header host $http_host;
+        proxy_pass http://127.0.0.1:8080;
     }
 }
 ' | sudo tee /etc/nginx/sites-available/baculus
@@ -81,8 +151,8 @@ configure_hosts() {
   echo "configuring hosts" >> $LOG
   local config=/etc/hosts
   printf "
-127.0.0.1 baculus
-10.0.42.1 baculus.mesh
+127.0.0.1 baculus $HOSTNAME
+10.0.42.1 baculus.mesh baculus.map baculus.chat
 " | sudo tee -a $config
   echo "configured hosts" >> $LOG
 }
@@ -95,7 +165,7 @@ printf \
 dhcp-mac=set:client_is_a_pi,B8:27:EB:*:*:*
 dhcp-reply-delay=tag:client_is_a_pi,2
 
-interface=wlan0
+interface=eth0
 listen-address=127.0.0.1
 listen-address=10.0.42.1
 bind-interfaces
