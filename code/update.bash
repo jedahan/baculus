@@ -5,6 +5,10 @@ HOME=/home/pi
 LOG=$HOME/baculus.log
 export src=$HOME/config/ && mkdir -p $src
 
+clone_docs() {
+  git clone https://github.com/baculus-buoy/baculus.git
+}
+
 setup_npm() {
   export NPM_CONFIG_PREFIX=$HOME/.npm/global
   mkdir -p $NPM_CONFIG_PREFIX
@@ -111,9 +115,8 @@ server {
     }
 
     location / {
-        proxy_set_header   X-Real-IP $remote_addr;
-        proxy_set_header   Host $http_host;
-        proxy_pass         http://127.0.0.1:8008;
+        root /home/pi/baculus/_site;
+        try_files $uri $uri/ $uri/index.html /index.html;
     }
 }
 
@@ -124,7 +127,7 @@ server {
 
     location / {
         root /home/pi/mvd/build;
-        try_files $uri /index.html;
+        try_files $uri $uri/ $uri/index.html /index.html;
     }
 }
 
