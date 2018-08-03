@@ -5,8 +5,20 @@ HOME=/home/pi
 LOG=$HOME/baculus.log
 export src=$HOME/config/ && mkdir -p $src
 
-clone_docs() {
+install_docs() {
+  grep "installed docs" $LOG && return
+  echo "installing docs" >> $LOG
   git clone https://github.com/baculus-buoy/baculus.git
+  pushd baculus
+  sudo apt install -y ruby ruby-dev
+  bundle --version || sudo gem install bundler
+  bundle install
+  bundle exec jekyll build
+  pushd _site
+  sed -i -e 's/^.*oogle.*$//' *html */*html
+  popd # _site
+  popd # baculus
+  echo "installed docs" >> $LOG
 }
 
 setup_npm() {
@@ -207,13 +219,13 @@ install_scuttlebot() {
   pushd multiserver
   git checkout 93e96755fc2dfe1cfa37386a92e4e9d87c3378bc
   npm install
-  popd
+  popd # multiserver
   # broadcast-stream
   git clone https://github.com/jedahan/broadcast-stream.git --branch routerless
   pushd broadcast-stream
   git checkout 53e28ee7be3a247a62dc6f7003d2c89b9a38770e
   npm install
-  popd
+  popd # broadcast-stream
   # scuttlebot
   git clone https://github.com/jedahan/scuttlebot.git --branch routerless
   pushd scuttlebot
@@ -221,7 +233,7 @@ install_scuttlebot() {
   npm install
   npm link ../broadcast-stream
   npm link ../multiserver
-  popd
+  popd # scuttlebot
   # appname
   echo ssb_appname=bac | sudo tee -a /etc/environment
   echo "installed scuttlebot" >> $LOG
@@ -236,7 +248,7 @@ install_mvd() {
   git checkout d8a4a9ffc444a9daa612ede79049083a4ce1ca7c
   npm install
   npm link ../scuttlebot
-  popd
+  popd # mvd
   echo "installed mvd" >> $LOG
 }
 
@@ -252,13 +264,14 @@ install_cjdns() {
   sudo cp cjdroute /usr/bin/cjdroute
   cjdroute --genconf | sed -e 's/"bind": "all"/"bind": "eth0"/' | sudo tee /etc/cjdroute.conf
   sudo cp contrib/systemd/cjdns* /etc/systemd/system/
-  popd
+  popd #cjdns
   echo "installed cjdns" >> $LOG
 }
 
 echo "--- START" $(date) >> $LOG
 cd $HOME || return
 setup_npm
+install_docs
 install_cjdns
 update_rclocal
 configure_dnsmasq
