@@ -26,11 +26,21 @@ install_baculus() {
 }
 
 configure_npm() {
+  which node >/dev/null || {
+    sudo apt install -y nodejs
+  }
+  which npm >/dev/null || {
+    sudo apt install -y npm
+  }
   export NPM_CONFIG_PREFIX=$HOME/npm/global
   mkdir -p $NPM_CONFIG_PREFIX
-  echo NPM_CONFIG_PREFIX=$NPM_CONFIG_PREFIX | sudo tee -a /etc/environment
+  grep NPM_CONFIG_PREFIX /etc/environment || {
+    echo NPM_CONFIG_PREFIX=$NPM_CONFIG_PREFIX | sudo tee -a /etc/environment
+  }
   export PATH=$NPM_CONFIG_PREFIX/bin:$PATH
-  echo PATH=$PATH | sudo tee -a /etc/environment
+  grep PATH /etc/environment || {
+    echo PATH=$PATH | sudo tee -a /etc/environment
+  }
 }
 
 install_tileserver() {
@@ -112,19 +122,19 @@ install_scuttlebot() {
   echo 'installing scuttlebot'
   cd $HOME
   # multiserver
-  git clone https://github.com/jedahan/multiserver.git --branch routerless
+  test -d multiserver || git clone https://github.com/jedahan/multiserver.git --branch routerless
   pushd multiserver
   git checkout 93e96755fc2dfe1cfa37386a92e4e9d87c3378bc
   npm install
   popd # multiserver
   # broadcast-stream
-  git clone https://github.com/jedahan/broadcast-stream.git --branch routerless
+  test -d broadcast-stream || git clone https://github.com/jedahan/broadcast-stream.git --branch routerless
   pushd broadcast-stream
   git checkout 53e28ee7be3a247a62dc6f7003d2c89b9a38770e
   npm install
   popd # broadcast-stream
   # scuttlebot
-  git clone https://github.com/jedahan/scuttlebot.git --branch routerless
+  test -d scuttlebot || git clone https://github.com/jedahan/scuttlebot.git --branch routerless
   pushd scuttlebot
   git checkout 7ed0c946a833212406ee492f27a29ba239669d6f
   npm install
