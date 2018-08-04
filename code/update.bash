@@ -3,9 +3,10 @@
 set -ex
 HOME=/home/pi
 LOG=$HOME/log/baculus.log
+INSTALL_LOG=$HOME/log/install.log
 
 install_baculus() {
-  grep '^installed baculus$' $LOG && return
+  grep '^installed baculus$' $INSTALL_LOG && return
   echo 'installing baculus'
   git clone https://github.com/baculus-buoy/baculus.git
   pushd baculus
@@ -17,7 +18,7 @@ install_baculus() {
   sed -i -e 's/^.*oogle.*$//' *html */*html
   popd # _site
   popd # baculus
-  echo 'installed baculus'
+  echo 'installed baculus' >> $INSTALL_LOG
 }
 
 configure_npm() {
@@ -29,7 +30,7 @@ configure_npm() {
 }
 
 install_tileserver() {
-  grep '^installed tileserver$' $LOG && return
+  grep '^installed tileserver$' $INSTALL_LOG && return
   echo 'installing tileserver'
   npm install -g tileserver-gl-light
   cp home/pi/tileserver.json $HOME/
@@ -38,7 +39,7 @@ install_tileserver() {
   sudo systemctl daemon-reload
   sudo systemctl enable tileserver
   sudo systemctl start tileserver
-  echo 'installed tileserver'
+  echo 'installed tileserver' >> $INSTALL_LOG
 }
 
 meshpoint() {
@@ -62,46 +63,46 @@ adhoc() {
 }
 
 configure_nginx() {
-  grep 'configured nginx' $LOG && return
+  grep 'configured nginx' $INSTALL_LOG && return
   echo 'configuring nginx'
   sudo cp etc/nginx/sites-available/baculus /etc/nginx/sites-available/
   sudo ln -s /etc/nginx/sites-available/baculus /etc/nginx/sites-enabled/baculus
   sudo rm /etc/nginx/sites-enabled/default
   sudo systemctl enable nginx
-  echo 'configured nginx'
+  echo 'configured nginx' >> $INSTALL_LOG
 }
 
 configure_hosts() {
-  grep "configured hosts" $LOG && return
+  grep "configured hosts" $INSTALL_LOG && return
   echo 'configuring hosts'
   local config=/etc/hosts
   printf "
 127.0.0.1 baculus $HOSTNAME
 10.0.42.1 baculus.mesh baculus.map baculus.chat
 " | sudo tee -a $config
-  echo 'configured hosts'
+  echo 'configured hosts' >> $INSTALL_LOG
 }
 
 configure_dnsmasq() {
-  grep '^configured dnsmasq$' $LOG && return
+  grep '^configured dnsmasq$' $INSTALL_LOG && return
   echo 'configuring dnsmasq'
   sudo cp etc/dnsmasq.conf /etc/
-  echo 'configured dnsmasq'
+  echo 'configured dnsmasq' >> $INSTALL_LOG
 }
 
 update_rclocal() {
-  grep '^updated rclocal$' $LOG && return
+  grep '^updated rclocal$' $INSTALL_LOG && return
   echo 'updating rclocal'
   printf \ '
 # setup adhoc mode
 /home/pi/adhoc.sh
 ip addr
 ' | sudo tee -a /etc/rc.local
-  echo 'updated rc.local'
+  echo 'updated rc.local' >> $INSTALL_LOG
 }
 
 install_scuttlebot() {
-  grep '^installed scuttlebot$' $LOG && return
+  grep '^installed scuttlebot$' $INSTALL_LOG && return
   echo 'installing scuttlebot'
   cd $HOME
   # multiserver
@@ -126,11 +127,11 @@ install_scuttlebot() {
   popd # scuttlebot
   # appname
   echo ssb_appname=bac | sudo tee -a /etc/environment
-  echo 'installed scuttlebot'
+  echo 'installed scuttlebot' >> $INSTALL_LOG
 }
 
 install_mvd() {
-  grep '^installed mvd$' $LOG && return
+  grep '^installed mvd$' $INSTALL_LOG && return
   echo 'installing mvd'
   cd $HOME
   git clone https://github.com/jedahan/mvd --branch routerless
@@ -139,11 +140,11 @@ install_mvd() {
   npm install
   npm link ../scuttlebot
   popd # mvd
-  echo 'installed mvd'
+  echo 'installed mvd' >> $INSTALL_LOG
 }
 
 install_cjdns() {
-  grep '^installed cjdns$' $LOG && return
+  grep '^installed cjdns$' $INSTALL_LOG && return
   echo 'installing cjdns'
   cd $HOME
   git clone https://github.com/cjdelisle/cjdns.git
@@ -155,7 +156,7 @@ install_cjdns() {
   cjdroute --genconf | sed -e 's/"bind": "all"/"bind": "eth0"/' | sudo tee /etc/cjdroute.conf
   sudo cp contrib/systemd/cjdns* /etc/systemd/system/
   popd #cjdns
-  echo 'installed cjdns'
+  echo 'installed cjdns' >> $INSTALL_LOG
 }
 
 mkdir -p $(dirname $LOG) && touch $LOG || exit 1
