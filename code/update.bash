@@ -4,6 +4,11 @@ set -ex
 HOME=/home/pi
 LOG=$HOME/log/baculus.log
 
+fix_modules() {
+  sudo rmmod 8192cu
+  sudo modprobe rtl8192cu
+}
+
 install_baculus() {
   grep '^installed baculus$' $LOG && return
   echo 'installing baculus'
@@ -51,6 +56,8 @@ meshpoint() {
 }
 
 adhoc() {
+  lsmod | grep 8192cu && sudo rmmod 8192cu
+  sudo modprobe rtl8192cu
   test -f $HOME/adhoc.sh || {
   echo 'installing adhoc.sh'
     cp home/pi/adhoc.sh $HOME/adhoc.sh
