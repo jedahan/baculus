@@ -5,6 +5,10 @@ HOME=/home/pi
 LOG=$HOME/log/baculus.log
 INSTALL_LOG=$HOME/log/install.log
 
+change_locale() {
+  sudo raspi-config nonint do_change_locale 'en_US.UTF-8'
+}
+
 install_baculus() {
   grep '^installed baculus$' $INSTALL_LOG && return
   echo 'installing baculus'
@@ -163,6 +167,7 @@ install_cjdns() {
 
 install_everything() {
   echo "--- START" $(date)
+  change_locale
   install_baculus
   configure_npm
   install_cjdns
