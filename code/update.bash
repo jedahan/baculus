@@ -33,19 +33,21 @@ install_tileserver() {
   grep '^installed tileserver$' $INSTALL_LOG && return
   echo 'installing tileserver'
   npm install -g tileserver-gl-light
+  pushd $HOME/baculus/code
   cp home/pi/tileserver.json $HOME/
   cp -r home/pi/tiles $HOME/
   sudo cp etc/systemd/system/tileserver.service /etc/systemd/system/
   sudo systemctl daemon-reload
   sudo systemctl enable tileserver
   sudo systemctl start tileserver
+  popd # ~/baculus/code
   echo 'installed tileserver' >> $INSTALL_LOG
 }
 
 meshpoint() {
   test -f $HOME/meshpoint.sh || {
   echo 'installing meshpoint.sh'
-    cp home/pi/meshpoint.sh $HOME/meshpoint.sh
+    cp $HOME/baculus/code/home/pi/meshpoint.sh $HOME/meshpoint.sh
     echo 'installed meshpoint.sh'
   }
   bash $HOME/meshpoint.sh
@@ -56,7 +58,7 @@ adhoc() {
   sudo modprobe rtl8192cu
   test -f $HOME/adhoc.sh || {
   echo 'installing adhoc.sh'
-    cp home/pi/adhoc.sh $HOME/adhoc.sh
+    cp $HOME/baculus/code/home/pi/adhoc.sh $HOME/adhoc.sh
     echo 'installed adhoc.sh'
   }
   bash $HOME/adhoc.sh
@@ -65,7 +67,7 @@ adhoc() {
 configure_nginx() {
   grep 'configured nginx' $INSTALL_LOG && return
   echo 'configuring nginx'
-  sudo cp etc/nginx/sites-available/baculus /etc/nginx/sites-available/
+  sudo cp $HOME/baculus/code/etc/nginx/sites-available/baculus /etc/nginx/sites-available/
   sudo ln -s /etc/nginx/sites-available/baculus /etc/nginx/sites-enabled/baculus
   sudo rm /etc/nginx/sites-enabled/default
   sudo systemctl enable nginx
@@ -86,7 +88,7 @@ configure_hosts() {
 configure_dnsmasq() {
   grep '^configured dnsmasq$' $INSTALL_LOG && return
   echo 'configuring dnsmasq'
-  sudo cp etc/dnsmasq.conf /etc/
+  sudo cp $HOME/baculus/code/etc/dnsmasq.conf /etc/
   echo 'configured dnsmasq' >> $INSTALL_LOG
 }
 
