@@ -162,14 +162,14 @@ install_cjdns() {
 mkdir -p $(dirname $LOG) && touch $LOG || exit 1
 echo "--- START" $(date) >> $LOG
 cd $HOME || return
-install_baculus &>$LOG
-configure_npm &>$LOG
-install_cjdns &>$LOG
-configure_dnsmasq &>$LOG
-configure_nginx &>$LOG
-install_scuttlebot &>$LOG
-install_mvd &>$LOG
-install_tileserver &>$LOG
-adhoc &>$LOG
-update_rclocal &>$LOG
+install_baculus &>>$LOG
+configure_npm &>>$LOG
+install_cjdns &>>$LOG
+configure_dnsmasq &>>$LOG
+configure_nginx &>>$LOG
+install_scuttlebot &>>$LOG
+install_mvd &>>$LOG
+install_tileserver &>>$LOG
+adhoc &>>$LOG
+update_rclocal &>>$LOG
 echo "--- END" $(date) >> $LOG
