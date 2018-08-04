@@ -1,0 +1,12 @@
+[Unit]
+Description=opengl tileserver
+Wants=network.target
+After=network.target
+
+[Service]
+SyslogIdentifier=tileserver
+ExecStart=/home/pi/npm/bin/tileserver-gl-light --config /home/pi/tileserver.json
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

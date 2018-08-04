@@ -4,9 +4,9 @@ set -ex
 HOME=/home/pi
 LOG=$HOME/log/baculus.log
 
-install_docs() {
-  grep '^installed docs$' $LOG && return
-  echo 'installing docs'
+install_baculus() {
+  grep '^installed baculus$' $LOG && return
+  echo 'installing baculus'
   git clone https://github.com/baculus-buoy/baculus.git
   pushd baculus
   sudo apt install -y ruby ruby-dev
@@ -17,11 +17,11 @@ install_docs() {
   sed -i -e 's/^.*oogle.*$//' *html */*html
   popd # _site
   popd # baculus
-  echo 'installed docs'
+  echo 'installed baculus'
 }
 
-setup_npm() {
-  export NPM_CONFIG_PREFIX=$HOME/.npm/global
+configure_npm() {
+  export NPM_CONFIG_PREFIX=$HOME/npm/global
   mkdir -p $NPM_CONFIG_PREFIX
   echo NPM_CONFIG_PREFIX=$NPM_CONFIG_PREFIX | sudo tee -a /etc/environment
   export PATH=$NPM_CONFIG_PREFIX/bin:$PATH
@@ -32,44 +32,9 @@ install_tileserver() {
   grep '^installed tileserver$' $LOG && return
   echo 'installing tileserver'
   npm install -g tileserver-gl-light
-  wget https://baculus.co/de/tiles/2017-07-03_california_mountain-view.mbtiles
-  wget https://baculus.co/de/tiles/2017-07-03_new-york_brooklyn.mbtiles
-  printf '
-{
-  "options": {
-    "paths": {
-      "root": "/home/pi/npm/lib/node_modules/tileserver-gl-light/node_modules/tileserver-gl-styles",
-      "fonts": "fonts",
-      "styles": "styles",
-      "mbtiles": "/home/pi"
-    }
-  },
-  "data": {
-    "brooklyn": {
-      "mbtiles": "2017-07-03_new-york_brooklyn.mbtiles"
-    },
-    "mountainview": {
-      "mbtiles": "2017-07-03_new-york_brooklyn.mbtiles"
-    }
-  }
-}
-' > $HOME/tileserver.json
-
-  printf '
-[Unit]
-Description=opengl tileserver
-Wants=network.target
-After=network.target
-
-[Service]
-SyslogIdentifier=tileserver
-ExecStart=/home/pi/npm/bin/tileserver-gl-light --config /home/pi/tileserver.json
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-' > tileserver.service
-  sudo cp tileserver.service /etc/systemd/system/
+  cp home/pi/tileserver.json $HOME/
+  cp -r home/pi/tiles $HOME/
+  sudo cp etc/systemd/system/tileserver.service /etc/systemd/system/
   sudo systemctl daemon-reload
   sudo systemctl enable tileserver
   sudo systemctl start tileserver
@@ -79,17 +44,8 @@ WantedBy=multi-user.target
 meshpoint() {
   test -f $HOME/meshpoint.sh || {
   echo 'installing meshpoint.sh'
-  printf '# sets wlan1 to meshpoint mode
-local mesh_dev="${1:-wlan1}"
-local mesh_name="${2:-bacumesh}"
-sudo ifconfig $mesh_dev down
-sudo iw $mesh_dev set type mp
-sudo ifconfig $mesh_dev up
-sudo iw dev $mesh_dev mesh join ${mesh_name} freq 2412 HT40+
-sudo iw dev $mesh_dev set mesh_param mesh_fwding=0
-sudo iw dev $mesh_dev set mesh_param mesh_rssi_threshold -65
-  ' > $HOME/meshpoint.sh
-  echo 'installed meshpoint.sh'
+    cp home/pi/meshpoint.sh $HOME/meshpoint.sh
+    echo 'installed meshpoint.sh'
   }
   bash $HOME/meshpoint.sh
 }
@@ -97,26 +53,8 @@ sudo iw dev $mesh_dev set mesh_param mesh_rssi_threshold -65
 adhoc() {
   test -f $HOME/adhoc.sh || {
   echo 'installing adhoc.sh'
-  printf '# sets wlan1 to adhoc mode
-local mesh_dev="${1:-wlan1}"
-local mesh_name="${2:-bacuhoc}"
-
-sudo ifconfig $mesh_dev down
-sudo iw $mesh_dev set type ibss
-sudo ifconfig $mesh_dev up
-sudo iw dev $mesh_dev ibss join ${mesh_name} 2412 HT40+
-
-local suffix=5
-local selfassigned=$(ip addr show $mesh_dev | awk "/169/ {print \$2}")
-
-if [[ $HOST == 'baculusA' ]]; then suffix=10; fi
-if [[ $HOST == 'baculusB' ]]; then suffix=11; fi
-if [[ $HOST == 'baculusC' ]]; then suffix=12; fi
-
-sudo ip addr del $selfassigned dev $mesh_dev
-sudo ip addr add 10.0.17.${suffix} dev $mesh_dev
-' > $HOME/adhoc.sh
-  echo 'installed adhoc.sh'
+    cp home/pi/adhoc.sh $HOME/adhoc.sh
+    echo 'installed adhoc.sh'
   }
   bash $HOME/adhoc.sh
 }
@@ -124,50 +62,7 @@ sudo ip addr add 10.0.17.${suffix} dev $mesh_dev
 configure_nginx() {
   grep 'configured nginx' $LOG && return
   echo 'configuring nginx'
-  printf '
-server {
-    listen 80;
-    server_name baculus.mesh *.baculus.mesh;
-
-    # For iOS
-    if ($http_user_agent ~* (CaptiveNetworkSupport) ) {
-        return 302 http://baculus.mesh/;
-    }
-
-    # Android
-    location /generate_204 {
-        return 302 http://baculus.mesh/;
-    }
-
-    location / {
-        root /home/pi/baculus/_site;
-        try_files $uri $uri/ $uri/index.html /index.html;
-    }
-}
-
-server {
-    listen 80;
-    listen [::]:80;
-    server_name baculus.chat  *.baculus.chat;
-
-    location / {
-        root /home/pi/mvd/build;
-        try_files $uri $uri/ $uri/index.html /index.html;
-    }
-}
-
-server {
-    listen 80;
-    listen [::]:80;
-    server_name baculus.map *.baculus.map;
-
-    location / {
-        proxy_set_header x-real-ip $remote_addr;
-        proxy_set_header host $http_host;
-        proxy_pass http://127.0.0.1:8080;
-    }
-}
-' | sudo tee /etc/nginx/sites-available/baculus
+  sudo cp etc/nginx/sites-available/baculus /etc/nginx/sites-available/
   sudo ln -s /etc/nginx/sites-available/baculus /etc/nginx/sites-enabled/baculus
   sudo rm /etc/nginx/sites-enabled/default
   sudo systemctl enable nginx
@@ -188,38 +83,18 @@ configure_hosts() {
 configure_dnsmasq() {
   grep '^configured dnsmasq$' $LOG && return
   echo 'configuring dnsmasq'
-printf \
-"# Delays sending DHCPOFFER and proxydhcp replies for at least the specified number of seconds.
-dhcp-mac=set:client_is_a_pi,B8:27:EB:*:*:*
-dhcp-reply-delay=tag:client_is_a_pi,2
-
-interface=eth0
-listen-address=127.0.0.1
-listen-address=10.0.42.1
-bind-interfaces
-server=/mesh/10.0.42.1
-local=/mesh/
-domain=mesh
-bogus-priv
-dhcp-range=10.0.42.2,10.0.42.200,255.255.255.0,2h
-address=/mesh/10.0.42.1
-server=/#/1.1.1.1
-dhcp-option=6,10.0.42.1
-dhcp-authoritative
-" | sudo tee /etc/dnsmasq.conf
+  sudo cp etc/dnsmasq.conf /etc/
   echo 'configured dnsmasq'
 }
 
 update_rclocal() {
   grep '^updated rclocal$' $LOG && return
   echo 'updating rclocal'
-  printf "
-# Print ipv6 address
-_IPV6=\$(ip -6 address show dev eth0 scope link | awk '/inet6/{print \$2}')
-if [ \"\$_IPV6\" ]; then
-  printf 'Local ipv6 address is %s\\n' \"\$_IPV6\"
-fi
-" | sudo tee -a /etc/rc.local
+  printf \ '
+# setup adhoc mode
+/home/pi/adhoc.sh
+ip addr
+' | sudo tee -a /etc/rc.local
   echo 'updated rc.local'
 }
 
@@ -274,7 +149,7 @@ install_cjdns() {
   git pull
   git checkout 77259a49e5bc7ca7bc6dca5bd423e02be563bdc5
   NO_TEST=1 Seccomp_NO=1 ./do
-  sudo cp cjdroute /usr/bin/cjdroute
+  sudo cp cjdroute /usr/bin/
   cjdroute --genconf | sed -e 's/"bind": "all"/"bind": "eth0"/' | sudo tee /etc/cjdroute.conf
   sudo cp contrib/systemd/cjdns* /etc/systemd/system/
   popd #cjdns
@@ -284,14 +159,14 @@ install_cjdns() {
 mkdir -p $(dirname $LOG) && touch $LOG || exit 1
 echo "--- START" $(date) >> $LOG
 cd $HOME || return
-setup_npm &>$LOG
-install_docs &>$LOG
+install_baculus &>$LOG
+configure_npm &>$LOG
 install_cjdns &>$LOG
-update_rclocal &>$LOG
 configure_dnsmasq &>$LOG
 configure_nginx &>$LOG
 install_scuttlebot &>$LOG
 install_mvd &>$LOG
 install_tileserver &>$LOG
 adhoc &>$LOG
+update_rclocal &>$LOG
 echo "--- END" $(date) >> $LOG
