@@ -2,12 +2,11 @@
 # baculus update script
 set -ex
 HOME=/home/pi
-LOG=$HOME/baculus.log
-export src=$HOME/config/ && mkdir -p $src
+LOG=$HOME/log/baculus.log
 
 install_docs() {
-  grep "installed docs" $LOG && return
-  echo "installing docs" >> $LOG
+  grep '^installed docs$' $LOG && return
+  echo 'installing docs'
   git clone https://github.com/baculus-buoy/baculus.git
   pushd baculus
   sudo apt install -y ruby ruby-dev
@@ -18,7 +17,7 @@ install_docs() {
   sed -i -e 's/^.*oogle.*$//' *html */*html
   popd # _site
   popd # baculus
-  echo "installed docs" >> $LOG
+  echo 'installed docs'
 }
 
 setup_npm() {
@@ -30,8 +29,8 @@ setup_npm() {
 }
 
 install_tileserver() {
-  grep "installed tileserver" $LOG && return
-  echo "installing tileserver" >> $LOG
+  grep '^installed tileserver$' $LOG && return
+  echo 'installing tileserver'
   npm install -g tileserver-gl-light
   wget https://baculus.co/de/tiles/2017-07-03_california_mountain-view.mbtiles
   wget https://baculus.co/de/tiles/2017-07-03_new-york_brooklyn.mbtiles
@@ -74,11 +73,12 @@ WantedBy=multi-user.target
   sudo systemctl daemon-reload
   sudo systemctl enable tileserver
   sudo systemctl start tileserver
-  echo "installed tileserver" >> $LOG
+  echo 'installed tileserver'
 }
 
 meshpoint() {
   test -f $HOME/meshpoint.sh || {
+  echo 'installing meshpoint.sh'
   printf '# sets wlan1 to meshpoint mode
 local mesh_dev="${1:-wlan1}"
 local mesh_name="${2:-bacumesh}"
@@ -89,12 +89,14 @@ sudo iw dev $mesh_dev mesh join ${mesh_name} freq 2412 HT40+
 sudo iw dev $mesh_dev set mesh_param mesh_fwding=0
 sudo iw dev $mesh_dev set mesh_param mesh_rssi_threshold -65
   ' > $HOME/meshpoint.sh
+  echo 'installed meshpoint.sh'
   }
   bash $HOME/meshpoint.sh
 }
 
 adhoc() {
   test -f $HOME/adhoc.sh || {
+  echo 'installing adhoc.sh'
   printf '# sets wlan1 to adhoc mode
 local mesh_dev="${1:-wlan1}"
 local mesh_name="${2:-bacuhoc}"
@@ -114,13 +116,14 @@ if [[ $HOST == 'baculusC' ]]; then suffix=12; fi
 sudo ip addr del $selfassigned dev $mesh_dev
 sudo ip addr add 10.0.17.${suffix} dev $mesh_dev
 ' > $HOME/adhoc.sh
+  echo 'installed adhoc.sh'
   }
   bash $HOME/adhoc.sh
 }
 
 configure_nginx() {
-  grep "configured nginx" $LOG && return
-  echo "configuring nginx" >> $LOG
+  grep 'configured nginx' $LOG && return
+  echo 'configuring nginx'
   printf '
 server {
     listen 80;
@@ -168,23 +171,23 @@ server {
   sudo ln -s /etc/nginx/sites-available/baculus /etc/nginx/sites-enabled/baculus
   sudo rm /etc/nginx/sites-enabled/default
   sudo systemctl enable nginx
-  echo "configured nginx" >> $LOG
+  echo 'configured nginx'
 }
 
 configure_hosts() {
   grep "configured hosts" $LOG && return
-  echo "configuring hosts" >> $LOG
+  echo 'configuring hosts'
   local config=/etc/hosts
   printf "
 127.0.0.1 baculus $HOSTNAME
 10.0.42.1 baculus.mesh baculus.map baculus.chat
 " | sudo tee -a $config
-  echo "configured hosts" >> $LOG
+  echo 'configured hosts'
 }
 
 configure_dnsmasq() {
-  grep "configured dnsmasq" $LOG && return
-  echo "configuring dnsmasq" >> $LOG
+  grep '^configured dnsmasq$' $LOG && return
+  echo 'configuring dnsmasq'
 printf \
 "# Delays sending DHCPOFFER and proxydhcp replies for at least the specified number of seconds.
 dhcp-mac=set:client_is_a_pi,B8:27:EB:*:*:*
@@ -204,12 +207,12 @@ server=/#/1.1.1.1
 dhcp-option=6,10.0.42.1
 dhcp-authoritative
 " | sudo tee /etc/dnsmasq.conf
-  echo "configured dnsmasq" >> $LOG
+  echo 'configured dnsmasq'
 }
 
 update_rclocal() {
-  grep "updated rclocal" $LOG && return
-  echo "updating rclocal" >> $LOG
+  grep '^updated rclocal$' $LOG && return
+  echo 'updating rclocal'
   printf "
 # Print ipv6 address
 _IPV6=\$(ip -6 address show dev eth0 scope link | awk '/inet6/{print \$2}')
@@ -217,12 +220,12 @@ if [ \"\$_IPV6\" ]; then
   printf 'Local ipv6 address is %s\\n' \"\$_IPV6\"
 fi
 " | sudo tee -a /etc/rc.local
-  echo "updated rc.local" >> $LOG
+  echo 'updated rc.local'
 }
 
 install_scuttlebot() {
-  grep "installed scuttlebot" $LOG && return
-  echo "installing scuttlebot" >> $LOG
+  grep '^installed scuttlebot$' $LOG && return
+  echo 'installing scuttlebot'
   cd $HOME
   # multiserver
   git clone https://github.com/jedahan/multiserver.git --branch routerless
@@ -246,12 +249,12 @@ install_scuttlebot() {
   popd # scuttlebot
   # appname
   echo ssb_appname=bac | sudo tee -a /etc/environment
-  echo "installed scuttlebot" >> $LOG
+  echo 'installed scuttlebot'
 }
 
 install_mvd() {
-  grep "installed mvd" $LOG && return
-  echo "installing mvd" >> $LOG
+  grep '^installed mvd$' $LOG && return
+  echo 'installing mvd'
   cd $HOME
   git clone https://github.com/jedahan/mvd --branch routerless
   pushd mvd
@@ -259,12 +262,12 @@ install_mvd() {
   npm install
   npm link ../scuttlebot
   popd # mvd
-  echo "installed mvd" >> $LOG
+  echo 'installed mvd'
 }
 
 install_cjdns() {
-  grep "installed cjdns" $LOG && return
-  echo "installing cjdns" >> $LOG
+  grep '^installed cjdns$' $LOG && return
+  echo 'installing cjdns'
   cd $HOME
   git clone https://github.com/cjdelisle/cjdns.git
   pushd cjdns
@@ -275,19 +278,20 @@ install_cjdns() {
   cjdroute --genconf | sed -e 's/"bind": "all"/"bind": "eth0"/' | sudo tee /etc/cjdroute.conf
   sudo cp contrib/systemd/cjdns* /etc/systemd/system/
   popd #cjdns
-  echo "installed cjdns" >> $LOG
+  echo 'installed cjdns'
 }
 
+mkdir -p $(dirname $LOG) && touch $LOG || exit 1
 echo "--- START" $(date) >> $LOG
 cd $HOME || return
-setup_npm
-install_docs
-install_cjdns
-update_rclocal
-configure_dnsmasq
-configure_nginx
-install_scuttlebot
-install_mvd
-install_tileserver
-adhoc
+setup_npm &>$LOG
+install_docs &>$LOG
+install_cjdns &>$LOG
+update_rclocal &>$LOG
+configure_dnsmasq &>$LOG
+configure_nginx &>$LOG
+install_scuttlebot &>$LOG
+install_mvd &>$LOG
+install_tileserver &>$LOG
+adhoc &>$LOG
 echo "--- END" $(date) >> $LOG
