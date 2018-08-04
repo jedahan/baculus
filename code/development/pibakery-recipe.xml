@@ -3,7 +3,7 @@
   <block type="onfirstboot" id="onfirstboot" x="32" y="20">
     <next>
       <block type="sethostname" id="O/gSH[HgvN^H74Y/EB=e">
-        <field name="1">baculusA</field>
+        <field name="1">baculusC</field>
         <next>
           <block type="changepass" id="*BY2~YAv86?1VetRytp6">
             <field name="1">baculus</field>
@@ -60,10 +60,10 @@
                                                                     <next>
                                                                       <block type="downloadfile" id=")QV);B/%kysCsI~-7sjP">
                                                                         <field name="1">https://baculus.co/de/update.bash</field>
-                                                                        <field name="2">/home/pi/baculus_update.bash</field>
+                                                                        <field name="2">/home/pi/update.bash</field>
                                                                         <next>
                                                                           <block type="runcommand" id="0G,}1C-h54h^cXfH]=Q=">
-                                                                            <field name="1">bash /home/pi/baculus_update.bash</field>
+                                                                            <field name="1">bash /home/pi/update.bash</field>
                                                                             <field name="2">pi</field>
                                                                             <next>
                                                                               <block type="reboot" id="qe(r|_Kph*ruPA0i@`h-"></block>
