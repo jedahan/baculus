@@ -37,13 +37,13 @@ switch_modules() {
 }
 
 install_mosh() {
-  require mosh
+  which mosh >/dev/null || require mosh
 }
 
 clone_source() {
   grep '^cloned source' $INSTALL_LOG && return
   echo 'cloning source'
-  require git
+  which git >/dev/null || require git
   cd
   test -d baculus || git clone https://github.com/baculus-buoy/baculus.git
   echo 'cloned source' >> $INSTALL_LOG
@@ -65,7 +65,8 @@ install_npm() {
 install_scuttlebot() {
   grep '^installed scuttlebot$' $INSTALL_LOG && return
   echo 'installing scuttlebot'
-  require git nodejs
+  which git >/dev/null || require git
+  which npm >/dev/null || require nodejs
   cd
   # multiserver
   test -d multiserver || git clone https://github.com/jedahan/multiserver.git --branch routerless
@@ -95,7 +96,8 @@ install_scuttlebot() {
 install_mvd() {
   grep '^installed mvd$' $INSTALL_LOG && return
   echo 'installing mvd'
-  require git nodejs
+  which git >/dev/null || require git
+  which npm >/dev/null || require nodejs
   cd
   test -d mvd || git clone https://github.com/jedahan/mvd --branch routerless
   pushd mvd
@@ -108,7 +110,8 @@ install_mvd() {
 install_tileserver() {
   grep '^installed tileserver$' $INSTALL_LOG && return
   echo 'installing tileserver'
-  require nodejs libcairo2-dev libprotobuf-dev
+  require libcairo2-dev libprotobuf-dev
+  which npm >/dev/null || require nodejs
   npm install -g tileserver-gl-light
   pushd $HOME/baculus/code
   cp home/pi/tileserver.json $HOME/
@@ -124,7 +127,8 @@ install_tileserver() {
 install_cjdns() {
   grep '^installed cjdns$' $INSTALL_LOG && return
   echo 'installing cjdns'
-  require build-essential git
+  require build-essential
+  which git >/dev/null || require git
   cd
   test -d cjdns || git clone https://github.com/cjdelisle/cjdns.git
   pushd cjdns
@@ -141,7 +145,7 @@ install_cjdns() {
 install_dnsmasq() {
   grep '^installed dnsmasq$' $INSTALL_LOG && return
   echo 'installing dnsmasq'
-  require dnsmasq
+  which dnsmasq >/dev/null || require dnsmasq
   sudo cp $HOME/baculus/code/etc/dnsmasq.conf /etc/
   echo 'installed dnsmasq' >> $INSTALL_LOG
 }
@@ -149,7 +153,7 @@ install_dnsmasq() {
 install_nginx() {
   grep 'installing nginx' $INSTALL_LOG && return
   echo 'installed nginx'
-  require nginx
+  which nginx >/dev/null || require nginx
   test -f /etc/nginx/sites-available/baculus || sudo cp $HOME/baculus/code/etc/nginx/sites-available/baculus $_
   test -f /etc/nginx/sites-enabled/baculus || sudo ln -s /etc/nginx/sites-available/baculus $_
   test -f /etc/nginx/sites-enabled/default || sudo rm $_
@@ -160,7 +164,7 @@ install_nginx() {
 build_site() {
   grep '^built site$' $INSTALL_LOG && return
   echo 'building site'
-  require ruby ruby-dev
+  which gem >/dev/null || require ruby ruby-dev
   pushd baculus
   which bundle >/dev/null || sudo gem install bundler
   bundle install
