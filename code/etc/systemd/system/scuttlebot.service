@@ -1,0 +1,17 @@
+[Unit]
+Description=scuttlebot
+After=syslog.target
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/scuttlebot
+Environment=ssb_appname=bac
+ExecStart=/usr/bin/node bin server --allowPrivate
+ExecStop=/bin/kill -s QUIT $MAINPID
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
