@@ -150,9 +150,9 @@ install_nginx() {
   grep 'installing nginx' $INSTALL_LOG && return
   echo 'installed nginx'
   require nginx
-  sudo cp $HOME/baculus/code/etc/nginx/sites-available/baculus /etc/nginx/sites-available/
-  sudo ln -s /etc/nginx/sites-available/baculus /etc/nginx/sites-enabled/baculus
-  sudo rm /etc/nginx/sites-enabled/default
+  test -f /etc/nginx/sites-available/baculus || sudo cp $HOME/baculus/code/etc/nginx/sites-available/baculus $_
+  test -f /etc/nginx/sites-enabled/baculus || sudo ln -s /etc/nginx/sites-available/baculus $_
+  test -f /etc/nginx/sites-enabled/default || sudo rm $_
   sudo systemctl enable nginx
   echo 'installed nginx' >> $INSTALL_LOG
 }
