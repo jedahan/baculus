@@ -209,33 +209,30 @@ meshpoint() {
   bash $HOME/meshpoint.sh
 }
 
-install_everything() {
-  echo "--- START" $(date)
-  change_locale en_US.UTF-8
-  configure_hosts
-  switch_modules
-  install_mosh
-  clone_source
-  install_npm
-
-  install_scuttlebot
-  install_mvd
-
-  install_tileserver
-  install_cjdns
-
-  install_dnsmasq
-  install_nginx
-
-  build_site
-  adhoc
-  update_rclocal
-  enable_ssh
-  share_hostname
-  echo "--- END" $(date)
-}
-
 cd
 test -d $(dirname $LOG) || mkdir -p $(dirname $LOG)
 touch $LOG || exit 1
-install_everything &>>$LOG
+
+echo "--- START" $(date) &>>$LOG
+change_locale en_US.UTF-8 &>>$LOG
+configure_hosts &>>$LOG
+switch_modules &>>$LOG
+install_mosh &>>$LOG
+clone_source &>>$LOG
+install_npm &>>$LOG
+
+install_scuttlebot &>>$LOG
+install_mvd &>>$LOG
+
+install_tileserver &>>$LOG
+install_cjdns &>>$LOG
+
+install_dnsmasq &>>$LOG
+install_nginx &>>$LOG
+
+build_site &>>$LOG
+adhoc &>>$LOG
+update_rclocal &>>$LOG
+enable_ssh &>>$LOG
+share_hostname &>>$LOG
+echo "--- END" $(date) &>>$LOG
