@@ -97,11 +97,10 @@ install_mvd() {
   echo 'installing mvd'
   require git nodejs
   cd
-  git clone https://github.com/jedahan/mvd --branch routerless
+  test -d mvd || git clone https://github.com/jedahan/mvd --branch routerless
   pushd mvd
   git checkout d8a4a9ffc444a9daa612ede79049083a4ce1ca7c
   npm install
-  npm link ../scuttlebot
   popd # mvd
   echo 'installed mvd' >> $INSTALL_LOG
 }
@@ -127,7 +126,7 @@ install_cjdns() {
   echo 'installing cjdns'
   require build-essential git
   cd
-  git clone https://github.com/cjdelisle/cjdns.git
+  test -d cjdns || git clone https://github.com/cjdelisle/cjdns.git
   pushd cjdns
   git pull
   git checkout 77259a49e5bc7ca7bc6dca5bd423e02be563bdc5
