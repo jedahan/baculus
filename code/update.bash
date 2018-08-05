@@ -21,6 +21,7 @@ configure_hosts() {
   printf "
 127.0.0.1 baculus $HOSTNAME
 10.0.42.1 baculus.mesh baculus.map baculus.chat
+10.0.42.1 apple.com google.com
 " | sudo tee -a $config
   echo 'configured hosts' >> $INSTALL_LOG
 }
