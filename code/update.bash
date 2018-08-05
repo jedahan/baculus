@@ -28,8 +28,8 @@ switch_modules() {
   grep rtl8192cu /etc/modules || {
     echo rtl8192cu | sudo tee -a /etc/modules
   }
-  grep 8192cu /etc/modprobe.d/raspi-blacklist.conf || {
-    echo 8192cu | sudo tee -a /etc/modprobe.d/raspi-blacklist.conf
+  grep '^blacklist 8192cu$' /etc/modprobe.d/raspi-blacklist.conf || {
+    echo 'blacklist 8192cu' | sudo tee -a /etc/modprobe.d/raspi-blacklist.conf
   }
   lsmod | grep 8192cu && sudo rmmod 8192cu
   lsmod | grep rtl8192cu || sudo modprobe rtl8192cu
