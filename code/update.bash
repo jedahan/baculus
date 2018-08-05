@@ -105,7 +105,7 @@ install_mvd() {
   git checkout d8a4a9ffc444a9daa612ede79049083a4ce1ca7c
   npm install
   npm run build
-  npm link scuttlebot
+  #npm link scuttlebot
   popd # mvd
   test -f /etc/systemd/system/mvd.service || sudo cp $HOME/baculus/code/$_ $_
   echo 'installed mvd' >> $INSTALL_LOG
