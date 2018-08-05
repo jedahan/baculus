@@ -188,6 +188,14 @@ ip addr
   echo 'updated rc.local' >> $INSTALL_LOG
 }
 
+enable_ssh() {
+  test -f /boot/ssh || touch $_
+}
+
+share_hostname() {
+  test -f /boot/${HOSTNAME} || touch $_
+}
+
 meshpoint() {
   test -f $HOME/meshpoint.sh || {
   echo 'installing meshpoint.sh'
@@ -217,6 +225,8 @@ install_everything() {
   build_site
   adhoc
   update_rclocal
+  enable_ssh
+  share_hostname
   echo "--- END" $(date)
 }
 
