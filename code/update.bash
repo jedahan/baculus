@@ -59,7 +59,7 @@ install_npm() {
   grep PATH /etc/environment || {
     echo PATH=$PATH | sudo tee -a /etc/environment
   }
-  require nodejs
+  which npm >/dev/null || require nodejs
 }
 
 install_scuttlebot() {
@@ -193,11 +193,11 @@ ip addr
 }
 
 enable_ssh() {
-  test -f /boot/ssh || touch $_
+  test -f /boot/ssh || sudo touch $_
 }
 
 share_hostname() {
-  test -f /boot/${HOSTNAME} || touch $_
+  test -f /boot/${HOSTNAME} || sudo touch $_
 }
 
 meshpoint() {
