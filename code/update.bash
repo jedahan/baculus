@@ -50,7 +50,7 @@ clone_source() {
 }
 
 install_npm() {
-  export NPM_CONFIG_PREFIX=$HOME/npm/global
+  export NPM_CONFIG_PREFIX=$HOME/npm
   mkdir -p $NPM_CONFIG_PREFIX
   grep NPM_CONFIG_PREFIX /etc/environment || {
     echo NPM_CONFIG_PREFIX=$NPM_CONFIG_PREFIX | sudo tee -a /etc/environment
