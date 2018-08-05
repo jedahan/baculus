@@ -45,7 +45,6 @@ clone_source() {
 }
 
 install_npm() {
-  require npm
   export NPM_CONFIG_PREFIX=$HOME/npm/global
   mkdir -p $NPM_CONFIG_PREFIX
   grep NPM_CONFIG_PREFIX /etc/environment || {
@@ -55,12 +54,13 @@ install_npm() {
   grep PATH /etc/environment || {
     echo PATH=$PATH | sudo tee -a /etc/environment
   }
+  require nodejs npm
 }
 
 install_scuttlebot() {
   grep '^installed scuttlebot$' $INSTALL_LOG && return
   echo 'installing scuttlebot'
-  require git npm
+  require git nodejs npm
   cd
   # multiserver
   test -d multiserver || git clone https://github.com/jedahan/multiserver.git --branch routerless
@@ -90,7 +90,7 @@ install_scuttlebot() {
 install_mvd() {
   grep '^installed mvd$' $INSTALL_LOG && return
   echo 'installing mvd'
-  require git npm
+  require git nodejs npm
   cd
   git clone https://github.com/jedahan/mvd --branch routerless
   pushd mvd
@@ -104,7 +104,7 @@ install_mvd() {
 install_tileserver() {
   grep '^installed tileserver$' $INSTALL_LOG && return
   echo 'installing tileserver'
-  require npm libcairo2-dev libprotobuf-dev
+  require nodejs npm libcairo2-dev libprotobuf-dev
   npm install -g tileserver-gl-light
   pushd $HOME/baculus/code
   cp home/pi/tileserver.json $HOME/
