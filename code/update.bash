@@ -160,7 +160,7 @@ install_nginx() {
 build_site() {
   grep '^built site$' $INSTALL_LOG && return
   echo 'building site'
-  require rubygems ruby-dev
+  require ruby ruby-dev
   pushd baculus
   which bundle >/dev/null || sudo gem install bundler
   bundle install
