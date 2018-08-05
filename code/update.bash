@@ -142,11 +142,18 @@ install_cjdns() {
   echo 'installed cjdns' >> $INSTALL_LOG
 }
 
+configure_network() {
+  grep '^configuring network' $INSTALL_LOG && return
+  echo 'configured network'
+  sudo cp $HOME/baculus/code/etc/dhcpcd.conf /etc/dhcpcd.conf
+  echo 'configured network' >> $INSTALL_LOG
+}
+
 install_dnsmasq() {
   grep '^installed dnsmasq$' $INSTALL_LOG && return
   echo 'installing dnsmasq'
   which dnsmasq >/dev/null || require dnsmasq
-  sudo cp $HOME/baculus/code/etc/dnsmasq.conf /etc/
+  sudo cp $HOME/baculus/code/etc/dnsmasq.conf /etc/dnsmasq.conf
   echo 'installed dnsmasq' >> $INSTALL_LOG
 }
 
@@ -156,7 +163,7 @@ install_nginx() {
   which nginx >/dev/null || require nginx
   test -f /etc/nginx/sites-available/baculus || sudo cp $HOME/baculus/code/etc/nginx/sites-available/baculus $_
   test -f /etc/nginx/sites-enabled/baculus || sudo ln -s /etc/nginx/sites-available/baculus $_
-  test -f /etc/nginx/sites-enabled/default || sudo rm $_
+  test -f /etc/nginx/sites-enabled/default && sudo rm $_
   sudo systemctl enable nginx
   echo 'installed nginx' >> $INSTALL_LOG
 }
@@ -222,6 +229,7 @@ change_locale en_US.UTF-8 &>>$LOG
 configure_hosts &>>$LOG
 switch_modules &>>$LOG
 install_mosh &>>$LOG
+configure_network &>>$LOG
 clone_source &>>$LOG
 install_npm &>>$LOG
 
