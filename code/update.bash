@@ -36,6 +36,10 @@ switch_modules() {
   lsmod | grep '^rtl8192cu' || sudo modprobe rtl8192cu
 }
 
+install_mosh() {
+  require mosh
+}
+
 clone_source() {
   grep '^cloned source' $INSTALL_LOG && return
   echo 'cloning source'
@@ -211,6 +215,7 @@ install_everything() {
   change_locale en_US.UTF-8
   configure_hosts
   switch_modules
+  install_mosh
   clone_source
   install_npm
 
