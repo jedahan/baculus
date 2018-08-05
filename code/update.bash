@@ -10,7 +10,8 @@ require() {
 }
 
 change_locale() {
-  sudo raspi-config nonint do_change_locale 'en_US.UTF-8'
+  test "$LANG" = "$1" && return
+  sudo raspi-config nonint do_change_locale "$1"
 }
 
 configure_hosts() {
@@ -31,8 +32,8 @@ switch_modules() {
   grep '^blacklist 8192cu$' /etc/modprobe.d/raspi-blacklist.conf || {
     echo 'blacklist 8192cu' | sudo tee -a /etc/modprobe.d/raspi-blacklist.conf
   }
-  lsmod | grep 8192cu && sudo rmmod 8192cu
-  lsmod | grep rtl8192cu || sudo modprobe rtl8192cu
+  lsmod | grep '^8192cu' && sudo rmmod 8192cu
+  lsmod | grep '^rtl8192cu' || sudo modprobe rtl8192cu
 }
 
 clone_source() {
@@ -207,7 +208,7 @@ meshpoint() {
 
 install_everything() {
   echo "--- START" $(date)
-  change_locale
+  change_locale en_US.UTF-8
   configure_hosts
   switch_modules
   clone_source
