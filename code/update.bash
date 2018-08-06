@@ -17,7 +17,7 @@ raspi_config() {
   test "$LANG" = 'en_US.UTF-8' || sudo raspi-config nonint do_change_locale "$_"
   sudo raspi-config nonint do_configure_keyboard us
   sudo raspi-config nonint do_wifi_country US
-  sudo raspi-config nonint do_ssh 1
+  sudo raspi-config nonint do_ssh 0
 
   # give minimal memory to gpu
   local SPLIT=16
