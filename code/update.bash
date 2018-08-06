@@ -259,6 +259,7 @@ touch $LOG || exit 1
   raspi_config
   configure_hosts
   switch_modules
+  sudo ip route del default eth0
   require mosh
   clone_source
   configure_network
