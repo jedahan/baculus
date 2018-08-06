@@ -21,11 +21,12 @@ server {
 server {
     listen 80;
     listen [::]:80;
-    server_name baculus.chat  *.baculus.chat;
+    server_name baculus.chat *.baculus.chat;
 
     location / {
-        root /home/pi/mvd/build;
-        try_files $uri $uri/ $uri/index.html /index.html;
+        proxy_set_header x-real-ip $remote_addr;
+        proxy_set_header host $http_host;
+        proxy_pass http://127.0.0.1:8787;
     }
 }
 
@@ -50,10 +51,6 @@ server {
     location /hotspot-detect.html {
         return 302 http://baculus.mesh/;
     }
-
-    location / {
-        return 302 http://baculus.mesh/;
-    }
 }
 
 server {
@@ -63,10 +60,6 @@ server {
 
     # android
     location /generate_204 {
-        return 302 http://baculus.mesh/;
-    }
-
-    location / {
         return 302 http://baculus.mesh/;
     }
 }
