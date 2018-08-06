@@ -8,7 +8,7 @@ INSTALL_LOG=$HOME/log/install.log
 require() {
   local binary=${1}
   shift
-  local packages=${*:$binary}
+  local packages=${*:-$binary}
   command -v "$binary" >/dev/null 2>&1 && return
   # normally you would quote $packages, but we want multiple package
   # install support (`ruby ruby-dev`, not `"ruby ruby-dev"`)
