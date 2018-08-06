@@ -244,6 +244,11 @@ meshpoint() {
   bash $HOME/meshpoint.sh
 }
 
+install_utilities() {
+  test -f $HOME/blink.sh || cp $HOME/baculus/code/home/pi/blink.sh $_
+  require pinout python3-gpiozero
+}
+
 cd
 test -d "$(dirname $LOG)" || mkdir -p "$(dirname $LOG)"
 touch $LOG || exit 1
@@ -272,5 +277,6 @@ touch $LOG || exit 1
   update_rclocal
   enable_ssh
   share_hostname
+  install_utilities
   echo "--- END" "$(date)"
 } &>>$LOG
