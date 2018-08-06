@@ -252,8 +252,8 @@ touch $LOG || exit 1
   configure_hosts
   switch_modules
   require mosh
-  configure_network
   clone_source
+  configure_network
   install_npm
 
   install_scuttlebot
