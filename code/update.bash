@@ -9,15 +9,24 @@ require() {
   sudo DEBIAN_FRONTEND=noninteractive apt install -y $*
 }
 
-change_locale() {
-  test "$LANG" = "$1" && return
-  sudo raspi-config nonint do_change_locale "$1"
+raspi_config() {
+  test "$LANG" = 'en_US.UTF-8' || sudo raspi-config nonint do_change_locale $_
+  sudo raspi-config nonint do_configure_keyboard us
+  sudo raspi-config nonint do_wifi_country US
+  sudo raspi-config nonint do_ssh 1
+
+  # give minimal memory to gpu
+  local SPLIT=16
+  test -e /boot/arm${SPLIT}_start.elf \
+   && cmp /boot/arm${SPLIT}_start.elf /boot/start.elf >/dev/null 2>&1 \
+   || sudo raspi-config nonint do_memory_split $SPLIT
 }
 
 configure_hosts() {
   grep "configured hosts" $INSTALL_LOG && return
   echo 'configuring hosts'
   local config=/etc/hosts
+  grep baculus.mesh /etc/hosts >/dev/null && return
   printf "
 127.0.0.1 baculus $HOSTNAME
 10.0.42.1 baculus.mesh baculus.map baculus.chat
@@ -234,7 +243,7 @@ test -d $(dirname $LOG) || mkdir -p $(dirname $LOG)
 touch $LOG || exit 1
 
 echo "--- START" $(date) &>>$LOG
-change_locale en_US.UTF-8 &>>$LOG
+raspi_config &>>$LOG
 configure_hosts &>>$LOG
 switch_modules &>>$LOG
 install_mosh &>>$LOG
