@@ -12,11 +12,13 @@ change_to_adhoc() {
   test $selfassigned && sudo ip addr del $_ dev $mesh_dev
 
   local suffix=5
-  if [[ $HOST == 'baculusA' ]]; then suffix=10; fi
-  if [[ $HOST == 'baculusB' ]]; then suffix=11; fi
-  if [[ $HOST == 'baculusC' ]]; then suffix=12; fi
+  if [[ $HOSTNAME == 'baculusA' ]]; then suffix=10; fi
+  if [[ $HOSTNAME == 'baculusB' ]]; then suffix=11; fi
+  if [[ $HOSTNAME == 'baculusC' ]]; then suffix=12; fi
+  local addr=10.0.17.${suffix}
 
-  sudo ip addr add 10.0.17.${suffix} dev $mesh_dev
+  ip addr show $mesh_dev | grep $addr >/dev/null 2>&1 && return
+  sudo ip addr add $addr $mesh_dev
 }
 
 change_to_adhoc $*
