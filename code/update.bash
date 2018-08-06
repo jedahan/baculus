@@ -6,20 +6,23 @@ LOG=$HOME/log/baculus.log
 INSTALL_LOG=$HOME/log/install.log
 
 require() {
-  sudo DEBIAN_FRONTEND=noninteractive apt install -y $*
+  local binary=${1}
+  shift
+  local packages=${*:-$binary}
+  command -v "$binary" >/dev/null 2>&1 && return
+  sudo DEBIAN_FRONTEND=noninteractive apt install -y "$packages"
 }
 
 raspi_config() {
-  test "$LANG" = 'en_US.UTF-8' || sudo raspi-config nonint do_change_locale $_
+  test "$LANG" = 'en_US.UTF-8' || sudo raspi-config nonint do_change_locale "$_"
   sudo raspi-config nonint do_configure_keyboard us
   sudo raspi-config nonint do_wifi_country US
   sudo raspi-config nonint do_ssh 1
 
   # give minimal memory to gpu
   local SPLIT=16
-  test -e /boot/arm${SPLIT}_start.elf \
-   && cmp /boot/arm${SPLIT}_start.elf /boot/start.elf >/dev/null 2>&1 \
-   || sudo raspi-config nonint do_memory_split $SPLIT
+  test -e /boot/arm${SPLIT}_start.elf && cmp /boot/arm${SPLIT}_start.elf /boot/start.elf >/dev/null 2>&1 && return
+  sudo raspi-config nonint do_memory_split $SPLIT
 }
 
 configure_hosts() {
@@ -28,10 +31,10 @@ configure_hosts() {
   local config=/etc/hosts
   grep baculus.mesh /etc/hosts >/dev/null && return
   printf "
-127.0.0.1 baculus $HOSTNAME
+127.0.0.1 baculus %s
 10.0.42.1 baculus.mesh baculus.map baculus.chat
 10.0.42.1 apple.com google.com
-" | sudo tee -a $config
+" "$HOSTNAME" | sudo tee -a $config
   echo 'configured hosts' >> $INSTALL_LOG
 }
 
@@ -46,14 +49,10 @@ switch_modules() {
   lsmod | grep '^rtl8192cu' || sudo modprobe rtl8192cu
 }
 
-install_mosh() {
-  which mosh >/dev/null || require mosh
-}
-
 clone_source() {
   grep '^cloned source' $INSTALL_LOG && return
   echo 'cloning source'
-  which git >/dev/null || require git
+  require git
   cd
   test -d baculus || git clone https://github.com/baculus-buoy/baculus.git
   echo 'cloned source' >> $INSTALL_LOG
@@ -67,16 +66,16 @@ install_npm() {
   }
   export PATH=$NPM_CONFIG_PREFIX/bin:$PATH
   grep PATH /etc/environment || {
-    echo PATH=$PATH | sudo tee -a /etc/environment
+    echo PATH="$PATH" | sudo tee -a /etc/environment
   }
-  which npm >/dev/null || require nodejs
+  require npm nodejs
 }
 
 install_scuttlebot() {
   grep '^installed scuttlebot$' $INSTALL_LOG && return
   echo 'installing scuttlebot'
-  which git >/dev/null || require git
-  which npm >/dev/null || require nodejs
+  require git
+  require npm nodejs
   cd
   # multiserver
   test -d multiserver || git clone https://github.com/jedahan/multiserver.git --branch routerless
@@ -98,18 +97,20 @@ install_scuttlebot() {
   npm link ../broadcast-stream
   npm link ../multiserver
   popd # scuttlebot
-  test -f /etc/systemd/system/scuttlebot.service || sudo cp $HOME/baculus/code/$_ $_
+  test -f /etc/systemd/system/scuttlebot.service || sudo cp $HOME/baculus/code/"$_" "$_"
   sudo systemctl daemon-reload
   # appname
-  grep '^ssb_appname=bac$' /etc/environment >/dev/null || { echo ssb_appname=bac | sudo tee -a /etc/environment }
+  grep '^ssb_appname=bac$' /etc/environment >/dev/null || {
+    echo 'ssb_appname=bac' | sudo tee -a /etc/environment
+  }
   echo 'installed scuttlebot' >> $INSTALL_LOG
 }
 
 install_mvd() {
   grep '^installed mvd$' $INSTALL_LOG && return
   echo 'installing mvd'
-  which git >/dev/null || require git
-  which npm >/dev/null || require nodejs
+  require git
+  require npm nodejs
   cd
   test -d mvd || git clone https://github.com/jedahan/mvd --branch routerless
   pushd mvd
@@ -117,8 +118,10 @@ install_mvd() {
   npm install
   npm run build
   popd # mvd
-  grep '^ssb_appname=bac$' /etc/environment >/dev/null || { echo ssb_appname=bac | sudo tee -a /etc/environment }
-  test -f /etc/systemd/system/mvd.service || sudo cp $HOME/baculus/code/$_ $_
+  grep '^ssb_appname=bac$' /etc/environment >/dev/null || {
+    echo 'ssb_appname=bac' | sudo tee -a /etc/environment
+  }
+  test -f /etc/systemd/system/mvd.service || sudo cp $HOME/baculus/code/"$_" "$_"
   sudo systemctl daemon-reload
   sudo systemctl enable mvd
   sudo systemctl restart mvd
@@ -128,8 +131,9 @@ install_mvd() {
 install_tileserver() {
   grep '^installed tileserver$' $INSTALL_LOG && return
   echo 'installing tileserver'
-  require libcairo2-dev libprotobuf-dev
-  which npm >/dev/null || require nodejs
+  require false libcairo2-dev
+  require false libprotobuf-dev
+  require npm nodejs
   npm install -g tileserver-gl-light
   pushd $HOME/baculus/code
   cp home/pi/tileserver.json $HOME/
@@ -145,8 +149,8 @@ install_tileserver() {
 install_cjdns() {
   grep '^installed cjdns$' $INSTALL_LOG && return
   echo 'installing cjdns'
-  require build-essential
-  which git >/dev/null || require git
+  require false build-essential
+  require git
   cd
   test -d cjdns || git clone https://github.com/cjdelisle/cjdns.git
   pushd cjdns
@@ -170,7 +174,7 @@ configure_network() {
 install_dnsmasq() {
   grep '^installed dnsmasq$' $INSTALL_LOG && return
   echo 'installing dnsmasq'
-  which dnsmasq >/dev/null || require dnsmasq
+  require dnsmasq
   sudo cp $HOME/baculus/code/etc/dnsmasq.conf /etc/dnsmasq.conf
   echo 'installed dnsmasq' >> $INSTALL_LOG
 }
@@ -178,10 +182,10 @@ install_dnsmasq() {
 install_nginx() {
   grep 'installing nginx' $INSTALL_LOG && return
   echo 'installed nginx'
-  which nginx >/dev/null || require nginx
-  test -f /etc/nginx/sites-available/baculus || sudo cp $HOME/baculus/code/etc/nginx/sites-available/baculus $_
-  test -f /etc/nginx/sites-enabled/baculus || sudo ln -s /etc/nginx/sites-available/baculus $_
-  test -f /etc/nginx/sites-enabled/default && sudo rm $_
+  require nginx
+  test -f /etc/nginx/sites-available/baculus || sudo cp $HOME/baculus/code/etc/nginx/sites-available/baculus "$_"
+  test -f /etc/nginx/sites-enabled/baculus || sudo ln -s /etc/nginx/sites-available/baculus "$_"
+  test -f /etc/nginx/sites-enabled/default && sudo rm "$_"
   sudo systemctl enable nginx
   echo 'installed nginx' >> $INSTALL_LOG
 }
@@ -189,13 +193,13 @@ install_nginx() {
 build_site() {
   grep '^built site$' $INSTALL_LOG && return
   echo 'building site'
-  which gem >/dev/null || require ruby ruby-dev
+  require gem ruby ruby-dev
   pushd baculus
-  which bundle >/dev/null || sudo gem install bundler
+  command -v bundle >/dev/null 2>&1 || sudo gem install bundler
   bundle install
   bundle exec jekyll build
   pushd _site
-  sed -i -e 's/^.*oogle.*$//' *html */*html
+  sed -i -e 's/^.*oogle.*$//' ./*html* ./*/*html*
   popd # _site
   popd # baculus
   echo 'built site' >> $INSTALL_LOG
@@ -213,7 +217,7 @@ adhoc() {
 update_rclocal() {
   grep '^updated rclocal$' $INSTALL_LOG && return
   echo 'updating rclocal'
-  printf \ '
+  printf '
 # setup adhoc mode
 /home/pi/adhoc.sh
 ip addr
@@ -222,11 +226,11 @@ ip addr
 }
 
 enable_ssh() {
-  test -f /boot/ssh || sudo touch $_
+  test -f /boot/ssh || sudo touch "$_"
 }
 
 share_hostname() {
-  test -f /boot/${HOSTNAME} || sudo touch $_
+  test -f /boot/"${HOSTNAME}" || sudo touch "$_"
 }
 
 meshpoint() {
@@ -239,30 +243,32 @@ meshpoint() {
 }
 
 cd
-test -d $(dirname $LOG) || mkdir -p $(dirname $LOG)
+test -d "$(dirname $LOG)" || mkdir -p "$(dirname $LOG)"
 touch $LOG || exit 1
 
-echo "--- START" $(date) &>>$LOG
-raspi_config &>>$LOG
-configure_hosts &>>$LOG
-switch_modules &>>$LOG
-install_mosh &>>$LOG
-configure_network &>>$LOG
-clone_source &>>$LOG
-install_npm &>>$LOG
+{
+  echo "--- START" "$(date)"
+  raspi_config
+  configure_hosts
+  switch_modules
+  require mosh
+  configure_network
+  clone_source
+  install_npm
 
-install_scuttlebot &>>$LOG
-install_mvd &>>$LOG
+  install_scuttlebot
+  install_mvd
 
-install_tileserver &>>$LOG
-install_cjdns &>>$LOG
+  install_tileserver
+  install_cjdns
 
-install_dnsmasq &>>$LOG
-install_nginx &>>$LOG
+  install_dnsmasq
+  install_nginx
 
-build_site &>>$LOG
-adhoc &>>$LOG
-update_rclocal &>>$LOG
-enable_ssh &>>$LOG
-share_hostname &>>$LOG
-echo "--- END" $(date) &>>$LOG
+  build_site
+  adhoc
+  update_rclocal
+  enable_ssh
+  share_hostname
+  echo "--- END" "$(date)"
+} &>>$LOG
