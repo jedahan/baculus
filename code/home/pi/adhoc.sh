@@ -8,14 +8,14 @@ change_to_adhoc() {
   sudo ifconfig $mesh_dev up
   sudo iw dev $mesh_dev ibss join ${mesh_name} 2412 HT40+
 
-  local suffix=5
-  local selfassigned=$(ip addr show $mesh_dev | awk "/169/ {print \$2}")
+  local selfassigned=$(ip addr show $mesh_dev scope global | awk "/169/ {print \$2}")
+  test $selfassigned && sudo ip addr del $_ dev $mesh_dev
 
+  local suffix=5
   if [[ $HOST == 'baculusA' ]]; then suffix=10; fi
   if [[ $HOST == 'baculusB' ]]; then suffix=11; fi
   if [[ $HOST == 'baculusC' ]]; then suffix=12; fi
 
-  sudo ip addr del $selfassigned dev $mesh_dev
   sudo ip addr add 10.0.17.${suffix} dev $mesh_dev
 }
 

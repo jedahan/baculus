@@ -214,6 +214,7 @@ adhoc() {
     echo 'installed adhoc.sh'
   }
   bash $HOME/adhoc.sh
+  sudo systemctl restart dnsmasq
 }
 
 update_rclocal() {
