@@ -8,9 +8,11 @@ INSTALL_LOG=$HOME/log/install.log
 require() {
   local binary=${1}
   shift
-  local packages=${*:-$binary}
+  local packages=${*:$binary}
   command -v "$binary" >/dev/null 2>&1 && return
-  sudo DEBIAN_FRONTEND=noninteractive apt install -y "$packages"
+  # normally you would quote $packages, but we want multiple package
+  # install support (`ruby ruby-dev`, not `"ruby ruby-dev"`)
+  sudo DEBIAN_FRONTEND=noninteractive apt install -y $packages
 }
 
 raspi_config() {
