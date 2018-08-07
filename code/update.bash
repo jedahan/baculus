@@ -5,6 +5,11 @@ HOME=/home/pi
 LOG=$HOME/log/baculus.log
 INSTALL_LOG=$HOME/log/install.log
 
+redirect_dns() {
+  sudo iptables -A PREROUTING -p udp -m udp --dport 53 -i eth0 -j DNAT --to-destination 10.0.42.1:53
+  sudo iptables -A PREROUTING -p tcp -m tcp --dport 53 -i eth0 -j DNAT --to-destination 10.0.42.1:53
+}
+
 require() {
   local binary=${1}
   shift
@@ -276,6 +281,7 @@ touch $LOG || exit 1
 
   build_site
   adhoc
+  redirect_dns
   update_rclocal
   enable_ssh
   share_hostname
