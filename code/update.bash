@@ -255,6 +255,15 @@ install_utilities() {
   require pinout python3-gpiozero
 }
 
+remove_eth0_route() {
+  ip route show default dev eth0 | grep default || return
+  sudo ip route del default dev eth0
+}
+
+install_mosh() {
+  require mosh
+}
+
 cd
 test -d "$(dirname $LOG)" || mkdir -p "$(dirname $LOG)"
 touch $LOG || exit 1
@@ -264,8 +273,8 @@ touch $LOG || exit 1
   raspi_config
   configure_hosts
   switch_modules
-  sudo ip route del default dev eth0
-  require mosh
+  remove_eth0_route
+  install_mosh
   clone_source
   configure_network
   install_npm
