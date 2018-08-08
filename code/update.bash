@@ -23,7 +23,7 @@ set_hostname() {
   NEW_HOSTNAME=$(cat /boot/hostname)
   test $CURRENT_HOSTNAME = $NEW_HOSTNAME && return 0
   echo $NEW_HOSTNAME | sudo tee /etc/hostname
-  sudo sed -i "s/127.0.1.1.*$CURRENT_HOSTNAME/127.0.1.1\t$NEW_HOSTNAME/g" /etc/hosts
+  sudo sed -i "s/127.0.0.1.*$CURRENT_HOSTNAME/127.0.0.1\t$NEW_HOSTNAME/g" /etc/hosts
   sudo hostname $NEW_HOSTNAME
 }
 
