@@ -10,11 +10,21 @@ redirect_dns() {
   sudo iptables -A PREROUTING -p tcp -m tcp --dport 53 -i eth0 -j DNAT --to-destination 10.0.42.1:53
 }
 
+set_hostname() {
+  test -f /boot/hostname || return 0
+  CURRENT_HOSTNAME=$(cat /etc/hostname | tr -d " \t\n\r")
+  NEW_HOSTNAME=$(cat /boot/hostname)
+  test $CURRENT_HOSTNAME = $NEW_HOSTNAME && return 0
+  echo $NEW_HOSTNAME | sudo tee /etc/hostname
+  sudo sed -i "s/127.0.1.1.*$CURRENT_HOSTNAME/127.0.1.1\t$NEW_HOSTNAME/g" /etc/hosts
+  sudo hostname $NEW_HOSTNAME
+}
+
 require() {
   local binary=${1}
   shift
   local packages=${*:-$binary}
-  command -v "$binary" >/dev/null 2>&1 && return
+  command -v "$binary" >/dev/null 2>&1 && return 0
   # normally you would quote $packages, but we want multiple package
   # install support (`ruby ruby-dev`, not `"ruby ruby-dev"`)
   sudo DEBIAN_FRONTEND=noninteractive apt install -y $packages
@@ -28,7 +38,7 @@ raspi_config() {
 
   # give minimal memory to gpu
   local SPLIT=16
-  test -e /boot/arm${SPLIT}_start.elf && cmp /boot/arm${SPLIT}_start.elf /boot/start.elf >/dev/null 2>&1 && return
+  test -e /boot/arm${SPLIT}_start.elf && cmp /boot/arm${SPLIT}_start.elf /boot/start.elf >/dev/null 2>&1 && return 0
   sudo raspi-config nonint do_memory_split $SPLIT
 }
 
@@ -212,14 +222,13 @@ build_site() {
   echo 'built site' >> $INSTALL_LOG
 }
 
-adhoc() {
+enable_adhoc() {
   test -f $HOME/adhoc.sh || {
     echo 'installing adhoc.sh'
     cp $HOME/baculus/code/home/pi/adhoc.sh $HOME/adhoc.sh
     echo 'installed adhoc.sh'
   }
   bash $HOME/adhoc.sh
-  sudo systemctl restart dnsmasq
 }
 
 update_rclocal() {
@@ -256,12 +265,20 @@ install_utilities() {
 }
 
 remove_eth0_route() {
-  ip route show default dev eth0 | grep default || return
+  ip route show default dev eth0 | grep default || return 0
   sudo ip route del default dev eth0
 }
 
 install_mosh() {
   require mosh
+}
+
+restart_dhcpcd() {
+  sudo systemctl restart dhcpcd
+}
+
+restart_dnsmasq() {
+  sudo systemctl restart dnsmasq
 }
 
 cd
@@ -270,6 +287,7 @@ touch $LOG || exit 1
 
 {
   echo "--- START" "$(date)"
+  set_hostname
   raspi_config
   configure_hosts
   switch_modules
@@ -289,8 +307,11 @@ touch $LOG || exit 1
   install_nginx
 
   build_site
-  adhoc
+  restart_dhcpcd
+  enable_adhoc
+  restart_dnsmasq
   redirect_dns
+
   update_rclocal
   enable_ssh
   share_hostname
