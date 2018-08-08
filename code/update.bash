@@ -55,17 +55,6 @@ configure_hosts() {
   echo 'configured hosts' >> $INSTALL_LOG
 }
 
-switch_modules() {
-  grep rtl8192cu /etc/modules || {
-    echo rtl8192cu | sudo tee -a /etc/modules
-  }
-  grep '^blacklist 8192cu$' /etc/modprobe.d/raspi-blacklist.conf || {
-    echo 'blacklist 8192cu' | sudo tee -a /etc/modprobe.d/raspi-blacklist.conf
-  }
-  lsmod | grep '^8192cu' && sudo rmmod 8192cu
-  lsmod | grep '^rtl8192cu' || sudo modprobe rtl8192cu
-}
-
 clone_source() {
   grep '^cloned source' $INSTALL_LOG && return
   echo 'cloning source'
@@ -184,7 +173,7 @@ install_cjdns() {
 configure_network() {
   grep '^configuring network' $INSTALL_LOG && return
   echo 'configured network'
-  sudo cp $HOME/baculus/code/etc/dhcpcd.conf /etc/dhcpcd.conf
+  sudo cp $HOME/baculus/code/etc/  sed -e "s/SUFFIX/`suffix`/" $HOME/baculus/code/etc/dhcpcd.conf.template | sudo tee /etc/dhcpcd.conf
   echo 'configured network' >> $INSTALL_LOG
 }
 
@@ -233,7 +222,6 @@ install_adhoc() {
   grep '^installed adhoc$' $INSTALL_LOG && return
   echo 'installing adhoc'
   sudo cp $HOME/baculus/code/wpa_supplicant/wpa_supplicant-wlan1.conf /etc/wpa_supplicant/wpa_supplicant-wlan1.conf
-  sed -e "s/SUFFIX/`suffix`/" $HOME/baculus/code/etc/dhcpcd.conf.template | sudo tee /etc/dhcpcd.conf
   echo 'installed adhoc' >> $INSTALL_LOG
 }
 
@@ -296,7 +284,6 @@ touch $LOG || exit 1
   set_hostname
   raspi_config
   configure_hosts
-  switch_modules
   remove_eth0_route
   install_mosh
   clone_source
