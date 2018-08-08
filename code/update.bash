@@ -6,8 +6,8 @@ LOG=$HOME/log/baculus.log
 INSTALL_LOG=$HOME/log/install.log
 
 redirect_dns() {
-  sudo iptables -A PREROUTING -p udp -m udp --dport 53 -i eth0 -j DNAT --to-destination 10.0.42.1:53
-  sudo iptables -A PREROUTING -p tcp -m tcp --dport 53 -i eth0 -j DNAT --to-destination 10.0.42.1:53
+  sudo iptables -t nat -A PREROUTING -p udp -m udp --dport 53 -i eth0 -j DNAT --to-destination 10.0.42.1:53
+  sudo iptables -t nat -A PREROUTING -p tcp -m tcp --dport 53 -i eth0 -j DNAT --to-destination 10.0.42.1:53
 }
 
 set_hostname() {
@@ -160,7 +160,7 @@ install_cjdns() {
   cd
   test -d cjdns || git clone https://github.com/cjdelisle/cjdns.git
   pushd cjdns
-  git pull
+  git pull origin master
   git checkout 77259a49e5bc7ca7bc6dca5bd423e02be563bdc5
   NO_TEST=1 Seccomp_NO=1 ./do
   sudo cp cjdroute /usr/bin/
@@ -221,7 +221,7 @@ suffix() {
 install_adhoc() {
   grep '^installed adhoc$' $INSTALL_LOG && return
   echo 'installing adhoc'
-  sudo cp $HOME/baculus/code/wpa_supplicant/wpa_supplicant-wlan1.conf /etc/wpa_supplicant/wpa_supplicant-wlan1.conf
+  sudo cp $HOME/baculus/code/etc/wpa_supplicant/wpa_supplicant-wlan1.conf /etc/wpa_supplicant/wpa_supplicant-wlan1.conf
   echo 'installed adhoc' >> $INSTALL_LOG
 }
 
