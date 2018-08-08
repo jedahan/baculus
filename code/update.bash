@@ -173,7 +173,7 @@ install_cjdns() {
 configure_network() {
   grep '^configuring network' $INSTALL_LOG && return
   echo 'configured network'
-  sudo cp $HOME/baculus/code/etc/  sed -e "s/SUFFIX/`suffix`/" $HOME/baculus/code/etc/dhcpcd.conf.template | sudo tee /etc/dhcpcd.conf
+  sed -e "s/SUFFIX/`suffix`/" $HOME/baculus/code/etc/dhcpcd.conf.template | sudo tee /etc/dhcpcd.conf
   echo 'configured network' >> $INSTALL_LOG
 }
 
