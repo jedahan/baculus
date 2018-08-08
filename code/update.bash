@@ -5,6 +5,13 @@ HOME=/home/pi
 LOG=$HOME/log/baculus.log
 INSTALL_LOG=$HOME/log/install.log
 
+suffix() {
+  test $HOSTNAME = 'baculusA' && echo -n 10 && return
+  test $HOSTNAME = 'baculusB' && echo -n 11 && return
+  test $HOSTNAME = 'baculusC' && echo -n 12 && return
+  echo -n 5
+}
+
 redirect_dns() {
   sudo iptables -t nat -A PREROUTING -p udp -m udp --dport 53 -i eth0 -j DNAT --to-destination 10.0.42.1:53
   sudo iptables -t nat -A PREROUTING -p tcp -m tcp --dport 53 -i eth0 -j DNAT --to-destination 10.0.42.1:53
@@ -109,6 +116,9 @@ install_scuttlebot() {
   grep '^ssb_appname=bac$' /etc/environment >/dev/null || {
     echo 'ssb_appname=bac' | sudo tee -a /etc/environment
   }
+  grep "^ssb_host=10.0.17.`suffix`\$" /etc/environment >/dev/null || {
+    echo "ssb_host=10.0.17.`suffix`" | sudo tee -a /etc/environment
+  }
   echo 'installed scuttlebot' >> $INSTALL_LOG
 }
 
@@ -120,7 +130,7 @@ install_mvd() {
   cd
   test -d mvd || git clone https://github.com/jedahan/mvd --branch routerless
   pushd mvd
-  git checkout aeb2e39999285051307ef584af0fe9c7537f0912
+  git checkout 96e33f1da0dde33348793cb2b1ca6a7f2f309c4b
   npm install
   npm run build
   popd # mvd
@@ -209,13 +219,6 @@ build_site() {
   popd # _site
   popd # baculus
   echo 'built site' >> $INSTALL_LOG
-}
-
-suffix() {
-  test $HOSTNAME = 'baculusA' && echo -n 10 && return
-  test $HOSTNAME = 'baculusB' && echo -n 11 && return
-  test $HOSTNAME = 'baculusC' && echo -n 12 && return
-  echo -n 5
 }
 
 install_adhoc() {
