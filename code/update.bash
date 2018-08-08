@@ -222,13 +222,19 @@ build_site() {
   echo 'built site' >> $INSTALL_LOG
 }
 
-enable_adhoc() {
-  test -f $HOME/adhoc.sh || {
-    echo 'installing adhoc.sh'
-    cp $HOME/baculus/code/home/pi/adhoc.sh $HOME/adhoc.sh
-    echo 'installed adhoc.sh'
-  }
-  bash $HOME/adhoc.sh
+suffix() {
+  test $HOSTNAME = 'baculusA' && echo -n 10 && return
+  test $HOSTNAME = 'baculusB' && echo -n 11 && return
+  test $HOSTNAME = 'baculusC' && echo -n 12 && return
+  echo -n 5
+}
+
+install_adhoc() {
+  grep '^installed adhoc$' $INSTALL_LOG && return
+  echo 'installing adhoc'
+  sudo cp $HOME/baculus/code/wpa_supplicant/wpa_supplicant-wlan1.conf /etc/wpa_supplicant/wpa_supplicant-wlan1.conf
+  sed -e "s/SUFFIX/`suffix`/" $HOME/baculus/code/etc/dhcpcd.conf.template | sudo tee /etc/dhcpcd.conf
+  echo 'installed adhoc' >> $INSTALL_LOG
 }
 
 update_rclocal() {
@@ -307,8 +313,8 @@ touch $LOG || exit 1
   install_nginx
 
   build_site
+  install_adhoc
   restart_dhcpcd
-  enable_adhoc
   restart_dnsmasq
   redirect_dns
 
