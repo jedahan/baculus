@@ -18,7 +18,7 @@ change_to_adhoc() {
   local addr=10.0.17.${suffix}
 
   ip addr show $mesh_dev | grep $addr >/dev/null 2>&1 && return
-  sudo ip addr add $addr $mesh_dev
+  sudo ip addr add $addr dev $mesh_dev
 }
 
 change_to_adhoc $*
