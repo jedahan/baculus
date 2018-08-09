@@ -129,7 +129,7 @@ install_mvd() {
   cd
   test -d mvd || git clone https://github.com/jedahan/mvd --branch routerless
   pushd mvd
-  git checkout c26e5ff1c7941db459e1b122230735940aae0eba
+  git checkout 23a56ebfb1bd2a1b315477bb2bbefb3e027439ca
   npm install
   npm run build
   popd # mvd
