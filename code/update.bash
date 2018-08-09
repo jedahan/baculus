@@ -57,7 +57,6 @@ configure_hosts() {
   printf "
 127.0.0.1 baculus %s
 10.0.42.1 baculus.mesh baculus.map baculus.chat
-10.0.42.1 apple.com google.com
 " "$HOSTNAME" | sudo tee -a $config
   echo 'configured hosts' >> $INSTALL_LOG
 }
@@ -130,7 +129,7 @@ install_mvd() {
   cd
   test -d mvd || git clone https://github.com/jedahan/mvd --branch routerless
   pushd mvd
-  git checkout 96e33f1da0dde33348793cb2b1ca6a7f2f309c4b
+  git checkout dfbdfde16674a1e5858e724e425d728eb17fa5ad
   npm install
   npm run build
   popd # mvd
