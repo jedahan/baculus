@@ -81,20 +81,34 @@ We still intend to work on the self-repairability portion of the network (via GP
 
 We were pretty close to the mark for our original estimates
 
+**Semi-Permanent Bill of Materials**
+
+| Part                                                         | Notes                       | Power | Weight | Cost     |
+| ------------------------------------------------------------ | --------------------------- | ----- | ------ | -------- |
+| [Raspberry Pi 3B+](https://www.adafruit.com/product/3775)    |                             | 690mA | 50g    | $35      |
+| [16GB microSD](https://www.amazon.com/Sandisk-Ultra-Micro-UHS-I-Adapter/dp/B073K14CVB) |                             |       | 2g     | $10      |
+| [ALFA usb wifi](http://a.co/5UL0Vl1)                         |                             | 200mA | 181g   | $35      |
+| [Litebeam 5AC gen2](https://www.amazon.com/Ubiquiti-Networks-LBE-5AC-GEN2-US-Litebeam-23dBi/dp/B06Y2JH7PV/) | ~2km city range @ 4m height |       | 152g   | $70      |
+| 5V Power Supply                                              | For pi                      |       |        | $8       |
+| [Mr. Longarm Pole](https://www.amazon.com/gp/product/B00004YUPO) | 2m - 4m                     |       |        | $25      |
+|                                                              | **Total**                   |       |        | **$183** |
+
 **Base Bill of Materials**
 
-| Part                                                         | Notes                       | Cost     |
-| ------------------------------------------------------------ | --------------------------- | -------- |
-| [Raspberry Pi 3B+](https://www.adafruit.com/product/3775)    |                             | $35      |
-| [16GB microSD](https://www.amazon.com/Sandisk-Ultra-Micro-UHS-I-Adapter/dp/B073K14CVB) |                             | $9       |
-| [Litebeam 5AC gen2](https://www.amazon.com/Ubiquiti-Networks-LBE-5AC-GEN2-US-Litebeam-23dBi/dp/B06Y2JH7PV/) | ~2km city range @ 4m height | $75      |
-| [200WH Power Station](https://www.amazon.com/gp/product/B07BGZB9L5/) | AC and USB outlets          | $170     |
-| [Clear Waterproof Backpack](https://www.amazon.com/gp/product/B01LZT7KFU/) |                             | $25      |
-| [10x DC Power Jack Plugs](https://www.amazon.com/gp/product/B01J1WZENK/) |                             | $8       |
-| [12V-24V DC-DC Converter](https://www.amazon.com/gp/product/B00ID3TJ3U) | for litebeam                | $16      |
-| [12V-5V microUSB Converter](https://www.amazon.com/gp/product/B01MEESLZ6/) | for pi                      | $10      |
-| [Mr. Longarm Pole](https://www.amazon.com/gp/product/B00004YUPO) | 2m - 4m                     | $25      |
-|                                                              | **Total**                   | **$373** |
+| Part                                                         | Notes              | Weight | Cost     |
+| ------------------------------------------------------------ | ------------------ | ------ | -------- |
+| [Raspberry Pi 3B+](https://www.adafruit.com/product/3775)  |                    | 50g    | $35      |
+| [16GB microSD](https://www.amazon.com/Sandisk-Ultra-Micro-UHS-I-Adapter/dp/B073K14CVB) |                    | 2g     | $8       |
+| [ALFA usb wifi](http://a.co/5UL0Vl1)                         |                             | 181g | $35 |
+| [Ubiquiti Mesh AC](https://www.amazon.com/Ubiquiti-Networks-UAP-AC-M-US-Wide-Area-Dual-Band/dp/B076B4ZVF2/ref=sr_1_4?s=electronics&ie=UTF8&qid=1533837131&sr=1-4&keywords=ubiquiti+mesh+ac&dpID=51-Rhp-ZYuL&preST=_SY300_QL70_&dpSrc=srch/) |                    | 162g   | $93      |
+| [200WH Power Station](https://www.amazon.com/gp/product/B07BGZB9L5/) | AC and USB outlets | 2364g | $180  |
+| [Clear Waterproof Backpack](https://www.amazon.com/gp/product/B01LZT7KFU/) |                    | 430g | $25      |
+| [10x DC Power Jack Plugs](https://www.amazon.com/gp/product/B01J1WZENK/) |                    | 2g | $8/4     |
+| [2x PoE Injector](https://www.amazon.com/BeElion-Passive-Injector-Splitter-Connector/dp/B01HMNJHII/ref=pd_sbs_421_1?_encoding=UTF8&pd_rd_i=B01HMNJHII&pd_rd_r=TF2GKJN950SDFQHE0D06&pd_rd_w=Jm3Lr&pd_rd_wg=xo9Nj&psc=1&refRID=TF2GKJN950SDFQHE0D06) |                    | 20g    | $8/2     |
+| [12V-24V DC-DC Converter](https://www.amazon.com/gp/product/B00ID3TJ3U) | for litebeam       | 249g   | $16      |
+| [12V-5V microUSB Converter](https://www.amazon.com/gp/product/B01MEESLZ6/) | for pi             | 46g    | $10      |
+| [Mr. Longarm Pole](https://www.amazon.com/gp/product/B00004YUPO) | 2m - 4m            | 300g   | $25      |
+|                                                              | **Total**          |        | **$465** |
 
 ##### Extended
 
@@ -104,8 +118,7 @@ We were pretty close to the mark for our original estimates
 | [RTL-SDR](https://www.amazon.com/RTL-SDR-Blog-RTL2832U-Software-Telescopic/dp/B011HVUEME) | Iridium Reciever                  | $25      |
 | [Solar panel](https://www.amazon.com/gp/product/B0748GKHZ8/) | 80W @ 2.5kg                      | $110 |
 | [Iridium LNA](http://adsbfilter.blogspot.com/2016/02/l-band-inmarsat-thuraya-iridium-gps.html) |  | $30 |
-| [7" touchscreen](https://www.amazon.com/Raspberry-Pi-7-Touchscreen-Display/dp/B0153R2A9I) |  | $70 |
-|                                                              | **Total**                         | **$788** |
+|                                                              | **Total**                         | **$810** |
 
 ### Social Impact
 
@@ -140,6 +153,7 @@ We have been developing in the open in a lot of different ways:
 * sharing progress on the scuttlebutt main network
 * uploading work in progress to github, and tracking progress publicly
 * participating in the peer-to-peer web conference, soliciting feedback
+* our networks conference
 * respecting upstream licenses, and licensing our work CC0 where possible, MIT otherwise
 * taken up maintainership of open source projects such as PiBakery
 
