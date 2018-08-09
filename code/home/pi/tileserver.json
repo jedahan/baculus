@@ -8,11 +8,8 @@
     }
   },
   "data": {
-    "brooklyn": {
-      "mbtiles": "2017-07-03_new-york_brooklyn.mbtiles"
-    },
-    "mountainview": {
-      "mbtiles": "2017-07-03_california_mountain-view.mbtiles"
+    "world": {
+      "mbtiles": "world.mbtiles"
     }
   }
 }
