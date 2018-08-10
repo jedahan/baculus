@@ -5,7 +5,7 @@ After=network.target
 
 [Service]
 SyslogIdentifier=tileserver
-ExecStart=/home/pi/npm/bin/tileserver-gl-light --config /home/pi/tileserver.json
+ExecStart=/home/pi/npm/bin/tileserver-gl-light --config /home/pi/map/tileserver.json
 ExecStop=/bin/kill -s QUIT $MAINPID
 Restart=always
 

@@ -151,8 +151,7 @@ install_tileserver() {
   require npm nodejs
   npm install -g tileserver-gl-light
   pushd $HOME/baculus/code
-  cp home/pi/tileserver.json $HOME/
-  cp -r home/pi/tiles $HOME/
+  cp -r home/pi/map $HOME/map
   sudo cp etc/systemd/system/tileserver.service /etc/systemd/system/
   sudo systemctl daemon-reload
   sudo systemctl enable tileserver
