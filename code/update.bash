@@ -104,12 +104,15 @@ install_mvd() {
   npm install
   npm run build
   popd # mvd
-  grep '^ssb_appname=bac$' /etc/environment >/dev/null || {
-    echo 'ssb_appname=bac' | sudo tee -a /etc/environment
+  export ssb_appname=bac
+  grep "^ssb_appname=$ssb_appname\$" /etc/environment >/dev/null || {
+    echo "ssb_appname=$ssb_appname" | sudo tee -a /etc/environment
   }
-  grep "^ssb_host=10.0.17.`suffix`\$" /etc/environment >/dev/null || {
-    echo "ssb_host=10.0.17.`suffix`" | sudo tee -a /etc/environment
+  export ssb_host=10.0.17.`suffix`
+  grep "^ssb_host=$ssb_host\$" /etc/environment >/dev/null || {
+    echo "ssb_host=$ssb_host" | sudo tee -a /etc/environment
   }
+
   test -f /etc/systemd/system/mvd.service || sudo cp $HOME/baculus/code/"$_" "$_"
   sudo systemctl daemon-reload
   sudo systemctl enable mvd
