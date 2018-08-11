@@ -113,6 +113,10 @@ h1.not-found {
   font-size: 27px;
 }
 
+img {
+  width: 30%;
+}
+
 .logo img {
   height: 35px;
   margin-top: 7px;
