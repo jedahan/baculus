@@ -274,35 +274,34 @@ cd
 test -d "$(dirname $LOG)" || mkdir -p "$(dirname $LOG)"
 touch $LOG || exit 1
 
-{
-  echo "--- START" "$(date)"
-  set_hostname
-  raspi_config
-  configure_hosts
-  remove_eth0_route
-  install_mosh
-  clone_source
-  configure_network
-  install_npm
+echo "--- START" "$(date)" &>>$LOG
+set_hostname &>>$LOG
+raspi_config &>>$LOG
+configure_hosts &>>$LOG
+remove_eth0_route &>>$LOG
+install_mosh &>>$LOG
+clone_source &>>$LOG
+configure_network &>>$LOG
+install_npm &>>$LOG
 
-  install_scuttlebot
-  install_mvd
+install_scuttlebo &>>$LOGt
+install_mvd &>>$LOG
 
-  install_tileserver
-  install_cjdns
+install_tileserve &>>$LOGr
+install_cjdns &>>$LOG
 
-  install_dnsmasq
-  install_nginx
+install_dnsmasq &>>$LOG
+install_nginx &>>$LOG
 
-  build_site
-  install_adhoc
-  restart_dhcpcd
-  restart_dnsmasq
-  redirect_dns
+build_site &>>$LOG
+install_adhoc &>>$LOG
+restart_dhcpcd &>>$LOG
+restart_dnsmasq &>>$LOG
+redirect_dns &>>$LOG
 
-  update_rclocal
-  enable_ssh
-  share_hostname
-  install_utilities
-  echo "--- END" "$(date)"
-} &>>$LOG
+update_rclocal &>>$LOG
+enable_ssh &>>$LOG
+share_hostname &>>$LOG
+install_utilities &>>$LOG
+reboot &>>$LOG
+echo "--- END" "$(date)" &>>$LOG
