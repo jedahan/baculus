@@ -63,7 +63,7 @@ server {
 
     # macOS
     location /hotspot-detect.html {
-        return 302 http://baculus.mesh/;
+        return 302 http://baculus.mesh/captive;
     }
 }
 
@@ -74,6 +74,6 @@ server {
 
     # android
     location /generate_204 {
-        return 302 http://baculus.mesh/;
+        return 302 http://baculus.mesh/captive;
     }
 }
