@@ -3,7 +3,7 @@ Description=Restore iptables rules
 
 [Service]
 Type=oneshot
-ExecStartPre=/usr/bin/sleep 10
+ExecStartPre=/bin/sleep 10
 ExecStart=/sbin/iptables-restore /etc/iptables.dns.nat
 ExecStop=/sbin/iptables --flush
 RemainAfterExit=yes
