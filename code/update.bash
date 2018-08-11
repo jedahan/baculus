@@ -17,7 +17,7 @@ redirect_dns() {
   echo 'redirecting dns' >> $INSTALL_LOG
   sudo iptables -t nat -A PREROUTING -p udp -m udp --dport 53 -i eth0 -j DNAT --to-destination 10.0.42.1:53
   sudo iptables -t nat -A PREROUTING -p tcp -m tcp --dport 53 -i eth0 -j DNAT --to-destination 10.0.42.1:53
-  sudo iptables-save > /etc/iptables.dns.nat
+  sudo iptables-save | sudo tee /etc/iptables.dns.nat
   printf 'sudo iptables-restore < /etc/iptables.dns.nat' | sudo tee -a /etc/rc.local
   echo 'redirected dns' >> $INSTALL_LOG
 }
@@ -250,24 +250,23 @@ install_mosh &>>$LOG
 clone_source &>>$LOG
 configure_network &>>$LOG
 install_npm &>>$LOG
+install_utilities &>>$LOG
 
 install_mvd &>>$LOG
 
 install_tileserver &>>$LOG
 install_cjdns &>>$LOG
+build_site &>>$LOG
 
 install_dnsmasq &>>$LOG
 install_nginx &>>$LOG
 
-build_site &>>$LOG
 install_adhoc &>>$LOG
 restart_dhcpcd &>>$LOG
 restart_dnsmasq &>>$LOG
 redirect_dns &>>$LOG
 
-update_rclocal &>>$LOG
 enable_ssh &>>$LOG
 share_hostname &>>$LOG
-install_utilities &>>$LOG
 reboot &>>$LOG
 echo "--- END" "$(date)" &>>$LOG
