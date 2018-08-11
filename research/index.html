@@ -15,6 +15,9 @@
 
 	<script>
 		$(document).ready(function () {
+		  if (window.location.host.includes('mesh')) {
+		    $("a.logo-link").href = "http://baculus.mesh/portal";
+		  }
 			$("#nav-mobile").html($("#nav-main").html());
 			$("#nav-trigger span").click(function () {
 				if ($("nav#nav-mobile ul").hasClass("expanded")) {

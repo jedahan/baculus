@@ -4,12 +4,12 @@ server {
 
     # For iOS
     if ($http_user_agent ~* (CaptiveNetworkSupport) ) {
-        return 302 http://baculus.mesh/;
+        return 302 http://baculus.mesh/portal;
     }
 
     # Android
     location /generate_204 {
-        return 302 http://baculus.mesh/;
+        return 302 http://baculus.mesh/portal;
     }
 
     location / {
