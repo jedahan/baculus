@@ -13,12 +13,14 @@ suffix() {
 }
 
 redirect_dns() {
-  grep 'iptables-restore' /etc/rc.local && return
+  sudo systemctl list-unit-files iptables-restore.service | grep enabled && return
   echo 'redirecting dns' >> $INSTALL_LOG
   sudo iptables -t nat -A PREROUTING -p udp -m udp --dport 53 -i eth0 -j DNAT --to-destination 10.0.42.1:53
   sudo iptables -t nat -A PREROUTING -p tcp -m tcp --dport 53 -i eth0 -j DNAT --to-destination 10.0.42.1:53
   sudo iptables-save | sudo tee /etc/iptables.dns.nat
-  printf 'sudo iptables-restore < /etc/iptables.dns.nat' | sudo tee -a /etc/rc.local
+  sudo cp $HOME/baculus/code/etc/systemd/system/iptables-restore.service /etc/systemd/system/
+  sudo systemctl daemon-reload
+  sudo systemctl enable iptables-restore
   echo 'redirected dns' >> $INSTALL_LOG
 }
 
