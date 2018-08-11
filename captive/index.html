@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>Baculus</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+	<link rel="stylesheet" href="../css/mobile.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+	<link rel="stylesheet" href="../css/responsive.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+	<script src='../js/jquery-3.3.1.slim.min.js'></script>
+	<script defer src="/js/solid.min.js"></script>
+	<script defer src="/js/fontawesome.min.js"></script>
+	
+	<script>
+		$(document).ready(function () {
+		  if (window.location.host.includes('mesh')) {
+		    $("a.logo-link").href = "http://baculus.mesh/portal";
+		  }
+			$("#nav-mobile").html($("#nav-main").html());
+		});
+	</script>
+</head>
+
+<body>
+	<div class="text-container">
+		<h1>Welcome to Baculus</h1>
+		<h2> Please visit http://baculus.portal in a regular web browser </h2>
+		<img src="../img/buoy-icon-final.png" />
+	</div>
+</body>
+
+</html>
