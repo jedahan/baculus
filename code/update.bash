@@ -65,7 +65,7 @@ configure_hosts() {
   grep baculus.mesh /etc/hosts >/dev/null && return
   printf "
 127.0.0.1 baculus %s
-10.0.42.1 baculus.mesh baculus.map baculus.chat
+10.0.42.1 baculus.mesh baculus.map baculus.chat baculus.portal
 " "$HOSTNAME" | sudo tee -a $config
   echo 'configured hosts' >> $INSTALL_LOG
 }
@@ -113,7 +113,9 @@ install_mvd() {
     echo "ssb_host=$ssb_host" | sudo tee -a /etc/environment
   }
 
-  test -f /etc/systemd/system/mvd.service || sudo cp $HOME/baculus/code/"$_" "$_"
+  test -f /etc/systemd/system/mvd.service || {
+   sed -e "s/__SSB_HOST__/$ssb_host/" $HOME/baculus/code/etc/systemd/system/mvd.service.template | sudo tee /etc/systemd/system/mvd.service
+  }
   sudo systemctl daemon-reload
   sudo systemctl enable mvd
   sudo systemctl restart mvd

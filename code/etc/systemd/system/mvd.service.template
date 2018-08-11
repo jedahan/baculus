@@ -8,7 +8,7 @@ Type=simple
 User=pi
 Group=pi
 WorkingDirectory=/home/pi/mvd
-Environment=ssb_appname=bac
+Environment=ssb_appname=bac ssb_host=__SSB_HOST__
 ExecStart=/usr/bin/node bin server --allowPrivate
 ExecStop=/bin/kill -s QUIT $MAINPID
 Restart=always
