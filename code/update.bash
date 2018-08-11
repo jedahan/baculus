@@ -88,44 +88,6 @@ install_npm() {
   require npm nodejs
 }
 
-install_scuttlebot() {
-  grep '^installed scuttlebot$' $INSTALL_LOG && return
-  echo 'installing scuttlebot'
-  require git
-  require npm nodejs
-  cd
-  # multiserver
-  test -d multiserver || git clone https://github.com/jedahan/multiserver.git --branch routerless
-  pushd multiserver
-  git checkout 93e96755fc2dfe1cfa37386a92e4e9d87c3378bc
-  npm install
-  popd # multiserver
-  # broadcast-stream
-  test -d broadcast-stream || git clone https://github.com/jedahan/broadcast-stream.git --branch routerless
-  pushd broadcast-stream
-  git checkout 53e28ee7be3a247a62dc6f7003d2c89b9a38770e
-  npm install
-  popd # broadcast-stream
-  # scuttlebot
-  test -d scuttlebot || git clone https://github.com/jedahan/scuttlebot.git --branch routerless
-  pushd scuttlebot
-  git checkout 7ed0c946a833212406ee492f27a29ba239669d6f
-  npm install
-  npm link ../broadcast-stream
-  npm link ../multiserver
-  popd # scuttlebot
-  test -f /etc/systemd/system/scuttlebot.service || sudo cp $HOME/baculus/code/"$_" "$_"
-  sudo systemctl daemon-reload
-  # appname
-  grep '^ssb_appname=bac$' /etc/environment >/dev/null || {
-    echo 'ssb_appname=bac' | sudo tee -a /etc/environment
-  }
-  grep "^ssb_host=10.0.17.`suffix`\$" /etc/environment >/dev/null || {
-    echo "ssb_host=10.0.17.`suffix`" | sudo tee -a /etc/environment
-  }
-  echo 'installed scuttlebot' >> $INSTALL_LOG
-}
-
 install_mvd() {
   grep '^installed mvd$' $INSTALL_LOG && return
   echo 'installing mvd'
@@ -134,12 +96,15 @@ install_mvd() {
   cd
   test -d mvd || git clone https://github.com/jedahan/mvd --branch routerless
   pushd mvd
-  git checkout c20241f95894c5cbe07bfb52c937ba588fd5e0e3
+  git checkout 0eb0ac2552b9cba2dc6779c2726264300d08f233
   npm install
   npm run build
   popd # mvd
   grep '^ssb_appname=bac$' /etc/environment >/dev/null || {
     echo 'ssb_appname=bac' | sudo tee -a /etc/environment
+  }
+  grep "^ssb_host=10.0.17.`suffix`\$" /etc/environment >/dev/null || {
+    echo "ssb_host=10.0.17.`suffix`" | sudo tee -a /etc/environment
   }
   test -f /etc/systemd/system/mvd.service || sudo cp $HOME/baculus/code/"$_" "$_"
   sudo systemctl daemon-reload
@@ -284,10 +249,9 @@ clone_source &>>$LOG
 configure_network &>>$LOG
 install_npm &>>$LOG
 
-install_scuttlebo &>>$LOGt
 install_mvd &>>$LOG
 
-install_tileserve &>>$LOGr
+install_tileserver &>>$LOG
 install_cjdns &>>$LOG
 
 install_dnsmasq &>>$LOG
