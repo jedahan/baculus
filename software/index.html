@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="/css/mobile.css" type="text/css" media="screen" title="no title" charset="utf-8" />
 	<link rel="stylesheet" href="/css/responsive.css" type="text/css" media="screen" title="no title" charset="utf-8" />
 	<link href="https://fonts.googleapis.com/css?family=Crimson+Text:400,700|Rubik" rel="stylesheet">
-	<script src='/js/jquery-3.3.1.slim.min.js'></script>
+	<script src='/js/jquery-3.3.1.min.js'></script>
 	<script src="/js/baculus.js"></script>
 	<script defer src="/js/solid.min.js"></script>
 	<script defer src="/js/fontawesome.min.js"></script>
@@ -21,6 +21,7 @@
 
 		img {
 			max-width: inherit;
+			width: 100%;
 		}
 	</style>
 </head>
@@ -51,16 +52,16 @@
 					<div class="menu_container">
 						<ul class="navigation">
 							<li>
-								<a href="../howto">How-to</a>
+								<a href="/howto">How-to</a>
 							</li>
 							<li>
-								<a href="../research">Research & Testing</a>
+								<a href="/research">Research & Testing</a>
 							</li>
 							<li>
-								<a href="../network">Network</a>
+								<a href="/network">Network</a>
 							</li>
 							<li>
-								<a href="../software">Software</a>
+								<a href="/software">Software</a>
 							</li>
 						</ul>
 					</div>
@@ -85,7 +86,7 @@
 			<li>microSD card + SD adapter</li>
 			<li>wireless access point connected to the internet</li>
 			<li>
-				<a href="https://github.com/baculus-buoy/pibakery/releases">PiBakery application</a>
+        <a href="https://github.com/baculus-buoy/pibakery/releases">PiBakery application</a>
 			</li>
 			<li>baculus buoy
 				<a href="https://github.com/baculus-buoy/baculus/blob/master/pibakery-recipe.xml">pibakery-recipe</a>
@@ -100,45 +101,62 @@
 			<a href="https://github.com/baculus-buoy/pibakery/releases/download/v0.3.10/PiBakery-darwin-x64.zip">macOS</a> and
 			<a href="https://github.com/baculus-buoy/pibakery/releases/download/v0.3.10/PiBakery-linux-x64.zip">linux (64-bit)</a> as well as other architectures.</p>
 
-		<p>When you first open PiBakery, you should be greeted with a blank "recipe".
-			<img src="/docs/images/1_pibakery.png" alt="pibakery" />
+		<p>When you first open PiBakery, you should be greeted with a blank "recipe".</p>
+		<p>
+      <a href=/docs/images/1_pibakery.png>
+  			<img src="/docs/images/1_pibakery.png" alt="pibakery" />
+			</a>
 		</p>
 
 		<p>
 		  We have created a recipe for baculus that needs your help to start the install.
 			Make sure to
 			<a href="https://raw.githubusercontent.com/baculus-buoy/baculus/master/pibakery-recipe.xml"> download the latest pibakery-recipe.xml</a>, then click import, and choose that file.
-			<img src="/docs/images/2_import.png" alt="import" />
+      <a href=/docs/images/2_import.png>
+        <img src="/docs/images/2_import.png" alt="import" />
+			</a>
 		</p>
 
 		<p>
 		  Once imported, there should be blocks showing what will run on the pi the first time it is turned on.
-			<img src="/docs/images/3_imported.png" alt="imported" />
+			<a href=/docs/images/3_imported.png>
+  			<img src="/docs/images/3_imported.png" alt="imported" />
+			</a>
 		</p>
 
 		<p>
 		  Now, edit __HOSTNAME__ to a unique name, __NETWORK__ and __PASSWORD__ to your local internet connection.
-			<img src="/docs/images/4_configured.png" alt="configured" />
+			<a href=/docs/images/4_configured.png>
+  			<img src="/docs/images/4_configured.png" alt="configured" />
+			</a>
 		</p>
 
 		<p>
 		  Next, click Write in the top right corner, and you will be greeted with a SD card and Operating System chooser. If this is a blank SD card, your Operating System should prompt you to format it. Make sure to give a memorable name (we use ‘<strong>boot</strong>’), and select the raspbian lite image.
-			<img src="/docs/images/5_write.png" alt="write" />
+			<a href=/docs/images/5_write.png>
+  			<img src="/docs/images/5_write.png" alt="write" />
+			</a>
 		</p>
 
 		<p>
 		  Click Start Write, and a permissions dialog should pop up to allow writing
-			<img src="/docs/images/6_permissions.png" alt="permissions" />
+			<a href=/docs/images/6_permissions.png>
+  			<img src="/docs/images/6_permissions.png" alt="permissions" />
+			</a>
 		</p>
 
 		<p>
 		  The write should take around 2 minutes. Once it is done written, pop it into the pi.
-			<img src="/docs/images/8_done.png" alt="done" />
+			<a href=/docs/images/8_done.png>
+  			<img src="/docs/images/8_done.png" alt="done" />
+			</a>
 		</p>
 		
 		<p>
 		 If you have a screen attached you should be able to watch the entire process. Otherwise just wait a few minutes (ours took 15 minutes) until you see a ‘baculus’ wifi network up.
-			<img src="/docs/images/8_wifi.png" alt="wifi" />
+			<a href=/docs/images/8_wifi.png>
+  			<img src="/docs/images/8_wifi.png" alt="wifi" />
+			</a>
 		</p>
 
 		<p>
