@@ -8,41 +8,36 @@
 	<link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
 	<link rel="stylesheet" href="../css/mobile.css" type="text/css" media="screen" title="no title" charset="utf-8" />
 	<link rel="stylesheet" href="../css/responsive.css" type="text/css" media="screen" title="no title" charset="utf-8" />
-	<script src='../js/jquery-3.3.1.slim.min.js'></script>
+	<script src='/js/jquery-3.3.1.min.js'></script>
+	<script src='/js/baculus.js'></script>
 	<script defer src="/js/solid.min.js"></script>
 	<script defer src="/js/fontawesome.min.js"></script>
-	
-	<script>
-		$(document).ready(function () {
-		  if (window.location.host.includes('mesh')) {
-		    $("a.logo-link").href = "http://baculus.mesh/portal";
-		  }
-			$("#nav-mobile").html($("#nav-main").html());
-		});
-	</script>
 </head>
 
 <body>
 	<div class="text-container">
 		<h1>Welcome to Baculus</h1>
-		<h2>
-		  <a href="http://baculus.chat">
-  			<img src="../img/buoy-icon-final.png" />
-  			Chat
-			</a>
-		</h2>
+		
+	  <a href="http://baculus.chat">
+ 			<img src="../img/buoy-icon-final.png" />
+  		<h2>
+   			Chat
+  		</h2>
+		</a>
+		
     <a href="/">
 			<img src="../img/buoy-icon-how-to.png" />
   		<h2>
   			About
   		</h2>
 		</a>
-		<h2>
-		  <a href="http://baculus.map/here">
-  			<img src="../img/buoy-icon-research.png" />
+		
+	  <a href="http://baculus.map/here">
+			<img src="../img/buoy-icon-research.png" />
+  		<h2>
   			Map
-			</a>
-		</h2>
+  		</h2>
+		</a>
 	</div>
 </body>
 
