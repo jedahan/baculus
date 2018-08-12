@@ -5,9 +5,9 @@
 	<meta charset="utf-8" />
 	<title>Baculus</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<link rel="stylesheet" href="../css/main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
-	<link rel="stylesheet" href="../css/mobile.css" type="text/css" media="screen" title="no title" charset="utf-8" />
-	<link rel="stylesheet" href="../css/responsive.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+	<link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+	<link rel="stylesheet" href="/css/mobile.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+	<link rel="stylesheet" href="/css/responsive.css" type="text/css" media="screen" title="no title" charset="utf-8" />
 	<link href="https://fonts.googleapis.com/css?family=Crimson+Text:400,700|Rubik" rel="stylesheet">
 	<script src='/js/jquery-3.3.1.min.js'></script>
 	<script src='/js/baculus.js'></script>
@@ -41,16 +41,16 @@
 					<div class="menu_container">
 						<ul class="navigation">
 							<li>
-								<a href="../howto">How-to</a>
+								<a href="/howto">How-to</a>
 							</li>
 							<li>
-								<a href="../research">Research & Testing</a>
+								<a href="/research">Research & Testing</a>
 							</li>
 							<li>
-								<a href="../network">Network</a>
+								<a href="/network">Network</a>
 							</li>
 							<li>
-								<a href="../software">Software</a>
+								<a href="/software">Software</a>
 							</li>
 						</ul>
 					</div>
@@ -64,7 +64,7 @@
 		<h1>How-to</h1>
 
 		<p>
-			<img src="../img/buoy-icon-how-to.png" class="buoy-img" alt="" />
+			<img src="/img/buoy-icon-how-to.png" class="buoy-img" alt="" />
 		</p>
 
 		<p>Here is a short introduction on how to make a baculus-compatible backpack. The idea is each community has different strengths
@@ -83,29 +83,36 @@
 		<p>Look at your community, what are its strengths? Experienced commuity leaders? Young eager learners?</p>
 
 		<h2>Hardware</h2>
-    <div>
-    <img src="../img/build.gif" class=left alt="build animation"/>
- 		<p> The three main hardware components are
- 			<strong>power</strong>,
- 			<strong>networking</strong>, and a
- 			<strong>computer</strong>.
- 		</p>
-		<p> For <strong>power</strong>, we recommend using a lithium-ion battery for a good balance of weight, price, and power density. Camping batteries have circuity that provide AC, DC, and USB power, and can be charged via AC, Solar, pedal crank, etc.</p>
+		<div>
+			<img src="../img/build.gif" class=left alt="build animation" />
+			<p> The three main hardware components are
+				<strong>power</strong>,
+				<strong>networking</strong>, and a
+				<strong>computer</strong>.
+			</p>
+			<p> For
+				<strong>power</strong>, we recommend using a lithium-ion battery for a good balance of weight, price, and power density. Camping
+				batteries have circuity that provide AC, DC, and USB power, and can be charged via AC, Solar, pedal crank, etc.</p>
 
-		<p>For <strong>networking</strong>, we recommend Ubiquiti for a good balance of power draw, price, and performance. A point-to-multipoint
-			setup using litebeam sector antennae give good coverage and range from 200m to 30km (with line of sight).</p>
+			<p>For
+				<strong>networking</strong>, we recommend Ubiquiti for a good balance of power draw, price, and performance. A point-to-multipoint
+				setup using litebeam sector antennae give good coverage and range from 200m to 30km (with line of sight).</p>
 
-		<p>For a
-			<strong>computer</strong>, we recommend the Raspberry Pi, for its excellent price and large, supportive community.</p>
-</div>
+			<p>For a
+				<strong>computer</strong>, we recommend the Raspberry Pi, for its excellent price and large, supportive community.</p>
+		</div>
 
 		<h2>Software</h2>
 
-		<p>Picking software that works without being connected to the internet is crucial in disaster response scenarios. For this, we chose Scuttlebot, which was build by people who live on boats and have very intermittent connectivity. Scuttlebot is the server that stores and shares messages when it can, while Decent is the web application that can be accessed by phones, tablets, or laptops to send and view messages across the network. Both of these can be installed on the Raspberry Pi, and we provide customizable build scripts and tools in the build log.</p>
+		<p>Picking software that works without being connected to the internet is crucial in disaster response scenarios. For this,
+			we chose Scuttlebot, which was build by people who live on boats and have very intermittent connectivity. Scuttlebot is
+			the server that stores and shares messages when it can, while Decent is the web application that can be accessed by phones,
+			tablets, or laptops to send and view messages across the network. Both of these can be installed on the Raspberry Pi,
+			and we provide customizable build scripts and tools in the build log.</p>
 
 		<p>
-			<a href="../software/">
-				<img src="../img/GitHub-Mark-32px.png" class="gh_mark" alt="" />Visit the software howto to start building your own network!</a>
+			<a href="/software/">
+				<img src="/img/GitHub-Mark-32px.png" class="gh_mark" />Visit the software howto to start building your own network!</a>
 		</p>
 
 	</div>
