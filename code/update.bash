@@ -191,9 +191,6 @@ build_site() {
   command -v bundle >/dev/null 2>&1 || sudo gem install bundler
   bundle install
   bundle exec jekyll build
-  pushd _site
-  sed -i -e 's/^.*oogle.*$//' ./*html* ./*/*html*
-  popd # _site
   popd # baculus
   echo 'built site' >> $INSTALL_LOG
 }
