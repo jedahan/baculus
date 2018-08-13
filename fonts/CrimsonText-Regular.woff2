@@ -1,0 +1,11 @@
+--2018-08-13 10:14:58--  https://fonts.gstatic.com/s/crimsontext/v8/wlp2gwHKFkZgtmSR3NB0oRJfbwhTIfFd3A.woff2
+Resolving fonts.gstatic.com (fonts.gstatic.com)... 216.58.194.195
+Connecting to fonts.gstatic.com (fonts.gstatic.com)|216.58.194.195|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 13876 (14K) [font/woff2]
+Saving to: ‘wlp2gwHKFkZgtmSR3NB0oRJfbwhTIfFd3A.woff2’
+
+     0K .......... ...                                        100% 86.3K=0.2s
+
+2018-08-13 10:14:59 (86.3 KB/s) - ‘wlp2gwHKFkZgtmSR3NB0oRJfbwhTIfFd3A.woff2’ saved [13876/13876]
+
