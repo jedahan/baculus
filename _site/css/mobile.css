@@ -1,0 +1,39 @@
+@media (max-width: 1199px) and (min-width: 1024px) {
+
+	nav#nav-main .right {
+		width: 51%;
+	}
+
+	nav#nav-main .left {
+		width: 40%;
+	}
+
+}
+
+@media only screen and (max-width: 1023px) {
+
+	nav#nav-mobile .right {
+		width: 100%;
+	}
+
+	nav#nav-mobile .left.logo {
+		display: none;
+	}
+
+}
+
+@media only screen and (max-width: 499px) {
+
+	.text-container {
+		width: 90%;
+		height: 90%;
+		margin-top: 0;
+		border-radius: 0;
+		padding: 5%;
+	}
+
+	body {
+		background: #EDECE4;
+	}
+
+}

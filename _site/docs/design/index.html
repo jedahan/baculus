@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Baculus | baculus</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="Baculus" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="mozwins" />
+<meta property="og:description" content="mozwins" />
+<link rel="canonical" href="http://localhost:4000/docs/design/" />
+<meta property="og:url" content="http://localhost:4000/docs/design/" />
+<meta property="og:site_name" content="baculus" />
+<script type="application/ld+json">
+{"url":"http://localhost:4000/docs/design/","headline":"Baculus","description":"mozwins","@type":"WebPage","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=97a73190c54add139bed45c67b22d2755c14cf3e">
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+      <h1><a href="http://localhost:4000/">baculus</a></h1>
+      
+
+      <h1 id="baculus">Baculus</h1>
+
+<blockquote>
+  <p>Sean just finished editing a commercial for the pizzeria down the street, and was heading home early to make sure his family was prepared for the hurricaine that was supposed to hit later that evening. He could hear the sound of the news coming from the television, even before walking through the front door. The windows were taped up, and just after setting down the water the lights flickered and went out. He knew his brother was still at work, and tried to send a text to see if everything was alright, but the message was just showing an animation ‘sending…’.</p>
+
+  <p>Taking the stairs to the roof, he saw the only street lights that were on were the two police floodlights running off generators. His phone was at 20%, and he still had no service, and no wifi worked.</p>
+</blockquote>
+
+<blockquote>
+  <p>Taking the stairs to the roof, he saw a small group of people crowded on the steps of the church across the street, seemingly one of the only places that had light. Sean told his family he’d be back in 30 minutes, to find out if his brother is safe.</p>
+
+  <p>Sean checked his texts on the bottom floor, it was already sent, but he saw no response from his brother. When he was close to the church, his phone buzzed, and a ‘welcome to emergency wifi, here you can look for a particular person, checkin to share you are safe, or coordinate with others on our message board’. By this time, the pastor had asked what Sean needed, and while charging his phone Sean explained he was looking for his brother. The pastor instructed Sean to search for his brothers name, which showed that he had checked in at the firehouse just one neighborhood away. Afterwards Sean put his name, and his parents in the registry, charged his phone, and went back home.</p>
+</blockquote>
+
+<h2 id="a-resiliant-self-contained-friendly-internet-buoy">A resiliant, self-contained, friendly internet buoy</h2>
+
+<p>Baculus is a clear plastic backpack with wheels, a telescoping antennae/flag, a wifi access point, small computer, gps transceiver, software defined radio, and battery. The platform provides ad-hoc, self organizing wifi networking by working together with the humans who use it.</p>
+
+<p>By default, two mobile-first web and sms based applications run on baculus, to facilitate communication - a message board, and map checkin tool. We will share baculus with community leaders well before any possible disaster scenario. This allows members to become comfortable adapting the sytem to their needs, so when disaster strikes, it is a natural response to use the network.</p>
+
+<p>One key differentiator is what happens when existing mesh links go down. For this, we are using a self-repairing process where the boxes contain a phsyical wifi-divining rod that asks humans for help, by showing them which direction to bring the device to connect to the rest of the network.</p>
+
+<h2 id="baculus-is">baculus is</h2>
+
+<p><strong>self contained</strong> - a literally transparent, waterproof backpack with room for people to modify to meet their own needs. All tools work fully on their own, with or without a larger network.</p>
+
+<p><strong>resiliant</strong> - the network asks humans for help repairing if a link goes down, by finding and directing where they should be placed.</p>
+
+<p><strong>friendly</strong> - the software design is minimal, allowing for communities to use in whatever way is most natural for themselves.</p>
+
+<p><strong>a buoy?</strong> - meant to be moveable by a single person when needed to fill gaps in network connectivity</p>
+
+<h2 id="baculus-helps">baculus helps</h2>
+
+<p><strong>communities define their own needs</strong>, with a simple message board, and editable map.</p>
+
+<p><strong>repair infrastructure during disaster</strong>, since disconnected nodes discover connected nodes and direct people where it should be setup</p>
+
+<p><strong>answer who is where</strong> when disaster strikes</p>
+
+<p><strong>provide power and connectivity</strong> to help coordinate when needed</p>
+
+<h1 id="components">Components</h1>
+
+<h2 id="applications">Applications</h2>
+
+<p>There are two main interfaces for the initial software running on baculus - mobile web applications, and text messages.</p>
+
+<p>We will be using the mobile interface from occupy here to allow people to quickly post to a global stream the most important information. It will be backed by simple text storage that will be synced peer-to-peer using the <a href="https://github.com/dominictarr/scuttlebutt">scuttlebutt</a> protocol. This allows for intermittent connections, and no central server needed to coordinate. Special care will be taken to minimize both the initial application load and</p>
+
+<p><img src="/Users/jedahan/Downloads/occupy.here.jpg" alt="occupy.here" /></p>
+
+<p>Additional features built on top of the interface will be the gps location of the person who posted, and a toggle between map and stream view. The map view is especially targeted towards first responders, and will allow for location specific messages to be sent - for example, an SMS blast towards a particular base station to ask for a supply that is known to be there.</p>
+
+<p>A slightly specialized version that is just a name/location registry will be built to quickly answer the question ‘who is where’, which is more crucial during the first 72 hours after disaster strikes.</p>
+
+<p>For cellular phones without a web browser, openBTS will be used to create a cellular network where people can send and lookup stream messages via SMS. We have prototyped and successfully deployed this network for both an art show and a previous proposal with the Red Cross. We will be running an instance of the <a href="https://github.com/dumbstore/dumbstore">dumbstore</a> to simplify the process of creating new applications on top of osmoBTS.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Weather</span> <span class="o">&lt;</span> <span class="no">Dumbstore</span><span class="o">::</span><span class="no">App</span>
+    <span class="n">author</span> <span class="s1">'Jonathan Dahan'</span>
+    <span class="n">description</span> <span class="s1">'Sample weather app'</span>
+
+    <span class="n">text_id</span> <span class="s1">'weather'</span>
+    <span class="k">def</span> <span class="nf">text</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+      <span class="n">current_weather</span> <span class="o">=</span> <span class="no">WeatherApi</span><span class="p">.</span><span class="nf">get_weather</span>
+      <span class="s2">"&lt;Response&gt;&lt;Sms&gt;The weather is </span><span class="si">#{</span><span class="n">current_weather</span><span class="si">}</span><span class="s2">&lt;/Sms&gt;&lt;/Response&gt;"</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>example dumbstore application, also supports responding via voice</p>
+</blockquote>
+
+<h2 id="operating-system">Operating System</h2>
+
+<p>We will be running the most upstream version of <a href="https://raspbian.org">raspbian</a>. Any modifications of the base image will be shared as reproducible build scripts built on top of the <a href="http://pibakery.org/">PiBakery</a> framework. Any custom modules will be upstreamed to the PiBakery project. We already have experience upstreaming libraries to this framework.</p>
+
+<p>The cellular network operating system will be built on top of <a href="https://osmocom.org/projects/osmobts/wiki/Wiki">OsmoBTS</a>, which already has support for the LimeSDR.</p>
+
+<h2 id="hardware">Hardware</h2>
+
+<p>The system is designed to work with off-the-shelf hardware, to show the true cost for any participants to repair or replace components as needed.</p>
+
+<p><a href="#link-here">Raspberry Pi 3</a> - $45 (with microSD, usb) ubiquitious, open platform with great community support and availability.</p>
+
+<p><a href="#link-here">Ubiquiti Litebeam AC</a>  - $55 good point to point wifi that spans kilometers. We will be mounting these on a rotateable antenna to provide for the widest possible coverage.</p>
+
+<p><a href="#link-here">Plastic backpack w/wheels</a> - $35 from the container store / amazon</p>
+
+<p><a href="#link-here">1kWh battery</a> -  $85 should last 72 hours plus charge 20 cell phones, which are the most crucial times for responding to needs.</p>
+
+<p><a href="rtl-sdr.org">RTL-SDR</a> - $20 which can receive Iridium satellite messages for coordination</p>
+
+<p><a href="https://www.amazon.com/dp/B071FK3GWY">Solar Charge Controller</a> $20 used for give usb output to charge phones, and make it easier to recharge the batteries through a variety of sources including solar</p>
+
+<p><a href="#link-here">Miscellaneous</a> - $40 wires, adapters, velcro, power converters</p>
+
+<p>Nominal cost is $300 per node.</p>
+
+<h4 id="optional">Optional</h4>
+
+<p>100W solar panel - $99 This may prove cheaper than electricity in some areas, and makes more sense when you think of this infrastructure as being present and useful in non-emergency as much as disaster response.</p>
+
+<p>Lime SDR Mini - $180 full duplex SDR that can support 2g/3g/4g cellular networking, and iridium satellite messages</p>
+
+<p>Full node cost using off-the-shelf hardware is $600. This would be fully self-sufficient, flexible enough for future improvements, and each part be easily replaceable if not repairable.</p>
+
+<h2 id="networking">Networking</h2>
+
+<p>For WiFi networking, we will be using the QMP images, customized scripts will be published in a git repository. For the optional cellular SMS, we will use OsmoBTS, and for Iridium we will use gnu radio.</p>
+
+<h1 id="deployment">Deployment</h1>
+
+<p>Ket to Baculus being actually useful is its integration into communities before disaster strikes. To do that, the software needs to be simple, flexible, and useful. Previous projects such as Red Hook Wifi has shown that editable maps are intuitive and useful. Textual interfaces are well understood and flexble.</p>
+
+<h1 id="repair-process">Repair Process</h1>
+
+<h2 id="physical-network-repair">Physical network repair</h2>
+
+<p>A model to think about our physical / network repair process is the rain cycle. Nodes that have an uplink to the Iridium satellite network, either directly or through an internet gateway service precipitates its GPS coordinates up. Every few minutes, whatever coordinate data exists are blasted down to all the nodes using <a href="#link-here">Iridium burst</a>. These bursts, recievable <strong>anywhere in the world</strong>, allows disconnected nodes to find their closest neighbor. After being brought close enough to connect via wifi, that nodes gps location gets added to the cloud.</p>
+
+<blockquote>
+  <p>This might be too damn close to cloud computing, maybe theres a better analogy, or no analogy</p>
+</blockquote>
+
+<p>But how do we get the node where it needs to go? There are four places where a person can find out what direction, and how long it will take, to bring the node close enough to another. The four places that information can be found are:</p>
+
+<ol>
+  <li>The map when connected to wifi (requires device with screen)</li>
+  <li>The SMS gateway when connected to 2g (requires cell phone)</li>
+  <li>Compass + seven segment display (connected to pi)</li>
+  <li>Custom divining rod (optional, requires testing)</li>
+</ol>
+
+<p>The custom divining rod is a prototype physical interface we would like to test out, to see if it is helpful and reliable. A digital compass in the rod will allow a person to point it in any direction, and have it vibrate and light up in the direction it should be carried. An estimated number of minutes will be displayed so they understand just how far it might be.</p>
+
+<h2 id="what-happens-if-iridium-is-down">What happens if Iridium is down?</h2>
+
+<p>If Iridium is down, we fall back to using the RT-SDR to do frequency ping/scanning sweeps. Protocols[^such as?] have been used to broadcast ‘hello I am here’ signals. We would start at the lowest frequency gradually increasing if nothing is found. This will be another large part of the testing work.</p>
+
+<h2 id="what-happens-when-wifi-goes-down">What happens when wifi goes down?</h2>
+
+<p>If wifi signals are failing, we can experiment with data-over-fm for critical information (a name/location registry)</p>
+
+<h2 id="information-repair">Information Repair</h2>
+
+<p>How does the software work when they join the network? We will be using <a href="#link-here">scuttlebutt</a>, a well known and testing protocol for sharing information with intermittent network connectivity. This combined with <a href="#link-here">statebus</a> to reconcile differences allows us to opportunisticly share information without the frontend application worrying about having to be online.</p>
+
+<blockquote>
+  <p>This is a collaboration between the humans and the machines, and I would love to have the software, hardware, writing, etc, have a tone showing that the machines need help. I’m not sure if during a disaster that is insensitive or distracting, but just sharing my thoughts.</p>
+</blockquote>
+
+<h2 id="during-a-disaster">During a disaster</h2>
+
+<p>In the first 72 hours after a disaster, people immediately look for power, usually to charge their phones. They want to make sure they can communicate with loved ones, and coordinate help if they are in a position to do so.</p>
+
+<h1 id="design-values">Design Values</h1>
+
+<h6 id="off-the-shelf-hardware-to-have-maximum-accessibility">Off the shelf hardware to have maximum accessibility</h6>
+
+<p>The raspberry pi has tons of community documentation, and a good repair story</p>
+
+<h5 id="existing-protocols-for-maximum-compatability">Existing protocols for maximum compatability</h5>
+
+<p>Using well known protocols like AM/FM radio and WiFi mean that people can build baculus-compatable systems without special expertise, hardware, or programming.</p>
+
+<h5 id="platforms-over-products">Platforms over Products</h5>
+
+<p>A product requires support to maintain, and is often harder to write import/export tools. Plain text databases, forums, are adaptable to many needs.</p>
+
+<h5 id="upstream-everything">Upstream everything</h5>
+
+<p>Any extensions, plugins, build scripts, etc, will be brought into the upstream project. Having experience with contributing to many open source projects, package managers for macOS and multiple linux distributions means it is important to us that the work can be used and modified by as many people as possible.</p>
+
+<h1 id="feasability">Feasability</h1>
+
+<h2 id="technical">Technical</h2>
+
+<p>The most complicated component of baculus is communicating with the Iridium satellite network. This has been shown to work with an RT-SDR and HackRF in <a href="">ccc talk link here</a>. Independently, we have been able to tune into Iridium with our local RT-SDR but still need to work on making it robust and writing the software to send and decode GPS data. For running the SMS interface, we have already build openBTS cellular networks, and had successfully gotten over 40 cell phones to autoconnect, receive broadcasts from a locally running web application, and send SMSs back during <a href="">arthackday link here</a>.</p>
+
+<p>We also have experience writing offline first open source web applications, from small prototypes that use no libraries or frameworks like <a href="jedahan.com/saltpeanuts">this one-file schedule sketching application that can share state in the url</a> to <a href="">synchronized collaborative wiki editing link here</a>.</p>
+
+<h2 id="human"><strong>Human</strong></h2>
+
+<p>The most complicated non-technical component of baculus is getting it into the hands of community leaders. From our experience with NYC Mesh, having interested, reliable advocates are the only way for people to use the system and nodes to stay up during non-disaster times. We have had limited success working with The Red Cross in <a href="">a previous grant link here</a> , and are hoping that this challenge will help us connect more with people who need it most. Locally, during the prototype phase, we will be testing with leaders from the Red Hook Initiative, Pioneer Works, and others in Red Hook and Gowanus.</p>
+
+<h1 id="deliverables">Deliverables</h1>
+
+<p>For the prototype phase, we plan on having at least the following:</p>
+
+<p>A dozen nodes built</p>
+
+<p>Two field tests, one in Red Hook, one in a location outside of the US TBD</p>
+
+<p>Website with instructions how we build and deploy</p>
+
+<p>Markdown documentation with methods/results of case studies and user tests</p>
+
+<p>Wiki for others to fork/improve on the project</p>
+
+<p>Gitlab + github repositories for any custom code that could not be upstreamed</p>
+
+<h1 id="who-is-we">Who is ‘We’?</h1>
+
+<p>We is Jonathan Dahan and Ariel Cotton, with help from Corey Benninger, Brian Hall, Paul Pham, and many others.</p>
+
+<blockquote>
+  <table>
+    <tbody>
+      <tr>
+        <td><strong>Jonathan Dahan</strong> http://jonathan.is</td>
+        <td>http://jedahan.com</td>
+        <td><a href="https://twitter.com/jedahan">@jedahan</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Ariel Cotton</strong> http://argoncobalt.com</p>
+</blockquote>
+
+<h1 id="link-here">Link Here</h1>
+
+<blockquote>
+  <p>This is just a placeholder for links</p>
+</blockquote>
+
+
+      
+      <div class="footer border-top border-gray-light mt-5 pt-3 text-right text-gray">
+        This site is open source. <a href="http://github.com/jedahan/baculus/edit/gh-pages/docs/design/index.md">Improve this page</a>.
+      </div>
+      
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+    
+  </body>
+</html>

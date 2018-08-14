@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>Baculus</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+	<link rel="stylesheet" href="/css/mobile.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+	<link rel="stylesheet" href="/css/responsive.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+	<link href="/css/fonts.css" rel="stylesheet">
+	<script src='/js/jquery-3.3.1.min.js'></script>
+	<script src='/js/baculus.js'></script>
+	<script defer src="/js/solid.min.js"></script>
+	<script defer src="/js/fontawesome.min.js"></script>
+</head>
+
+<body>
+	<div class="text-container">
+		<header>
+
+			<div id="nav-trigger" class="clearfix">
+				<div class="left">
+					<a href="/" class="logo-link">
+						<div class="logo">Home</div>
+					</a>
+				</div>
+				<div class="right">
+					<span>
+						<a href="#">
+							<i class="fas fa-bars" aria-hidden="true"></i>
+						</a>
+					</span>
+				</div>
+			</div>
+			<nav id="nav-main">
+				<div class="left logo">
+					<a href="/">Home</a>
+				</div>
+				<div class="right">
+					<div class="menu_container">
+						<ul class="navigation">
+							<li>
+								<a href="/howto">How-to</a>
+							</li>
+							<li>
+								<a href="/research">Research & Testing</a>
+							</li>
+							<li>
+								<a href="/network">Network</a>
+							</li>
+							<li>
+								<a href="/software">Software</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+			<nav id="nav-mobile"></nav>
+
+
+		</header>
+
+		<h1>How-to</h1>
+
+		<p>
+			<img src="/img/buoy-icon-how-to.png" class="buoy-img" alt="" />
+		</p>
+
+		<p>Here is a short introduction on how to make a baculus-compatible backpack. The idea is each community has different strengths
+			and needs, and we provide two 'build logs' that fit particular communites on other pages.</p>
+
+		<p>The three main phases of building a baculus system are
+			<strong>design</strong>,
+			<strong>hardware</strong>, and
+			<strong>software</strong>.</p>
+
+		<h2>Design</h2>
+
+		<p>Look at your neighboorhood in a physical sense, what are its strengths? Is there a lot of sunlight? Tall trees? Good community
+			centers? Think about where you can setup connections, and where people are most likely to hang out and use the system.</p>
+
+		<p>Look at your community, what are its strengths? Experienced commuity leaders? Young eager learners?</p>
+
+		<h2>Hardware</h2>
+		<div>
+			<img src="../img/build.gif" class=left alt="build animation" />
+			<p> The three main hardware components are
+				<strong>power</strong>,
+				<strong>networking</strong>, and a
+				<strong>computer</strong>.
+			</p>
+			<p> For
+				<strong>power</strong>, we recommend using a lithium-ion battery for a good balance of weight, price, and power density. Camping
+				batteries have circuity that provide AC, DC, and USB power, and can be charged via AC, Solar, pedal crank, etc.</p>
+
+			<p>For
+				<strong>networking</strong>, we recommend Ubiquiti for a good balance of power draw, price, and performance. A point-to-multipoint
+				setup using litebeam sector antennae give good coverage and range from 200m to 30km (with line of sight).</p>
+
+			<p>For a
+				<strong>computer</strong>, we recommend the Raspberry Pi, for its excellent price and large, supportive community.</p>
+		</div>
+
+		<h2>Software</h2>
+
+		<p>Picking software that works without being connected to the internet is crucial in disaster response scenarios. For this,
+			we chose Scuttlebot, which was build by people who live on boats and have very intermittent connectivity. Scuttlebot is
+			the server that stores and shares messages when it can, while Decent is the web application that can be accessed by phones,
+			tablets, or laptops to send and view messages across the network. Both of these can be installed on the Raspberry Pi,
+			and we provide customizable build scripts and tools in the build log.</p>
+
+		<p>
+			<a href="/software/">
+				<img src="/img/GitHub-Mark-32px.png" class="gh_mark" />Visit the software howto to start building your own network!</a>
+		</p>
+
+	</div>
+</body>
+
+</html>

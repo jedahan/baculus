@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Baculus | baculus</title>
+<meta name="generator" content="Jekyll v3.7.3" />
+<meta property="og:title" content="Baculus" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="mozwins" />
+<meta property="og:description" content="mozwins" />
+<link rel="canonical" href="http://localhost:4000/applications/design/" />
+<meta property="og:url" content="http://localhost:4000/applications/design/" />
+<meta property="og:site_name" content="baculus" />
+<script type="application/ld+json">
+{"url":"http://localhost:4000/applications/design/","headline":"Baculus","description":"mozwins","@type":"WebPage","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=97a73190c54add139bed45c67b22d2755c14cf3e">
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+      <h1><a href="http://localhost:4000/">baculus</a></h1>
+      
+
+      <h1 id="baculus">Baculus</h1>
+
+<h2 id="a-resiliant-self-contained-friendly-internet-buoy">A resiliant, self-contained, friendly internet buoy</h2>
+
+<h6 id="team-members">Team members</h6>
+
+<p>Jonathan Dahan - <a href="mailto:hi@jonathan.is">hi@jonathan.is</a> - system architect, programmer</p>
+
+<p>Ariel Cotton - ariel@argoncobalt.com - designer, programmer</p>
+
+<h6 id="problem-statement">Problem Statement</h6>
+
+<p>For coordinators / first responders, repairing a network is tricky business. Fixed location infrastructure is more efficient, but when it goes down, figuring out where temporary networks need to be placed to connect to the people that need it most is tricky.</p>
+
+<p>For the people caught in a disaster, communications infrastructure is crucial for finding out if loved ones are safe, and finding out what resources (food, warmth, medical attention) are available where.</p>
+
+<h6 id="solution-statement">Solution Statement</h6>
+
+<p>We stuff a transparent plastic rolling backpack with hardware and software that helps community leaders know where to move to maximize wifi and cellular coverage, and can run independent of any other infrastructure for up to 72 hours.</p>
+
+<p>Off-the-shelf hardware and open-source software combine to provide SMS and mobile first web applications - a map view and message board.</p>
+
+<p>It is meant to be used year-round as a public wifi access point that also works when power, cell towers, and ISPs fail.</p>
+
+<h6 id="users">Users</h6>
+
+<p>There are two users baculus helps - those who are in need after a disaster, and those who help coordinate before and during. The system is designed to be installed with community leaders in high risk areas, for the community to become familiar with the utility of a local-first message board system. This benefits users by allowing them to define and share what is important.</p>
+
+<p>A key feature of the Red Hook Wifi initiative is that people were using the editable map and other local-first applications well before Sandy. This made it a natural response to use during a disaster.</p>
+
+<p>Community leaders need help in sharing vital information to those who need it most - like where a warm lunch can be had. Individuals, especially those with limited mobility - need a way to express needs like medicine, heat, or to checkin that they are okay. Baculus provides this by allowing SMS broadcast and response, that is hooked up to a message board view for responders to coordinate.</p>
+
+<h6 id="community--location">Community &amp; Location</h6>
+
+<p>The ideal locations for baculus are in medium sized communities around 35,000 people, that are at a high risk of natural disaster. The system is designed to scale down to small communities of around 250 and up to 100,000 people, but certain features, such as non-satellite beacon-finding, work best when the area has less dense buildings, for instance.</p>
+
+<p>Communities that have limited (either slow or non-existent) internet access also benefit the most, by having baculus be immediately useful in non-disaster scenarios as a local network with applications that work fine disconnected from the greater internet, or even with intermittent power.</p>
+
+<p>For example, many high-population growth urban areas have rolling brownouts, which can affect greater internet connectivity. Baculus would work fine in such a scenario, allowing for text and local applications to sync opportunisticly.</p>
+
+<h6 id="technical-feasability">Technical Feasability</h6>
+
+<blockquote>
+  <p>Explain the technical design of your solution. What technical capabilities do you envision a working prototype will have? Are there any technical hurdles or problems that will need to be solved in order to build a working prototype? At what stage of development is your solution currently?</p>
+</blockquote>
+
+<p><strong>Design Philosophy</strong></p>
+
+<p>All the technologies, and design have been chosen with the following values in mind - <strong>transparency &amp; community friendliness</strong>, <strong>availability &amp; affordability of hardware</strong>, <strong>documentation</strong>, and <strong>building platforms over products</strong>. With this in mind, we have also decided to go with hardware and software we have already tested and worked, but with the goal that each could be replaced by more readily available pieces while still leveraging the rest of the system.</p>
+
+<p><strong>Hardware</strong></p>
+
+<p>The basic hardware design is a lithium ion battery powering a raspberry pi, coordinating a  and ubiquiti litebeam access point. This will create three networks</p>
+
+<ol>
+  <li>Iridium network reciever for unconnected nodes to recieve GPS coords</li>
+  <li>Wifi mesh network for screen-based devices to connect to the map and message board applications for coordinating people and places</li>
+  <li>SMS network for feature phones to share needs and find friends and family</li>
+</ol>
+
+<p>The most complicated component of baculus is communicating with the Iridium satellite network. This has been shown to work with an RT-SDR and HackRF in <a href="https://www.youtube.com/watch?v=cvKaC4pNvck">this talk</a>. Independently, we have been able to tune into Iridium with our local RT-SDR but still need to work on making it robust and writing the software to send and decode GPS data.</p>
+
+<p>For running the SMS interface, we have already build openBTS cellular networks, and had successfully gotten over 40 cell phones to autoconnect, receive broadcasts from a locally running web application, and send SMSs back during <a href="">arthackday link here</a>.</p>
+
+<p><strong>Network &amp; Operating System Software</strong></p>
+
+<p>For the WiFi network, we will be using QMP images, the same used to power the over 34,000 nodes in <a href="https://guifi.net/">Guifi</a> and <a href="http://nycmesh.net/">NYC Mesh</a>. Any modifications / setup that cannot be upstreamed as options will be published as open source build scripts.</p>
+
+<p>For the Iridium interface, we will be building on top of <a href="https://www.gnuradio.org/">GNU Radio</a> - any new blocks will be published and available.</p>
+
+<p>The cell phone network will run on <a href="https://github.com/osmocom/osmo-bts">OsmoBTS</a>, which supports the <a href="https://www.crowdsupply.com/lime-micro/limesdr-mini">LimeSDR Mini</a>, whose developers have shown <a href="https://www.crowdsupply.com/lime-micro/limesdr-mini/updates/gsm-base-station-demo">a working GSM networking on the Raspberry Pi 3</a>. Having experience writing blocks for <a href="http://pibakery.org/">PiBakery</a> , we will publish reproducible builds on top of <a href="http://www.raspbian.org/">Raspbian</a> (and upstream any blocks we can).</p>
+
+<p><strong>Applications</strong> (1570 chars left)</p>
+
+<p>We will first test forum software like <a href="https://github.com/ssbc/patchwork">patchwork</a>, before developing our own custom solution for message boards - it is end-to-end encrypted, offline-first, and syncs opportunisticly. Evaluation of building new features like the map view on top of <a href="https://github.com/ssbc/secure-scuttlebutt">patchbay</a> will also be considered.</p>
+
+<p>Any new software, like the SMS gateway, or map view, will use <a href="https://github.com/ssbc/secure-scuttlebutt">scuttlebutt</a> to sync data, and be written in <a href="">javascript</a> on top of <a href="https://nodejs.org">node.js</a> to be approachable to the widest range of potential contributors as possible.</p>
+
+<p>We have experience writing offline first open source web applications, from small prototypes that use no libraries or frameworks like <a href="jedahan.com/saltpeanuts">this one-file schedule sketching application that can share state in the url</a> to <a href="">synchronized collaborative wiki editing link here</a>. We will err on the side of using plain old javascript, and target the default Android 4.0 browser and Firefox 52 for the first prototype of frontend web applications.</p>
+
+<p>For directing where the backpack should be moved to, we are building a divining rod that lights up, vibrates, and shows how many minutes they should walk in that direction. It will be powered by the raspberry pi, and a non-digital compass will be embedded in case the electronics fail.</p>
+
+<h6 id="differentiation">Differentiation</h6>
+
+<p>The main differentiator is that the nodes know their physical location on earth and help share where they should be placed by the humans.</p>
+
+<p>Nodes share GPS coordinates with each other over wifi, and if any node has an internet or Iridium uplink, precipitate that list up to the Iridium Network, to be burst across the appropriate zones. These <a href="https://mozilla.fluxx.io/dashboard/index#link-here">Iridium bursts</a> are receivable <strong>anywhere in the world</strong>, allowing disconnected nodes to find their closest neighbor. After being brought close enough to connect via wifi, that nodes gps location gets added to the cloud and the cycle continues.</p>
+
+<p>An individual can find out what direction, and how long it will take (time and distance), to bring the node close enough to join others on the network via a wifi map, sms broadcast, and divining rod. A digital and physical compass, led, vibrating motor, and display will direct a person in the correct heading. If Iridium is down, we fallback to the last known gps coordinates. Will we also experiment with SDR frequency scanning over common channels like AM/FM for the prototype, time allowing.</p>
+
+<h6 id="affordability">Affordability</h6>
+
+<p>Parts chosen contain all necessary power adapters, storage, antennae, etc. The closest comparable system, the LimeNet Mini is 3x as expensive and cellular only.</p>
+
+<p><strong>Base</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Part</th>
+      <th>Notes</th>
+      <th>Cost</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://www.amazon.com/Vilros-Raspberry-Media-Center-Kit/dp/B01CYX4HRM/">Raspberry Pi 3</a></td>
+      <td>With microsd, case, power supply</td>
+      <td>$60</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.amazon.com/Ubiquiti-Networks-LBE-5AC-GEN2-US-Litebeam-23dBi/dp/B06Y2JH7PV/">Litebeam 5AC gen2</a></td>
+      <td>WiFi 4km range @ 5m height</td>
+      <td>$75</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.crowdsupply.com/lime-micro/limesdr-mini">LimeSDR Mini</a></td>
+      <td>GSM/LTE base station + wayfinding</td>
+      <td>$180</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.amazon.com/K-Cliffs-Rolling-Backpack-Through-Daypack/dp/B00QUI5S8K">Clear Rolling Backpack</a></td>
+      <td>Case</td>
+      <td>$40</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.amazon.com/RTL-SDR-Blog-RTL2832U-Software-Telescopic/dp/B011HVUEME">RTL-SDR</a></td>
+      <td>Iridium Reciever</td>
+      <td>$25</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.amazon.com/gp/product/B00K8E4WAW/">Lead Acid Battery</a></td>
+      <td>2x12V18Ah</td>
+      <td>$80</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.amazon.com/Controller-soled-Battery-Intelligent-Regulator/dp/B06ZY6ZPWQ">Controller + USB</a></td>
+      <td>USB output</td>
+      <td>$20</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong>Total</strong></td>
+      <td><strong>$480</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Solar</strong> - 5Kg lighter, solar powered, where appropriate</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>part</th>
+      <th>notes</th>
+      <th>cost</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://www.amazon.com/dp/B01J44VSL2">Lithium Battery + Inverter</a></td>
+      <td>3kg</td>
+      <td>$300</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.amazon.com/gp/product/B00W81BZTO/">30W Solar panel</a></td>
+      <td>6kg</td>
+      <td>$50</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><strong>Total</strong></td>
+      <td><strong>$730</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<h6 id="social-impact">Social Impact</h6>
+
+<blockquote>
+  <p>How well-tailored is the solution to the needs of the community and users for which it is designed? How will the design of the solution help engage community members in order to maximize utilization?</p>
+</blockquote>
+
+<p>The system is designed to be useful year round, and only <em>extra</em> useful during emergencies. By not prescribing a single way to use it, the channel-style message board allows the community to use things as they see fit. We will be working with Mozilla and the NSF to identify communities that have low connectivity, are at risk or have a history of infrastructure going down (i.e. flood zones, inadequate power distribution), and working with local community leaders to show how it can help to own their own infrastructure.</p>
+
+<p>In addition, documentation for all software and hardware will be updated or created to provide for an onboarding for new programmers / technicians, inspired by the Red Hook Initiative’s digital stewards program, allowing for people interested in building skills in their own communities to grow. There is no reliance on a single provider for any component (even the iridium network can be replaced with LoRa dead-reckoning, for example), and no reliance on external guidance for the project to continue as long as it is useful.</p>
+
+<h6 id="scalability">Scalability</h6>
+
+<blockquote>
+  <p>How will the solution be adaptable to a broader set of communities or areas? How scalable is the solution? How will you provide tools and documentation to anyone who might wish to build upon your work or launch a similar effort?</p>
+</blockquote>
+
+<p>The biggest scalability challenge is human. The GuiFi network has over 35,000 active nodes. In addition to providing a comprehensive guide to building a node, we will be making sure each project has up-to-date onboarding documentation on how to contribute. This was part of our guidance of going for welcoming communities like the Raspberry Pi, over perhaps more powerful single board computers, for example.</p>
+
+<p>Everything is available off-the-shelf, at the very least via amazon, without the need for special partnerships.</p>
+
+<p>For applications to scale they must be offline first, and be happy with intermittent connectivity. For these reasons, we will be using <a href="https://mozilla.fluxx.io/dashboard/index#link-here">scuttlebutt</a>, a well known and testing protocol for sharing information with intermittent network connectivity.</p>
+
+<h6 id="openness">Openness</h6>
+
+<blockquote>
+  <p>Mozilla works in the open. How will you document and share your project progress with the community? What documentation and resources have you created to help others understand and leverage your design in their own work?</p>
+</blockquote>
+
+<p>We publish in open formats, and have a strong history and culture of contributing back upstream, not only to the original software, but writing our own packages and getting them upstreamed into mainstream repositories like raspbian and homebrew. We will share every WIP step publicly, through updating code repositories, writing blog posts, and livestreaming our work. In the past, we have had a great time participating in both <a href="http://geekstreams.com/">geekstreams</a> when building hardware projects, and <a href="https://twitch.tv/creative">twitch.tv/creative</a> while programming emulators. The communities have been crucial in helping get past roadblocks, etc.</p>
+
+<h6 id="portability-1000-chars-left">Portability (1000 chars left)</h6>
+
+<p>Its meant to be carried, or wheeled by a single person. The base system is 13Kg. Switching to using a solar panel + lithium ion solution drops the weight to 8Kg but the price goes up from ~$500 to $750.</p>
+
+<h6 id="power-650-left">Power (650 left)</h6>
+
+<p>In our testing, the default connected and browsing internet power draw of the WiFi AP is 3W - we got 40 hours reliably from two 60Wh batteries. The raspberry pi running some servers draws 1W according to our Kill-A-Watt. We are estimating the RTL-SDR + LimeSDR, if connecting intermittently (once every 10 minutes) to draw another 1W. To last 60 hours, we need around 300Wh battery. With a 30W solar panel, 4 hours of direct sunlight should power the system for the next 20 hours. For comparison, on average over the whole year, an apartment roof in Brooklyn can expect 4 hours of direct sunlight.</p>
+
+<h6 id="applications">Applications</h6>
+
+<blockquote>
+  <p>What information, apps, services, software, etc. will your solution provide access to? Are these designed in a way that maximizes usability for the intended users?</p>
+</blockquote>
+
+<p>With an upstream internet connection, the system works fully with the regular internet. We may provide utilities such as DNS level adblocking/user-tracking filtering (using <a href="https://pi-hole.net/">PiHole</a>) to help reduce bandwidth and cpu load.</p>
+
+<p>The forum software will work as normal. The SMS gateway will be default OFF until we notice that local upstream providers are not working, and will only turn on as a backup.</p>
+
+<p>It is crucial that users do not have any additional cognitive load during an emergency to be able to communicate. Where possible, we should be using the same UX they are used to.</p>
+
+<h6 id="previous-awards">Previous Awards</h6>
+
+<p>No previous awards have been given.</p>
+
+
+
+      
+      <div class="footer border-top border-gray-light mt-5 pt-3 text-right text-gray">
+        This site is open source. <a href="http://github.com/jedahan/baculus/edit/gh-pages/applications/design/index.md">Improve this page</a>.
+      </div>
+      
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+    
+  </body>
+</html>
