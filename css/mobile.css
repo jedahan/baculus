@@ -1,11 +1,11 @@
 @media (max-width: 1199px) and (min-width: 1024px) {
 
 	nav#nav-main .right {
-		width: 51%;
+		width: 67%;
 	}
 
 	nav#nav-main .left {
-		width: 40%;
+		width: 32%;
 	}
 
 }
@@ -19,6 +19,25 @@
 	nav#nav-mobile .left.logo {
 		display: none;
 	}
+	
+	.screenshot {
+	  width: 100%;
+	}
+
+}
+
+@media only screen and (max-width: 767px) {
+ .message_screenshot,
+ .wifi_screenshot,
+ .img-50-percent,
+ .img-60-percent {
+         width: 100%;
+         margin: 0 auto;
+ }
+
+ .img-60-percent {
+         margin-bottom: 20px;
+ }
 
 }
 

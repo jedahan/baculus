@@ -70,30 +70,34 @@
 			<nav id="nav-mobile"></nav>
 		</header>
 
-		<h2 id="baculus-build-log">Baculus Build Log</h2>
+		<h1>Software</h1>
 
-		<h3 id="software">Software</h3>
+		<p>This is a log on how to setup a Raspberry Pi with everything you need to create your own Baculus node.</p>
 
-		<p>This is a log on how to setup a raspberry pi with everything you need to create your own baculus node.</p>
-
-		<h3 id="preparation">Preparation</h3>
+		<p>
+		  <img src="/img/buoy-icon-software.png" class="buoy-img" alt="" />
+		</p>
+		
+		<h2>Software</h2>
 
 		<p>To build a node, we gathered the following materials:</p>
+		
+		<h2 id="preparation">Preparation</h2>
 
 		<ul>
-			<li>computer running macOS (linux is also supported)</li>
-			<li>raspberry pi 3 model b+ (model b also supported)</li>
-			<li>microSD card + SD adapter</li>
-			<li>wireless access point connected to the internet</li>
+			<li>Computer running macOS (linux is also supported)</li>
+			<li>Raspberry Pi 3 model b+ (model b also supported)</li>
+			<li>MicroSD card + SD adapter</li>
+			<li>Wireless access point connected to the internet</li>
 			<li>
 				<a href="https://github.com/baculus-buoy/pibakery/releases">PiBakery application</a>
 			</li>
-			<li>baculus buoy
+			<li>Baculus buoy
 				<a href="https://github.com/baculus-buoy/baculus/blob/master/pibakery-recipe.xml">pibakery-recipe</a>
 			</li>
 		</ul>
 
-		<h3 id="pibakery">PiBakery</h3>
+		<h2 id="pibakery">PiBakery</h2>
 
 		<p>We will be using our own version of PiBakery to burn the initial SD card, as it is cross-platform and allows easy customization
 			of build images. First, download the latest version from our
@@ -103,62 +107,77 @@
 
 		<p>When you first open PiBakery, you should be greeted with a blank "recipe".</p>
 		<p>
-			<a href=/docs/images/1_pibakery.png>
-				<img src="/docs/images/1_pibakery.png" alt="pibakery" />
-			</a>
+			<div class=screenshot>
+			<a href=/docs/images/1_pibakery_02.png>
+				<img src="/docs/images/1_pibakery_02.png" alt="pibakery" />
+			</a></div>
 		</p>
 
 		<p>
-			We have created a recipe for baculus that needs your help to start the install. Make sure to
+			We have created a recipe for Baculus that needs your help to start the install. Make sure to
 			<a href="https://raw.githubusercontent.com/baculus-buoy/baculus/master/pibakery-recipe.xml"> download the latest pibakery-recipe.xml</a>, then click import, and choose that file.
-			<a href=/docs/images/2_import.png>
-				<img src="/docs/images/2_import.png" alt="import" />
+			<div class=screenshot>
+			<a href=/docs/images/2_import_02.png>
+				<img src="/docs/images/2_import_02.png" alt="import" />
 			</a>
+			</div>
 		</p>
 
 		<p>
 			Once imported, there should be blocks showing what will run on the pi the first time it is turned on.
-			<a href=/docs/images/3_imported.png>
-				<img src="/docs/images/3_imported.png" alt="imported" />
+			<div class=screenshot>
+			<a href=/docs/images/3_imported_02.png>
+				<img src="/docs/images/3_imported_02.png" alt="imported" />
 			</a>
+			</div>
 		</p>
 
 		<p>
 			Now, edit __HOSTNAME__ to a unique name, __NETWORK__ and __PASSWORD__ to your local internet connection.
-			<a href=/docs/images/4_configured.png>
-				<img src="/docs/images/4_configured.png" alt="configured" />
+			<div class=screenshot>
+			<a href=/docs/images/4_configured_02.png>
+				<img src="/docs/images/4_configured_02.png" alt="configured" />
 			</a>
+			</div>
 		</p>
 
 		<p>
 			Next, click Write in the top right corner, and you will be greeted with a SD card and Operating System chooser. If this is
 			a blank SD card, your Operating System should prompt you to format it. Make sure to give a memorable name (we use ‘
 			<strong>boot</strong>’), and select the raspbian lite image.
-			<a href=/docs/images/5_write.png>
-				<img src="/docs/images/5_write.png" alt="write" />
+			<div class=screenshot>
+			<a href=/docs/images/5_write_03.png>
+				<img src="/docs/images/5_write_03.png" alt="write" />
 			</a>
+			</div>
 		</p>
 
 		<p>
 			Click Start Write, and a permissions dialog should pop up to allow writing
-			<a href=/docs/images/6_permissions.png>
-				<img src="/docs/images/6_permissions.png" alt="permissions" />
+			<div class=screenshot>
+			<a href=/docs/images/6_permissions_02.png>
+				<img src="/docs/images/6_permissions_02.png" alt="permissions" />
 			</a>
+			</div>
 		</p>
 
 		<p>
 			The write should take around 2 minutes. Once it is done written, pop it into the pi.
-			<a href=/docs/images/8_done.png>
-				<img src="/docs/images/8_done.png" alt="done" />
+			<div class=screenshot>
+			<a href=/docs/images/8_done_02.png>
+				<img src="/docs/images/8_done_02.png" alt="done" />
 			</a>
+			</div>
 		</p>
 
 		<p>
 			If you have a screen attached you should be able to watch the entire process. Otherwise just wait a few minutes (ours took
 			15 minutes) until you see a ‘baculus’ wifi network up.
-			<a href=/docs/images/8_wifi.png>
-				<img src="/docs/images/8_wifi.png" alt="wifi" />
+			<div class=screenshot>
+			<a href=/docs/images/9_wifi.png>
+				<img src="/docs/images/9_wifi.png" alt="wifi" />
 			</a>
+			</div>
 		</p>
 
 		<p>

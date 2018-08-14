@@ -12,6 +12,11 @@ body {
 p {
   color: #0b3051;
   font-size: 17px;
+  line-height: 25px;
+}
+
+strong {
+  line-height: 0px;
 }
 
 h1 {
@@ -131,6 +136,12 @@ sub {
   font-size: 13px;
 }
 
+.fa-file-pdf,
+.fa-github-alt,
+.fa-wrench {
+  margin-right: 5px;
+}
+
 /* IMGS
 --------------------------------------------- */
 
@@ -143,10 +154,18 @@ sub {
   max-width: 800px;
 }
 
-.buoy-img {
+img {
+  width: 100%;
+}
+
+img.buoy-img {
   width: 30%;
   float: right;
   padding: 0 0 10px 25px;
+}
+
+a img:hover {
+  opacity: 0.9;
 }
 
 .inline {
@@ -158,6 +177,41 @@ sub {
   display: inline;
   margin-right: 5px;
 }
+
+.img-with-caption {
+  line-height: 15px;
+}
+
+.img-50-percent {
+  width: 50%;
+  margin-left: 3%;
+  float: right;
+}
+
+.img-60-percent {
+  width: 60%;
+  margin-left: 3%;
+  float: right;
+}
+
+.screenshot {
+  text-align: center;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.message_screenshot {
+  text-align: center;
+  width: 70%;
+  margin: 0 auto;
+}
+
+.wifi_screenshot {
+  text-align: center;
+  width: 60%;
+  margin: 0 auto;
+}
+
 
 /* INDEX
 --------------------------------------------- */
