@@ -6,6 +6,3 @@ export LANGUAGE=$LANG
 sudo raspi-config nonint do_configure_keyboard us
 sudo raspi-config nonint do_wifi_country US
 sudo raspi-config nonint do_ssh 0
-
-# give minimal memory to gpu
-sudo raspi-config nonint do_memory_split "${SPLIT:-16}"
