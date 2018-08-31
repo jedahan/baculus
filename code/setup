@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -ex
+test "${SCRIPT_DIR}" || exit
+
+# usage: require package-name
+# if you want to force install a package use `require false package-name`
+# you might want to do that if a package installs a binary with a different name
+
+function require() {
+  local binary=${1}
+  shift
+  local packages=${*:-$binary}
+  command -v "$binary" >/dev/null 2>&1 && return 0
+  # normally you would quote $packages, but we want multiple package
+  # install support (`ruby ruby-dev`, not `"ruby ruby-dev"`)
+  sudo DEBIAN_FRONTEND=noninteractive apt install -y $packages
+}
+
+export -f require
+
+for script in "${SCRIPT_DIR}"/*; do
+  sudo -u pi /bin/bash "$PWD/$script"
+done
