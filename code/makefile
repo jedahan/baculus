@@ -12,7 +12,7 @@ clean:
 	rm -f build/{combined,root}.tar
 	
 build:
-	docker pull pi-maker
+	docker pull alpi-maker
 
 $(ROOT).xz:
 	curl -L http://vx2-downloads.raspberrypi.org/raspbian_lite/archive/2018-06-29-03:25/root.tar.xz -o $@
@@ -45,6 +45,6 @@ $(COMBINED): $(ROOT) $(BOOT).xz
 		-e HOSTNAME=$(@:.rpi.img=) \
 		-e IMAGE_SIZE=4G \
 		-e IMAGE_NAME=$@ \
-		"pi-maker"
+		"alpi-maker"
 	mv build/$@ .
 	echo "$@ built successfully! flash with etcher $@"

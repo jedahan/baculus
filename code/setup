@@ -14,11 +14,11 @@ function require() {
   command -v "$binary" >/dev/null 2>&1 && return 0
   # normally you would quote $packages, but we want multiple package
   # install support (`ruby ruby-dev`, not `"ruby ruby-dev"`)
-  sudo DEBIAN_FRONTEND=noninteractive apt install -y $packages
+  DEBIAN_FRONTEND=noninteractive apt install -y $packages
 }
 
 export -f require
 
 for script in "${SCRIPT_DIR}"/*; do
-  sudo -u pi /bin/bash "$PWD/$script"
+  /bin/bash "$script"
 done

@@ -5,4 +5,4 @@ test "$HOSTNAME" = 'baculusB' && suffix=11
 test "$HOSTNAME" = 'baculusC' && suffix=12
 test "$suffix" || suffix=5
 
-sed -e "s/SUFFIX/$suffix/" /etc/dhcpcd.conf.template | sudo tee /etc/dhcpcd.conf
+sed -e "s/SUFFIX/$suffix/" /etc/dhcpcd.conf.template > /etc/dhcpcd.conf

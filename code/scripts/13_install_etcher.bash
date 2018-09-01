@@ -1,4 +1,4 @@
 #!/bin/bash
 set -ex
 
-npm install -g etcher-cli
+sudo -u pi npm install -g etcher-cli

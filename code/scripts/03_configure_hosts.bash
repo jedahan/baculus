@@ -5,4 +5,4 @@ test "$HOSTNAME" || return
 printf "
 127.0.0.1 baculus %s
 10.0.42.1 baculus.mesh baculus.map baculus.chat baculus.portal
-" "$HOSTNAME" | sudo tee -a /etc/hosts
+" "$HOSTNAME" | tee -a /etc/hosts
