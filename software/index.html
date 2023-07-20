@@ -5,14 +5,14 @@
 	<meta charset="utf-8" />
 	<title>Baculus</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
-	<link rel="stylesheet" href="/css/mobile.css" type="text/css" media="screen" title="no title" charset="utf-8" />
-	<link rel="stylesheet" href="/css/responsive.css" type="text/css" media="screen" title="no title" charset="utf-8" />
-	<link href="/css/fonts.css" rel="stylesheet">
+	<link rel="stylesheet" href="./css/main.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+	<link rel="stylesheet" href="./css/mobile.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+	<link rel="stylesheet" href="./css/responsive.css" type="text/css" media="screen" title="no title" charset="utf-8" />
+	<link href="./css/fonts.css" rel="stylesheet">
 	<script src='/js/jquery-3.3.1.min.js'></script>
-	<script src="/js/baculus.js"></script>
-	<script defer src="/js/solid.min.js"></script>
-	<script defer src="/js/fontawesome.min.js"></script>
+	<script href="./js/baculus.js"></script>
+	<script defer href="./js/solid.min.js"></script>
+	<script defer href="./js/fontawesome.min.js"></script>
 
 	<style>
 		p {
@@ -32,7 +32,7 @@
 
 			<div id="nav-trigger" class="clearfix">
 				<div class="left">
-					<a href="/" class="logo-link">
+					<a href="./" class="logo-link">
 						<div class="logo">Home</div>
 					</a>
 				</div>
@@ -46,22 +46,22 @@
 			</div>
 			<nav id="nav-main">
 				<div class="left logo">
-					<a href="/">Home</a>
+					<a href="./">Home</a>
 				</div>
 				<div class="right">
 					<div class="menu_container">
 						<ul class="navigation">
 							<li>
-								<a href="/howto">How-to</a>
+								<a href="./howto">How-to</a>
 							</li>
 							<li>
-								<a href="/research">Research & Testing</a>
+								<a href="./research">Research & Testing</a>
 							</li>
 							<li>
-								<a href="/network">Network</a>
+								<a href="./network">Network</a>
 							</li>
 							<li>
-								<a href="/software">Software</a>
+								<a href="./software">Software</a>
 							</li>
 						</ul>
 					</div>
@@ -75,7 +75,7 @@
 		<p>This is a log on how to setup a Raspberry Pi with everything you need to create your own Baculus node.</p>
 
 		<p>
-		  <img src="/img/buoy-icon-software.png" class="buoy-img" alt="" />
+		  <img href="./img/buoy-icon-software.png" class="buoy-img" alt="" />
 		</p>
 		
 		<h2>Software</h2>
@@ -109,7 +109,7 @@
 		<p>
 			<div class=screenshot>
 			<a href=/docs/images/1_pibakery_02.png>
-				<img src="/docs/images/1_pibakery_02.png" alt="pibakery" />
+				<img href="./docs/images/1_pibakery_02.png" alt="pibakery" />
 			</a></div>
 		</p>
 
@@ -118,7 +118,7 @@
 			<a href="https://raw.githubusercontent.com/baculus-buoy/baculus/master/pibakery-recipe.xml"> download the latest pibakery-recipe.xml</a>, then click import, and choose that file.
 			<div class=screenshot>
 			<a href=/docs/images/2_import_02.png>
-				<img src="/docs/images/2_import_02.png" alt="import" />
+				<img href="./docs/images/2_import_02.png" alt="import" />
 			</a>
 			</div>
 		</p>
@@ -127,7 +127,7 @@
 			Once imported, there should be blocks showing what will run on the pi the first time it is turned on.
 			<div class=screenshot>
 			<a href=/docs/images/3_imported_02.png>
-				<img src="/docs/images/3_imported_02.png" alt="imported" />
+				<img href="./docs/images/3_imported_02.png" alt="imported" />
 			</a>
 			</div>
 		</p>
@@ -136,7 +136,7 @@
 			Now, edit __HOSTNAME__ to a unique name, __NETWORK__ and __PASSWORD__ to your local internet connection.
 			<div class=screenshot>
 			<a href=/docs/images/4_configured_02.png>
-				<img src="/docs/images/4_configured_02.png" alt="configured" />
+				<img href="./docs/images/4_configured_02.png" alt="configured" />
 			</a>
 			</div>
 		</p>
@@ -147,7 +147,7 @@
 			<strong>boot</strong>’), and select the raspbian lite image.
 			<div class=screenshot>
 			<a href=/docs/images/5_write_03.png>
-				<img src="/docs/images/5_write_03.png" alt="write" />
+				<img href="./docs/images/5_write_03.png" alt="write" />
 			</a>
 			</div>
 		</p>
@@ -156,7 +156,7 @@
 			Click Start Write, and a permissions dialog should pop up to allow writing
 			<div class=screenshot>
 			<a href=/docs/images/6_permissions_02.png>
-				<img src="/docs/images/6_permissions_02.png" alt="permissions" />
+				<img href="./docs/images/6_permissions_02.png" alt="permissions" />
 			</a>
 			</div>
 		</p>
@@ -165,7 +165,7 @@
 			The write should take around 2 minutes. Once it is done written, pop it into the pi.
 			<div class=screenshot>
 			<a href=/docs/images/8_done_02.png>
-				<img src="/docs/images/8_done_02.png" alt="done" />
+				<img href="./docs/images/8_done_02.png" alt="done" />
 			</a>
 			</div>
 		</p>
@@ -175,7 +175,7 @@
 			15 minutes) until you see a ‘baculus’ wifi network up.
 			<div class=screenshot>
 			<a href=/docs/images/9_wifi.png>
-				<img src="/docs/images/9_wifi.png" alt="wifi" />
+				<img href="./docs/images/9_wifi.png" alt="wifi" />
 			</a>
 			</div>
 		</p>
