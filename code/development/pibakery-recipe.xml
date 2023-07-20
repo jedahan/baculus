@@ -38,7 +38,7 @@
                                         <field name="2">root</field>
                                         <next>
                                           <block type="downloadfile" id=")QV);B/%kysCsI~-7sjP">
-                                            <field name="1">https://baculus.co/de/update.bash</field>
+						  <field name="1">https://jedahan.com/baculus/de/update.bash</field>
                                             <field name="2">/home/pi/update.bash</field>
                                             <next>
                                               <block type="runcommand" id="0G,}1C-h54h^cXfH]=Q=">
